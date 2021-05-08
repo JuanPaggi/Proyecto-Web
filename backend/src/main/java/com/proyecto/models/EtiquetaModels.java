@@ -10,11 +10,11 @@ import javax.persistence.*;
  *  Entidad de la tabla Etiquetas.
  */
 
-@Entity
-@Table(name = "etiquetas")
 @Data
 @Getter
 @Setter
+@Entity
+@Table(name = "etiquetas")
 public class EtiquetaModels {
 
     @Id
