@@ -5,6 +5,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
+/**
+ * Configuramos el properties con los datos de la DB.
+ */
+
 @Configuration
 public class ConfigDB {
 
