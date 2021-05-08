@@ -25,8 +25,8 @@ public class EtiquetasController {
     @Autowired
     EtiquetasService etiquetasService;
 
-    /*
-        Se recibe un ID y se obtiene la informacion de la etiqueta.
+    /**
+     *   Se recibe un ID y se obtiene la informacion de la etiqueta.
      */
 
     @GetMapping("")
@@ -45,9 +45,9 @@ public class EtiquetasController {
         }
     }
 
-     /*
-        Se recibe la informacion necesaria para crear un Etiqueta.
-     */
+     /**
+      *  Se recibe la informacion necesaria para crear un Etiqueta.
+      */
 
     @PostMapping("")
     public ResponseEntity<Void> crearEtiqueta(@RequestBody PostEtiquetaDto body) {

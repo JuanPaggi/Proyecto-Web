@@ -22,8 +22,8 @@ public class EtiquetasService {
     @Autowired
     EtiquetasRepository etiquetasRepository;
 
-    /*
-        Obtenemos la etiqueta de la base, armamos el DTO y la retornamos a la capa de controlador.
+    /**
+     *  Obtenemos la etiqueta de la base, armamos el DTO y la retornamos a la capa de controlador.
      */
 
     public GetEtiquetaDto obtenerEtiqueta(int idEtiqueta) {
@@ -49,9 +49,9 @@ public class EtiquetasService {
 
     }
 
-    /*
-        Recibimos la informacion de la etiqueta, comprobamos si longitud
-        y la guardamos en la base con el metodo save() de JPA.
+    /**
+     *  Recibimos la informacion de la etiqueta, comprobamos si longitud
+     *  y la guardamos en la base con el metodo save() de JPA.
      */
 
     public void crearEtiqueta(PostEtiquetaDto entrada) {
