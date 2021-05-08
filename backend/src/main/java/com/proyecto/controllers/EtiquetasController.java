@@ -37,6 +37,7 @@ public class EtiquetasController {
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
+                    log.error("ERROR: " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
                     log.error(error.getMessage(), error);
@@ -50,14 +51,39 @@ public class EtiquetasController {
       */
 
     @PostMapping("")
-    public ResponseEntity<Void> crearEtiqueta(@RequestBody PostEtiquetaDto body) {
+    public ResponseEntity<Integer> crearEtiqueta(@RequestBody PostEtiquetaDto body) {
         try {
-            etiquetasService.crearEtiqueta(body);
-            return new ResponseEntity<>(HttpStatus.OK);
+            Integer salida = etiquetasService.crearEtiqueta(body);
+            return new ResponseEntity<>(salida, HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 400:
+                    log.error("ERROR: " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                case 409:
+                    log.error("ERROR: " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                default:
+                    log.error(error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    /**
+     *  Se recibe el idEtiqueta de la etiqueta que quiero eliminar
+     */
+
+    @DeleteMapping("")
+    public ResponseEntity<Void> borrarEtiqueta(@RequestParam String idEtiqueta){
+        try {
+            etiquetasService.borrarEtiqueta(Integer.parseInt(idEtiqueta));
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR: " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
                     log.error(error.getMessage(), error);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

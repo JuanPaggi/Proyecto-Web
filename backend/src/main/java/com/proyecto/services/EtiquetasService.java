@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- *  Capa de servicio.
- *  Aca tenemos toda la logica de negocio.
+ * Capa de servicio.
+ * Aca tenemos toda la logica de negocio.
  */
 
 @Service
@@ -23,7 +23,7 @@ public class EtiquetasService {
     EtiquetasRepository etiquetasRepository;
 
     /**
-     *  Obtenemos la etiqueta de la base, armamos el DTO y la retornamos a la capa de controlador.
+     * Obtenemos la etiqueta de la base, armamos el DTO y la retornamos a la capa de controlador.
      */
 
     public GetEtiquetaDto obtenerEtiqueta(int idEtiqueta) {
@@ -50,20 +50,52 @@ public class EtiquetasService {
     }
 
     /**
-     *  Recibimos la informacion de la etiqueta, comprobamos si longitud
-     *  y la guardamos en la base con el metodo save() de JPA.
+     * Recibimos la informacion de la etiqueta, comprobamos si longitud
+     * y la guardamos en la base con el metodo save() de JPA.
+     * Retornamos el Id de la etiqueta.
      */
 
-    public void crearEtiqueta(PostEtiquetaDto entrada) {
+    public Integer crearEtiqueta(PostEtiquetaDto entrada) {
 
         try {
 
             if (entrada.getEtiqueta().length() <= 100) {
+
+                Integer existedb = etiquetasRepository.verificarExisteEtiqueta(entrada.getEtiqueta());
+
+                if (existedb.equals(1)) {
+                    throw new ApiException(409, "La etiqueta ya existe");
+                }
+
                 EtiquetaModels etiqueta = new EtiquetaModels();
                 etiqueta.setEtiqueta(entrada.getEtiqueta());
-                etiquetasRepository.save(etiqueta);
+                etiqueta = etiquetasRepository.save(etiqueta);
+
+                return etiqueta.getIdEtiqueta();
             } else {
                 throw new ApiException(400, "Los datos enviados no son validos");
+            }
+
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+
+    }
+
+    /**
+     * Recibimos el idEtiqueta, verificamso si existe en la base y lo eliminamos.
+     */
+
+    public void borrarEtiqueta(int idEtiqueta) {
+
+        try {
+
+            if (!etiquetasRepository.existsById(idEtiqueta)) {
+                throw new ApiException(404, "La etiqueta no existe");
+            } else {
+                etiquetasRepository.deleteById(idEtiqueta);
             }
 
         } catch (ApiException error) {
