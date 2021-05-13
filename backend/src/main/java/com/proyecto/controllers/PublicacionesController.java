@@ -5,6 +5,7 @@ import com.proyecto.dtos.GetPublicacionDto;
 import com.proyecto.dtos.PostPublicacionDto;
 import com.proyecto.services.PublicacionesService;
 import com.proyecto.utils.ApiException;
+import com.proyecto.utils.Herramientas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class PublicacionesController {
             switch (error.getCode()) {
                 case 400:
                     log.error("ERROR: " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 default:
                     log.error(error.getMessage(), error);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -56,4 +57,29 @@ public class PublicacionesController {
         }
     }
 
+    @DeleteMapping("")
+    public ResponseEntity<Void> borrarPublicacion (@RequestParam String idPublicacion) {
+        try {
+            if (Herramientas.comprobarNumero(idPublicacion)){
+
+                publicacionesService.borrarPublicacion(Integer.parseInt(idPublicacion));
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                throw new ApiException(400, "los datos enviados no son validos");
+            }
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR :" + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case 400:
+                    log.error("ERROR :" + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+            }
+        }
+    }
 }

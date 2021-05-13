@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+
 import java.util.Date;
 import java.util.Optional;
 
@@ -41,9 +42,8 @@ public class PublicacionesService {
         } catch (Exception error) {
             throw new ApiException(500, Constantes.ERROR_GENERAL);
         }
-
-
     }
+
 
     public Integer crearPublicacion(PostPublicacionDto entrada) {
 
@@ -66,6 +66,22 @@ public class PublicacionesService {
         } catch (Exception error) {
             throw new ApiException(500, Constantes.ERROR_GENERAL);
         }
+    }
+
+    public void borrarPublicacion(int idPublicacion) {
+
+        try {
+            if (!publicacionesRepository.existsById(idPublicacion)){
+                throw new ApiException(404, "La publicacion no existe.");
+            } else {
+                publicacionesRepository.deleteById(idPublicacion);
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+
     }
 
 }
