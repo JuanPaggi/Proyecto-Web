@@ -1,7 +1,7 @@
 package com.proyecto.services;
 
 import com.proyecto.dtos.GetEtiquetaDto;
-import com.proyecto.dtos.PostEtiquetaDto;
+import com.proyecto.dtos.EtiquetaDto;
 import com.proyecto.models.EtiquetaModels;
 import com.proyecto.repository.EtiquetasRepository;
 import com.proyecto.utils.ApiException;
@@ -30,12 +30,12 @@ public class EtiquetasService {
 
         try {
 
-            Optional<EtiquetaModels> etiqueta = etiquetasRepository.obtenerEtiqueta(idEtiqueta);
+            Optional<EtiquetaModels> etiquetaDB = etiquetasRepository.findById(idEtiqueta);
 
-            if (etiqueta.isPresent()) {
+            if (etiquetaDB.isPresent()) {
                 GetEtiquetaDto salida = new GetEtiquetaDto();
-                salida.setIdEtiqueta(etiqueta.get().getIdEtiqueta());
-                salida.setEtiqueta(etiqueta.get().getEtiqueta());
+                salida.setIdEtiqueta(etiquetaDB.get().getIdEtiqueta());
+                salida.setEtiqueta(etiquetaDB.get().getEtiqueta());
                 return salida;
             } else {
                 throw new ApiException(404, "La etiqueta no existe.");
@@ -55,7 +55,7 @@ public class EtiquetasService {
      * Retornamos el Id de la etiqueta.
      */
 
-    public Integer crearEtiqueta(PostEtiquetaDto entrada) {
+    public Integer crearEtiqueta(EtiquetaDto entrada) {
 
         try {
 
@@ -85,7 +85,7 @@ public class EtiquetasService {
     }
 
     /**
-     * Recibimos el idEtiqueta, verificamso si existe en la base y lo eliminamos.
+     * Recibimos el idEtiqueta, verificamos si existe en la base y lo eliminamos.
      */
 
     public void borrarEtiqueta(int idEtiqueta) {
@@ -96,6 +96,33 @@ public class EtiquetasService {
                 throw new ApiException(404, "La etiqueta no existe");
             } else {
                 etiquetasRepository.deleteById(idEtiqueta);
+            }
+
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+
+    }
+
+    /**
+     * Recibimos el idEtiqueta y el nombre de la etiqueta, verificamos si existe en la base y lo actualizamos.
+     */
+
+    public int actualizarEtiqueta(int idEtiqueta, EtiquetaDto body) {
+
+        try {
+
+            Optional<EtiquetaModels> etiquetaDB = etiquetasRepository.findById(idEtiqueta);
+
+            if (etiquetaDB.isPresent()) {
+                EtiquetaModels entrada = etiquetaDB.get();
+                entrada.setEtiqueta(body.getEtiqueta());
+                etiquetasRepository.save(entrada);
+                return entrada.getIdEtiqueta();
+            } else {
+                throw new ApiException(404, "La etiqueta no existe");
             }
 
         } catch (ApiException error) {

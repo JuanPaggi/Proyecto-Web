@@ -8,7 +8,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class PostEtiquetaDto {
+public class EtiquetaDto {
 
     @JsonProperty("etiqueta")
     private String etiqueta;
