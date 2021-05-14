@@ -15,9 +15,6 @@ import java.util.Optional;
 @Repository
 public interface EtiquetasRepository extends JpaRepository<EtiquetaModels, Integer> {
 
-    @Query(value = "select * from etiquetas where id_etiqueta= ?1", nativeQuery = true)
-    Optional<EtiquetaModels> obtenerEtiqueta(int idEtiqueta);
-
     @Query(value = "select count(*) > 0 from etiquetas where etiqueta = ?1", nativeQuery = true)
     Integer verificarExisteEtiqueta(String etiqueta);
 
