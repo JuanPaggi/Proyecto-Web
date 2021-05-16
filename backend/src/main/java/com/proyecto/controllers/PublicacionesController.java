@@ -5,13 +5,13 @@ import com.proyecto.dtos.GetPublicacionDto;
 import com.proyecto.dtos.PostPublicacionDto;
 import com.proyecto.services.PublicacionesService;
 import com.proyecto.utils.ApiException;
-import com.proyecto.utils.Herramientas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 
 @RestController
@@ -24,10 +24,12 @@ public class PublicacionesController {
     PublicacionesService publicacionesService;
 
     @GetMapping("")
-    public ResponseEntity<GetPublicacionDto> obtenerPublicacion(@RequestParam String idPublicacion) {
+    public ResponseEntity<GetPublicacionDto> obtenerPublicacion(@RequestParam Integer idPublicacion) {
         try {
-            GetPublicacionDto salida = publicacionesService.obetenerPublicacion(Integer.parseInt(idPublicacion));
+
+            GetPublicacionDto salida = publicacionesService.obetenerPublicacion(idPublicacion);
             return new ResponseEntity<>(salida, HttpStatus.OK);
+
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -58,27 +60,38 @@ public class PublicacionesController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Void> borrarPublicacion (@RequestParam String idPublicacion) {
+    public ResponseEntity<Void> borrarPublicacion (@RequestParam Integer idPublicacion) {
         try {
-            if (Herramientas.comprobarNumero(idPublicacion)){
+            publicacionesService.borrarPublicacion(idPublicacion);
+            return new ResponseEntity<>(HttpStatus.OK);
 
-                publicacionesService.borrarPublicacion(Integer.parseInt(idPublicacion));
-                return new ResponseEntity<>(HttpStatus.OK);
-            } else {
-                throw new ApiException(400, "los datos enviados no son validos");
-            }
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
                     log.error("ERROR :" + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                case 400:
-                    log.error("ERROR :" + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 default:
                     log.error("ERROR :" + error.getMessage(), error);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
+            }
+        }
+    }
+
+    @PutMapping("")
+    public ResponseEntity<Integer> actualizarPublicacion(@RequestParam Integer idPublicacion, @RequestBody PostPublicacionDto body){
+        try{
+            int salida = publicacionesService.actualizarPublicacion(idPublicacion, body);
+            return new ResponseEntity<>(salida, HttpStatus.OK);
+
+        } catch (ApiException error){
+            switch (error.getCode()){
+                case 404:
+                    log.error("ERROR: " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error(error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }

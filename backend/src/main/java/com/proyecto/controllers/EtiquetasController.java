@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+
 /**
  * Capa de controlador.
  * Donde se reciben todas las peticiones Rest.
@@ -30,10 +32,11 @@ public class EtiquetasController {
      */
 
     @GetMapping("")
-    public ResponseEntity<GetEtiquetaDto> obtenerEtiqueta(@RequestParam String idEtiqueta) {
+    public ResponseEntity<GetEtiquetaDto> obtenerEtiqueta(@RequestParam Integer idEtiqueta) {
         try {
-            GetEtiquetaDto salida = etiquetasService.obtenerEtiqueta(Integer.parseInt(idEtiqueta));
+            GetEtiquetaDto salida = etiquetasService.obtenerEtiqueta(idEtiqueta);
             return new ResponseEntity<>(salida, HttpStatus.OK);
+
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -55,6 +58,7 @@ public class EtiquetasController {
         try {
             Integer salida = etiquetasService.crearEtiqueta(body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
+
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 400:
@@ -75,10 +79,12 @@ public class EtiquetasController {
      */
 
     @DeleteMapping("")
-    public ResponseEntity<Void> borrarEtiqueta(@RequestParam String idEtiqueta) {
+    public ResponseEntity<Void> borrarEtiqueta(@RequestParam Integer idEtiqueta) {
         try {
-            etiquetasService.borrarEtiqueta(Integer.parseInt(idEtiqueta));
+
+            etiquetasService.borrarEtiqueta(idEtiqueta);
             return new ResponseEntity<>(HttpStatus.OK);
+
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -92,15 +98,13 @@ public class EtiquetasController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Integer> actualziarEtiqueta(@RequestParam String idEtiqueta, @RequestBody EtiquetaDto body) {
+    public ResponseEntity<Integer> actualziarEtiqueta(@RequestParam Integer idEtiqueta, @RequestBody EtiquetaDto body) {
         try {
-            int salida = etiquetasService.actualizarEtiqueta(Integer.parseInt(idEtiqueta), body);
+            int salida = etiquetasService.actualizarEtiqueta(idEtiqueta, body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
+
         } catch (ApiException error) {
             switch (error.getCode()) {
-                case 400:
-                    log.error("ERROR: " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 case 404:
                     log.error("ERROR: " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -110,5 +114,4 @@ public class EtiquetasController {
             }
         }
     }
-
 }

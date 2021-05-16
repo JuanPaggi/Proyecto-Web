@@ -17,5 +17,4 @@ public class PostPublicacionDto {
 
     @JsonProperty("titulo")
     private String titulo;
-
 }

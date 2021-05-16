@@ -2,6 +2,7 @@ package com.proyecto.services;
 
 import com.proyecto.dtos.GetPublicacionDto;
 import com.proyecto.dtos.PostPublicacionDto;
+import com.proyecto.models.EtiquetaModels;
 import com.proyecto.models.PublicacionModels;
 import com.proyecto.repository.PublicacionesRepository;
 import com.proyecto.utils.ApiException;
@@ -83,5 +84,34 @@ public class PublicacionesService {
         }
 
     }
+
+    public int actualizarPublicacion(int idPublicacion, PostPublicacionDto body){
+        try{
+            Optional<PublicacionModels> publicacionDB = publicacionesRepository.findById(idPublicacion);
+
+            if(publicacionDB.isPresent()){
+                PublicacionModels entrada = publicacionDB.get();
+
+                if (entrada.getTitulo() != null) {
+                    entrada.setTitulo(body.getTitulo());
+                }
+
+                if (entrada.getDescripcion() != null) {
+                    entrada.setDescripcion(body.getDescripcion());
+                }
+                publicacionesRepository.save(entrada);
+                return entrada.getIdPublicacion();
+
+            } else {
+                throw new ApiException(404, "La Publicacion no existe.");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error){
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+
 
 }
