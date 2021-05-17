@@ -1,9 +1,12 @@
 package com.proyecto.services;
 
+import com.proyecto.dtos.EtiquetaDto;
+import com.proyecto.dtos.GetEtiquetaDto;
 import com.proyecto.dtos.GetPublicacionDto;
 import com.proyecto.dtos.PostPublicacionDto;
 import com.proyecto.models.EtiquetaModels;
 import com.proyecto.models.PublicacionModels;
+import com.proyecto.repository.EtiquetasRepository;
 import com.proyecto.repository.PublicacionesRepository;
 import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
@@ -11,8 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +24,9 @@ public class PublicacionesService {
 
     @Autowired
     PublicacionesRepository publicacionesRepository;
+
+    @Autowired
+    EtiquetasRepository etiquetasRepository;
 
     public GetPublicacionDto obetenerPublicacion(int idPublicacion) {
 
@@ -33,6 +40,17 @@ public class PublicacionesService {
                 salida.setDescripcion(publicacion.get().getDescripcion());
                 salida.setFechaCreacion(publicacion.get().getFechaCreacion());
                 salida.setTitulo(publicacion.get().getTitulo());
+
+                List<GetEtiquetaDto> etiquetas = new ArrayList<>();
+                for (EtiquetaModels it: publicacion.get().getEtiquetas()) {
+                    GetEtiquetaDto etiquetaDto = new GetEtiquetaDto();
+                    etiquetaDto.setIdEtiqueta(it.getIdEtiqueta());
+                    etiquetaDto.setEtiqueta(it.getEtiqueta());
+                    etiquetas.add(etiquetaDto);
+                }
+
+                salida.setEtiquetas(etiquetas);
+
                 return salida;
             } else {
                 throw new ApiException(404, "La publicacion no existe.");
@@ -56,6 +74,15 @@ public class PublicacionesService {
                 publicacion.setDescripcion(entrada.getDescripcion());
                 publicacion.setFechaCreacion(new Date()); //crea la fecha en el momento
                 publicacion.setTitulo(entrada.getTitulo());
+
+                List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(entrada.getEtiquetas());
+
+                if(etiquetas.size() != entrada.getEtiquetas().size()){
+                    throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
+                }
+
+                publicacion.setEtiquetas(etiquetas);
+
                 publicacion = publicacionesRepository.save(publicacion);
 
                 return publicacion.getIdPublicacion();
