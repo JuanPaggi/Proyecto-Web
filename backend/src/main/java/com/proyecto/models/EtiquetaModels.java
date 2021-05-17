@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *  Entidad de la tabla Etiquetas.
@@ -24,5 +26,14 @@ public class EtiquetaModels {
 
     @Column(name = "etiqueta")
     private String etiqueta;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "publicaciones_etiquetas",
+            joinColumns =
+            @JoinColumn(name = "id_etiqueta", referencedColumnName = "id_etiqueta"),
+            inverseJoinColumns =
+            @JoinColumn(name = "id_publicacion", referencedColumnName = "id_publicacion")
+    )
+    private List<PublicacionModels> publicaciones = new ArrayList<>();
 
 }
