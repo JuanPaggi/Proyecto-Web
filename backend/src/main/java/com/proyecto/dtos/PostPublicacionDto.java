@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Data
 @Getter
@@ -17,4 +19,8 @@ public class PostPublicacionDto {
 
     @JsonProperty("titulo")
     private String titulo;
+
+    @JsonProperty("etiquetas")
+    private List<Integer> etiquetas;
+
 }
