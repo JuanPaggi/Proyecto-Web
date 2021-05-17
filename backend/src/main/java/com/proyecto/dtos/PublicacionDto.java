@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-public class PostPublicacionDto {
+public class PublicacionDto {
 
     @JsonProperty("descripcion")
     private String descripcion;

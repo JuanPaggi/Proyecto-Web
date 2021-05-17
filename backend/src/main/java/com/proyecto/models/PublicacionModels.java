@@ -1,16 +1,13 @@
 package com.proyecto.models;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
 @Getter
 @Setter
 @Entity
@@ -38,7 +35,6 @@ public class PublicacionModels {
             inverseJoinColumns =
             @JoinColumn(name = "id_etiqueta", referencedColumnName = "id_etiqueta")
     )
-    private List<EtiquetaModels> etiquetas = new ArrayList<>();
-    ;
+    private List<EtiquetaModels> etiquetas;
 
 }

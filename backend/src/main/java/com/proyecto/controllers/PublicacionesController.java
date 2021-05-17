@@ -2,7 +2,7 @@ package com.proyecto.controllers;
 
 
 import com.proyecto.dtos.GetPublicacionDto;
-import com.proyecto.dtos.PostPublicacionDto;
+import com.proyecto.dtos.PublicacionDto;
 import com.proyecto.services.PublicacionesService;
 import com.proyecto.utils.ApiException;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class PublicacionesController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Integer> crearPublicacion(@RequestBody PostPublicacionDto body) {
+    public ResponseEntity<Integer> crearPublicacion(@RequestBody PublicacionDto body) {
         try{
             Integer salida = publicacionesService.crearPublicacion(body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
@@ -82,7 +82,7 @@ public class PublicacionesController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Integer> actualizarPublicacion(@RequestParam Integer idPublicacion, @RequestBody PostPublicacionDto body){
+    public ResponseEntity<Integer> actualizarPublicacion(@RequestParam Integer idPublicacion, @RequestBody PublicacionDto body){
         try{
             int salida = publicacionesService.actualizarPublicacion(idPublicacion, body);
             return new ResponseEntity<>(salida, HttpStatus.OK);

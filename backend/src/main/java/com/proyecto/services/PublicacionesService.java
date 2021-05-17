@@ -1,9 +1,8 @@
 package com.proyecto.services;
 
-import com.proyecto.dtos.EtiquetaDto;
 import com.proyecto.dtos.GetEtiquetaDto;
 import com.proyecto.dtos.GetPublicacionDto;
-import com.proyecto.dtos.PostPublicacionDto;
+import com.proyecto.dtos.PublicacionDto;
 import com.proyecto.models.EtiquetaModels;
 import com.proyecto.models.PublicacionModels;
 import com.proyecto.repository.EtiquetasRepository;
@@ -64,7 +63,7 @@ public class PublicacionesService {
     }
 
 
-    public Integer crearPublicacion(PostPublicacionDto entrada) {
+    public Integer crearPublicacion(PublicacionDto entrada) {
 
         try {
 
@@ -112,20 +111,29 @@ public class PublicacionesService {
 
     }
 
-    public int actualizarPublicacion(int idPublicacion, PostPublicacionDto body){
+    public int actualizarPublicacion(int idPublicacion, PublicacionDto body){
         try{
-            Optional<PublicacionModels> publicacionDB = publicacionesRepository.findById(idPublicacion);
+            Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
 
-            if(publicacionDB.isPresent()){
-                PublicacionModels entrada = publicacionDB.get();
+            if(publicacion.isPresent()){
+                PublicacionModels entrada = publicacion.get();
 
-                if (entrada.getTitulo() != null) {
+                if (body.getTitulo() != null) {
                     entrada.setTitulo(body.getTitulo());
                 }
 
-                if (entrada.getDescripcion() != null) {
+                if (body.getDescripcion() != null) {
                     entrada.setDescripcion(body.getDescripcion());
                 }
+
+                List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(body.getEtiquetas());
+
+                if(etiquetas.size() != body.getEtiquetas().size()){
+                    throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
+                }
+
+                entrada.setEtiquetas(etiquetas);
+
                 publicacionesRepository.save(entrada);
                 return entrada.getIdPublicacion();
 
