@@ -29,7 +29,6 @@ public class EtiquetasService {
     public GetEtiquetaDto obtenerEtiqueta(int idEtiqueta) {
 
         try {
-
             Optional<EtiquetaModels> etiquetaDB = etiquetasRepository.findById(idEtiqueta);
 
             if (etiquetaDB.isPresent()) {

@@ -23,7 +23,5 @@ public class PublicacionDto {
     @JsonProperty("etiquetas")
     private List<Integer> etiquetas;
 
-    @JsonProperty("comentarios")
-    private List<Integer> comentarios;
 
 }

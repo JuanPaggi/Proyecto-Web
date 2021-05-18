@@ -32,7 +32,6 @@ public class PublicacionesService {
     public GetPublicacionDto obetenerPublicacion(int idPublicacion) {
 
         try {
-
             Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
 
             if (publicacion.isPresent()) {
@@ -49,7 +48,6 @@ public class PublicacionesService {
                     etiquetaDto.setEtiqueta(it.getEtiqueta());
                     etiquetas.add(etiquetaDto);
                 }
-
                 salida.setEtiquetas(etiquetas);
 
                 List<GetComentarioDto> comentarios = new ArrayList<>();
@@ -57,13 +55,12 @@ public class PublicacionesService {
                     GetComentarioDto comentarioDto = new GetComentarioDto();
                     comentarioDto.setIdComentario(it.getIdComentario());
                     comentarioDto.setTexto(it.getTexto());
+                    comentarioDto.setFechaCreacion(it.getFechaCreacion());
                     comentarios.add(comentarioDto);
                 }
-
                 salida.setComentarios(comentarios);
 
                 return salida;
-
 
             } else {
                 throw new ApiException(404, "La publicacion no existe.");
@@ -88,15 +85,15 @@ public class PublicacionesService {
                 publicacion.setFechaCreacion(new Date()); //crea la fecha en el momento
                 publicacion.setTitulo(entrada.getTitulo());
 
-                List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(entrada.getEtiquetas());
+                if (entrada.getEtiquetas() != null) {
+                    List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(entrada.getEtiquetas());
 
-                if (etiquetas.size() != entrada.getEtiquetas().size()) {
-                    throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
+                    if (etiquetas.size() != entrada.getEtiquetas().size()) {
+                        throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
+                    }
+
+                    publicacion.setEtiquetas(etiquetas);
                 }
-
-
-                publicacion.setEtiquetas(etiquetas);
-
                 publicacion = publicacionesRepository.save(publicacion);
 
                 return publicacion.getIdPublicacion();
@@ -123,7 +120,6 @@ public class PublicacionesService {
         } catch (Exception error) {
             throw new ApiException(500, Constantes.ERROR_GENERAL);
         }
-
     }
 
     public int actualizarPublicacion(int idPublicacion, PublicacionDto body) {
