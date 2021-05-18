@@ -13,4 +13,6 @@ public class ComentarioDto {
     @JsonProperty("texto")
     private String texto;
 
+    @JsonProperty("id_publicacion")
+    private int idPublicacion;
 }

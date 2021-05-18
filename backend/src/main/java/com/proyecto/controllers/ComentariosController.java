@@ -5,7 +5,6 @@ import com.proyecto.dtos.ComentarioDto;
 import com.proyecto.dtos.GetComentarioDto;
 import com.proyecto.services.ComentariosService;
 import com.proyecto.utils.ApiException;
-import com.proyecto.utils.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

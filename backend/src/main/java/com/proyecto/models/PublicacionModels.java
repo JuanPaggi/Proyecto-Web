@@ -37,4 +37,8 @@ public class PublicacionModels {
     )
     private List<EtiquetaModels> etiquetas;
 
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "id_publicacion", referencedColumnName = "id_publicacion", nullable = false, insertable = false, updatable = false)
+    private List<ComentarioModels> comentarios;
+
 }

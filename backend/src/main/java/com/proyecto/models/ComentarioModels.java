@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 
+
 @Getter
 @Setter
 @Entity
@@ -25,5 +26,7 @@ public class ComentarioModels {
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
 
-
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name ="id_publicacion", referencedColumnName = "id_publicacion")
+    private PublicacionModels publicacion;
 }

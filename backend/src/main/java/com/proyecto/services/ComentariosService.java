@@ -3,7 +3,9 @@ package com.proyecto.services;
 import com.proyecto.dtos.ComentarioDto;
 import com.proyecto.dtos.GetComentarioDto;
 import com.proyecto.models.ComentarioModels;
+import com.proyecto.models.PublicacionModels;
 import com.proyecto.repository.ComentariosRepository;
+import com.proyecto.repository.PublicacionesRepository;
 import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class ComentariosService {
 
     @Autowired
     ComentariosRepository comentariosRepository; //uso el repository porque neeito acceder a la base de datos
+    @Autowired
+    PublicacionesRepository publicacionesRepository;
 
 
     //aca me fijo en la base de datos si estan presentes los valores dentro de comentario.
@@ -53,7 +57,16 @@ public class ComentariosService {
                 comentario.setTexto(entrada.getTexto());
                 comentario.setFechaCreacion(new Date());
 
+                Optional<PublicacionModels> publicacion = publicacionesRepository.findById(entrada.getIdPublicacion());
+                if(publicacion.isPresent()){
+                    comentario.setPublicacion(publicacion.get());
+                } else {
+                    throw new ApiException(404, "la publicacion no existe.");
+                }
+
                 comentario = comentariosRepository.save(comentario);
+
+
 
                 return comentario.getIdComentario();
             } else {

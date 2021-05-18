@@ -28,4 +28,7 @@ public class GetPublicacionDto {
     @JsonProperty("etiquetas")
     private List<GetEtiquetaDto> etiquetas;
 
+    @JsonProperty("comentarios")
+    private List<GetComentarioDto> comentarios;
+
 }
