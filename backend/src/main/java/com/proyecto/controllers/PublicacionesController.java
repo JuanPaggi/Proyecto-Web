@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @RestController
 @RequestMapping("/publicaciones")
 public class PublicacionesController {
@@ -34,7 +33,7 @@ public class PublicacionesController {
             switch (error.getCode()) {
                 case 404:
                     log.error("ERROR :" + error.getMessage());
-                    return new ResponseEntity<>((HttpStatus.NOT_FOUND));
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
                     log.error(error.getMessage(), error);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -44,7 +43,7 @@ public class PublicacionesController {
 
     @PostMapping("")
     public ResponseEntity<Integer> crearPublicacion(@RequestBody PublicacionDto body) {
-        try{
+        try {
             Integer salida = publicacionesService.crearPublicacion(body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
         } catch (ApiException error) {
@@ -63,7 +62,7 @@ public class PublicacionesController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Void> borrarPublicacion (@RequestParam Integer idPublicacion) {
+    public ResponseEntity<Void> borrarPublicacion(@RequestParam Integer idPublicacion) {
         try {
             publicacionesService.borrarPublicacion(idPublicacion);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -82,13 +81,13 @@ public class PublicacionesController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Integer> actualizarPublicacion(@RequestParam Integer idPublicacion, @RequestBody PublicacionDto body){
-        try{
+    public ResponseEntity<Integer> actualizarPublicacion(@RequestParam Integer idPublicacion, @RequestBody PublicacionDto body) {
+        try {
             int salida = publicacionesService.actualizarPublicacion(idPublicacion, body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
 
-        } catch (ApiException error){
-            switch (error.getCode()){
+        } catch (ApiException error) {
+            switch (error.getCode()) {
                 case 404:
                     log.error("ERROR: " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);

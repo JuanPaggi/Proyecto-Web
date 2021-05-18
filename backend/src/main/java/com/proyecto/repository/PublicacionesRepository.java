@@ -10,8 +10,6 @@ import java.util.Optional;
 @Repository
 public interface PublicacionesRepository  extends JpaRepository<PublicacionModels, Integer> {
 
-
-
     @Query(value = "select * from publicaciones where id_publicacion= ?1", nativeQuery = true)
     Optional<PublicacionModels> obtenerPublicacion(int idPublicacion);
 
