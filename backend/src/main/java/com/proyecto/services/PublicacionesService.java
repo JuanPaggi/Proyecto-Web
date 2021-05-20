@@ -14,7 +14,6 @@ import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,7 +64,6 @@ public class PublicacionesService {
             } else {
                 throw new ApiException(404, "La publicacion no existe.");
             }
-
         } catch (ApiException error) {
             throw error;
         } catch (Exception error) {
@@ -144,8 +142,8 @@ public class PublicacionesService {
                 }
 
                 entrada.setEtiquetas(etiquetas);
-
                 publicacionesRepository.save(entrada);
+
                 return entrada.getIdPublicacion();
 
             } else {
@@ -157,6 +155,4 @@ public class PublicacionesService {
             throw new ApiException(500, Constantes.ERROR_GENERAL);
         }
     }
-
-
 }

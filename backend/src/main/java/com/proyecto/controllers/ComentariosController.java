@@ -1,6 +1,5 @@
 package com.proyecto.controllers;
 
-
 import com.proyecto.dtos.ComentarioDto;
 import com.proyecto.dtos.GetComentarioDto;
 import com.proyecto.services.ComentariosService;
@@ -22,11 +21,10 @@ public class ComentariosController {
     @Autowired
     ComentariosService comentariosService;
 
-
     @GetMapping("")
     public ResponseEntity<GetComentarioDto> obtenerComentario(@RequestParam Integer idComentario) {
-        try {
 
+        try {
             GetComentarioDto salida = comentariosService.obtenerComentario(idComentario);
             return new ResponseEntity<>(salida, HttpStatus.OK);
 
@@ -58,9 +56,43 @@ public class ComentariosController {
                 default:
                     log.error(error.getMessage(), error);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
             }
 
+        }
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<Void> borrarComentario(@RequestParam Integer idComentario) {
+        try {
+            comentariosService.borrarComentario(idComentario);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR :" + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @PutMapping("")
+    public ResponseEntity<Integer> actualizarComentario(@RequestParam Integer idComentario, @RequestBody ComentarioDto body) {
+        try {
+            int salida = comentariosService.actualizarComentario(idComentario, body);
+            return new ResponseEntity<>(salida, HttpStatus.OK);
+
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 }
