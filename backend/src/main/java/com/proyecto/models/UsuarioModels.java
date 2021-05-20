@@ -4,10 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-
 import javax.persistence.*;
 import java.util.Date;
-
 
 @Data
 @Getter
@@ -17,37 +15,37 @@ public class UsuarioModels {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name ="id_usuario")
+    @Column(name = "id_usuario")
     private int IdUsuario;
 
-    @Column (name = "user")
+    @Column(name = "user")
     private String user;
 
-    @Column (name ="clave")
+    @Column(name = "clave")
     private String clave;
 
-    @Column (name ="mail")
+    @Column(name = "mail")
     private String mail;
 
-    @Column (name ="nombre")
-    private String nobmre;
+    @Column(name = "nombre")
+    private String nombre;
 
-    @Column (name ="apellido")
+    @Column(name = "apellido")
     private String apellido;
 
-    @Column (name ="mail_verificado")
+    @Column(name = "mail_verificado")
     private Boolean mailVerificado;
 
-    @Column (name ="fecha_registro")
+    @Column(name = "fecha_registro")
     private Date fechaRegistro;
 
-    @Column (name ="fecha_nacimiento")
+    @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
 
-    @Column (name ="codigo_verificacion")
+    @Column(name = "codigo_verificacion")
     private String codigoVerificacion;
 
-    @Column (name ="admin")
+    @Column(name = "admin")
     private Boolean admin;
 
 }
