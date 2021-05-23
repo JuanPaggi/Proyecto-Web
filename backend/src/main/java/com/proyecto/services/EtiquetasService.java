@@ -8,7 +8,6 @@ import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 /**
@@ -29,7 +28,6 @@ public class EtiquetasService {
     public GetEtiquetaDto obtenerEtiqueta(int idEtiqueta) {
 
         try {
-
             Optional<EtiquetaModels> etiquetaDB = etiquetasRepository.findById(idEtiqueta);
 
             if (etiquetaDB.isPresent()) {

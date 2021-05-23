@@ -1,8 +1,10 @@
 package com.proyecto.services;
 
+import com.proyecto.dtos.GetComentarioDto;
 import com.proyecto.dtos.GetEtiquetaDto;
 import com.proyecto.dtos.GetPublicacionDto;
 import com.proyecto.dtos.PublicacionDto;
+import com.proyecto.models.ComentarioModels;
 import com.proyecto.models.EtiquetaModels;
 import com.proyecto.models.PublicacionModels;
 import com.proyecto.repository.EtiquetasRepository;
@@ -11,8 +13,6 @@ import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +30,6 @@ public class PublicacionesService {
     public GetPublicacionDto obetenerPublicacion(int idPublicacion) {
 
         try {
-
             Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
 
             if (publicacion.isPresent()) {
@@ -41,20 +40,29 @@ public class PublicacionesService {
                 salida.setTitulo(publicacion.get().getTitulo());
 
                 List<GetEtiquetaDto> etiquetas = new ArrayList<>();
-                for (EtiquetaModels it: publicacion.get().getEtiquetas()) {
+                for (EtiquetaModels it : publicacion.get().getEtiquetas()) {
                     GetEtiquetaDto etiquetaDto = new GetEtiquetaDto();
                     etiquetaDto.setIdEtiqueta(it.getIdEtiqueta());
                     etiquetaDto.setEtiqueta(it.getEtiqueta());
                     etiquetas.add(etiquetaDto);
                 }
-
                 salida.setEtiquetas(etiquetas);
 
-                return salida;
-            } else {
-                throw new ApiException(404, "La publicacion no existe.");
-            }
+                List<GetComentarioDto> comentarios = new ArrayList<>();
+                for (ComentarioModels it : publicacion.get().getComentarios()) {
+                    GetComentarioDto comentarioDto = new GetComentarioDto();
+                    comentarioDto.setIdComentario(it.getIdComentario());
+                    comentarioDto.setTexto(it.getTexto());
+                    comentarioDto.setFechaCreacion(it.getFechaCreacion());
+                    comentarios.add(comentarioDto);
+                }
+                salida.setComentarios(comentarios);
 
+                return salida;
+
+            } else {
+                throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
+            }
         } catch (ApiException error) {
             throw error;
         } catch (Exception error) {
@@ -74,14 +82,15 @@ public class PublicacionesService {
                 publicacion.setFechaCreacion(new Date()); //crea la fecha en el momento
                 publicacion.setTitulo(entrada.getTitulo());
 
-                List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(entrada.getEtiquetas());
+                if (entrada.getEtiquetas() != null) {
+                    List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(entrada.getEtiquetas());
 
-                if(etiquetas.size() != entrada.getEtiquetas().size()){
-                    throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
+                    if (etiquetas.size() != entrada.getEtiquetas().size()) {
+                        throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
+                    }
+
+                    publicacion.setEtiquetas(etiquetas);
                 }
-
-                publicacion.setEtiquetas(etiquetas);
-
                 publicacion = publicacionesRepository.save(publicacion);
 
                 return publicacion.getIdPublicacion();
@@ -98,8 +107,8 @@ public class PublicacionesService {
     public void borrarPublicacion(int idPublicacion) {
 
         try {
-            if (!publicacionesRepository.existsById(idPublicacion)){
-                throw new ApiException(404, "La publicacion no existe.");
+            if (!publicacionesRepository.existsById(idPublicacion)) {
+                throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
             } else {
                 publicacionesRepository.deleteById(idPublicacion);
             }
@@ -108,14 +117,13 @@ public class PublicacionesService {
         } catch (Exception error) {
             throw new ApiException(500, Constantes.ERROR_GENERAL);
         }
-
     }
 
-    public int actualizarPublicacion(int idPublicacion, PublicacionDto body){
-        try{
+    public int actualizarPublicacion(int idPublicacion, PublicacionDto body) {
+        try {
             Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
 
-            if(publicacion.isPresent()){
+            if (publicacion.isPresent()) {
                 PublicacionModels entrada = publicacion.get();
 
                 if (body.getTitulo() != null) {
@@ -128,25 +136,22 @@ public class PublicacionesService {
 
                 List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(body.getEtiquetas());
 
-                if(etiquetas.size() != body.getEtiquetas().size()){
+                if (etiquetas.size() != body.getEtiquetas().size()) {
                     throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
                 }
 
                 entrada.setEtiquetas(etiquetas);
-
                 publicacionesRepository.save(entrada);
+
                 return entrada.getIdPublicacion();
 
             } else {
-                throw new ApiException(404, "La Publicacion no existe.");
+                throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
             }
         } catch (ApiException error) {
             throw error;
-        } catch (Exception error){
+        } catch (Exception error) {
             throw new ApiException(500, Constantes.ERROR_GENERAL);
         }
     }
-
-
-
 }

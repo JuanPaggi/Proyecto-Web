@@ -1,9 +1,8 @@
 package com.proyecto.controllers;
 
-
-import com.proyecto.dtos.GetPublicacionDto;
-import com.proyecto.dtos.PublicacionDto;
-import com.proyecto.services.PublicacionesService;
+import com.proyecto.dtos.ComentarioDto;
+import com.proyecto.dtos.GetComentarioDto;
+import com.proyecto.services.ComentariosService;
 import com.proyecto.utils.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,59 +13,59 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/publicaciones")
-public class PublicacionesController {
+@RequestMapping("/comentarios")
+public class ComentariosController {
 
-    public static final Logger log = LoggerFactory.getLogger(PublicacionesController.class);
+    public static final Logger log = LoggerFactory.getLogger(ComentariosController.class);
 
     @Autowired
-    PublicacionesService publicacionesService;
+    ComentariosService comentariosService;
 
     @GetMapping("")
-    public ResponseEntity<GetPublicacionDto> obtenerPublicacion(@RequestParam Integer idPublicacion) {
-        try {
+    public ResponseEntity<GetComentarioDto> obtenerComentario(@RequestParam Integer idComentario) {
 
-            GetPublicacionDto salida = publicacionesService.obetenerPublicacion(idPublicacion);
+        try {
+            GetComentarioDto salida = comentariosService.obtenerComentario(idComentario);
             return new ResponseEntity<>(salida, HttpStatus.OK);
 
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
-                    log.error("ERROR :" + error.getMessage());
+                    log.error("ERROR: " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
-                    log.error(error.getMessage(), error);
+                    log.error("ERROR: " + error.getMessage(), error);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
 
     @PostMapping("")
-    public ResponseEntity<Integer> crearPublicacion(@RequestBody PublicacionDto body) {
+    public ResponseEntity<Integer> crearComentario(@RequestBody ComentarioDto body) {
         try {
-            Integer salida = publicacionesService.crearPublicacion(body);
+            Integer salida = comentariosService.crearComentario(body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 400:
-                    log.error("ERROR: " + error.getMessage());
+                    log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 case 404:
-                    log.error("ERROR: " + error.getMessage());
+                    log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
                     log.error(error.getMessage(), error);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
         }
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Void> borrarPublicacion(@RequestParam Integer idPublicacion) {
+    public ResponseEntity<Void> borrarComentario(@RequestParam Integer idComentario) {
         try {
-            publicacionesService.borrarPublicacion(idPublicacion);
+            comentariosService.borrarComentario(idComentario);
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -75,24 +74,23 @@ public class PublicacionesController {
                 default:
                     log.error("ERROR :" + error.getMessage(), error);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
             }
         }
     }
 
     @PutMapping("")
-    public ResponseEntity<Integer> actualizarPublicacion(@RequestParam Integer idPublicacion, @RequestBody PublicacionDto body) {
+    public ResponseEntity<Integer> actualizarComentario(@RequestParam Integer idComentario, @RequestBody ComentarioDto body) {
         try {
-            int salida = publicacionesService.actualizarPublicacion(idPublicacion, body);
+            int salida = comentariosService.actualizarComentario(idComentario, body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
 
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
-                    log.error("ERROR: " + error.getMessage());
+                    log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
-                    log.error(error.getMessage(), error);
+                    log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
