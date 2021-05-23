@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -47,5 +48,13 @@ public class UsuarioModels {
 
     @Column(name = "admin")
     private Boolean admin;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="id_imagen", referencedColumnName = "id_imagen")
+    private ImagenModels imagenPerfil;
+
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval=true)
+    @JoinColumn(name="id_usuario", referencedColumnName = "id_usuario", nullable = false, insertable = false, updatable = false)
+    private List<ImagenModels> imagenes;
 
 }

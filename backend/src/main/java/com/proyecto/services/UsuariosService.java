@@ -77,8 +77,9 @@ public class UsuariosService {
 
                 Random rand = new Random();
                 Integer n = rand.nextInt(999999);
-
                 usuario.setCodigoVerificacion(n.toString());
+
+
 
                 usuario = usuariosRepository.save(usuario);
                 return usuario.getIdUsuario();
