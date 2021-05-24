@@ -51,7 +51,10 @@ public class UsuariosService {
                 salida.setAdmin(usuario.get().getAdmin());
                 salida.setMailVerificado(usuario.get().getMailVerificado());
                 salida.setCodigoVerificacion(usuario.get().getCodigoVerificacion());
-                salida.setIdImagen(usuario.get().getImagenPerfil().getIdImagen());
+
+                if (usuario.get().getImagenPerfil() != null) {
+                    salida.setIdImagen(usuario.get().getImagenPerfil().getIdImagen());
+                }
 
                 return salida;
             } else {
@@ -86,12 +89,15 @@ public class UsuariosService {
                 Integer n = rand.nextInt(999999);
                 usuario.setCodigoVerificacion(n.toString());
 
-                byte[] hash = Sha1Hasher.hashBytes(entrada.getImagen());
-                Optional<ImagenModels> imagen = imagenesService.obtenerImagenPorHash(hash);
-                if (imagen.isPresent()) {
-                    usuario.setImagenPerfil(imagen.get());
-                } else {
-                    usuario.setImagenPerfil(imagenesService.cargarImagen(entrada.getImagen()));
+                if (entrada.getImagen() != null) {
+
+                    byte[] hash = Sha1Hasher.hashBytes(entrada.getImagen());
+                    Optional<ImagenModels> imagen = imagenesService.obtenerImagenPorHash(hash);
+                    if (imagen.isPresent()) {
+                        usuario.setImagenPerfil(imagen.get());
+                    } else {
+                        usuario.setImagenPerfil(imagenesService.cargarImagen(entrada.getImagen()));
+                    }
                 }
 
                 usuario = usuariosRepository.save(usuario);
@@ -180,16 +186,16 @@ public class UsuariosService {
         try {
             Optional<UsuarioModels> userDB = usuariosRepository.findById(idUsuario);
 
-            if (userDB.isPresent()){
+            if (userDB.isPresent()) {
                 byte[] hash = Sha1Hasher.hashBytes(body.getImagen());
                 Optional<ImagenModels> imagen = imagenesService.obtenerImagenPorHash(hash);
 
-                if (imagen.isPresent()){
+                if (imagen.isPresent()) {
                     userDB.get().setImagenPerfil(imagen.get());
                 } else {
                     userDB.get().setImagenPerfil(imagenesService.cargarImagen(body.getImagen()));
                 }
-                
+
                 usuariosRepository.save(userDB.get());
             } else {
                 throw new ApiException(404, "El usuario no existe");
