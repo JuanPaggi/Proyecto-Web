@@ -13,8 +13,6 @@ import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,9 +61,8 @@ public class PublicacionesService {
                 return salida;
 
             } else {
-                throw new ApiException(404, "La publicacion no existe.");
+                throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
             }
-
         } catch (ApiException error) {
             throw error;
         } catch (Exception error) {
@@ -111,7 +108,7 @@ public class PublicacionesService {
 
         try {
             if (!publicacionesRepository.existsById(idPublicacion)) {
-                throw new ApiException(404, "La publicacion no existe.");
+                throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
             } else {
                 publicacionesRepository.deleteById(idPublicacion);
             }
@@ -144,12 +141,12 @@ public class PublicacionesService {
                 }
 
                 entrada.setEtiquetas(etiquetas);
-
                 publicacionesRepository.save(entrada);
+
                 return entrada.getIdPublicacion();
 
             } else {
-                throw new ApiException(404, "La Publicacion no existe.");
+                throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
             }
         } catch (ApiException error) {
             throw error;
@@ -157,6 +154,4 @@ public class PublicacionesService {
             throw new ApiException(500, Constantes.ERROR_GENERAL);
         }
     }
-
-
 }
