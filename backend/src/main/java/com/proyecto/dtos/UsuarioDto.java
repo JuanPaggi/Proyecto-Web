@@ -42,4 +42,7 @@ public class UsuarioDto {
     @JsonProperty ("admin")
     private Boolean admin;
 
+    @JsonProperty ("imagen")
+    private byte[] imagen;
+
 }

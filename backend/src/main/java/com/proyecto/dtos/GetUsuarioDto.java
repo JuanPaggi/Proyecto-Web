@@ -45,6 +45,9 @@ public class GetUsuarioDto {
     @JsonProperty ("admin")
     private Boolean admin;
 
+    @JsonProperty ("idImagen")
+    private int idImagen;
+
 
 
 }
