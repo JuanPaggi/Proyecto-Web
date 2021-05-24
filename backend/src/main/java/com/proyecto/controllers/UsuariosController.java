@@ -1,9 +1,6 @@
 package com.proyecto.controllers;
 
-import com.proyecto.dtos.GetUsuarioDto;
-import com.proyecto.dtos.PutUsuarioDto;
-import com.proyecto.dtos.PutUsuarioImagenDto;
-import com.proyecto.dtos.UsuarioDto;
+import com.proyecto.dtos.*;
 import com.proyecto.services.UsuariosService;
 import com.proyecto.utils.ApiException;
 import org.slf4j.Logger;
@@ -12,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -23,14 +22,42 @@ public class UsuariosController {
     @Autowired
     UsuariosService usuariosService;
 
-    @GetMapping("")
-    public ResponseEntity<GetUsuarioDto> obtenerUsuario(@RequestParam Integer idUsuario) {
+    @PostMapping("")
+    public ResponseEntity<Void> verificarUsuario(@RequestBody LoginUserDto body, HttpServletRequest request) {
 
         try {
-            GetUsuarioDto salida = usuariosService.obtenerUsuario(idUsuario);
-            return new ResponseEntity<>(salida, HttpStatus.OK);
+            if (usuariosService.verificarUser(body)) {
+                request.getSession(true).setAttribute("user", body.getUser());
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
+                case 401:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                default:
+                    log.error("ERROR : " + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<GetUsuarioDto> obtenerUsuario(HttpServletRequest request) {
+
+        try {
+            if (request.getSession(false) != null) {
+                String usuario = (String) request.getSession(false).getAttribute("user");
+                GetUsuarioDto salida = usuariosService.obtenerUsuario(usuario);
+                return new ResponseEntity<>(salida, HttpStatus.OK);
+            } else {
+                throw new ApiException(401, "No autorizado.");
+            }
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 401:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
                 case 404:
                     log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -85,7 +112,7 @@ public class UsuariosController {
             int salida = usuariosService.actualizarUsuario(idUsuario, body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
 
-        } catch (ApiException error){
+        } catch (ApiException error) {
             switch (error.getCode()) {
                 case 400:
                     log.error("ERROR : " + error.getMessage());
@@ -101,12 +128,12 @@ public class UsuariosController {
     }
 
     @PutMapping("/fotoPerfil")
-    public ResponseEntity<Void> actualizarFotoPerfil (@RequestParam Integer idUsuario, @RequestBody PutUsuarioImagenDto body) {
+    public ResponseEntity<Void> actualizarFotoPerfil(@RequestParam Integer idUsuario, @RequestBody PutUsuarioImagenDto body) {
         try {
             usuariosService.actualizarFotoPerfil(idUsuario, body);
             return new ResponseEntity<Void>(HttpStatus.OK);
 
-        } catch (ApiException error){
+        } catch (ApiException error) {
             switch (error.getCode()) {
                 case 400:
                     log.error("ERROR : " + error.getMessage());

@@ -1,9 +1,6 @@
 package com.proyecto.services;
 
-import com.proyecto.dtos.GetUsuarioDto;
-import com.proyecto.dtos.PutUsuarioDto;
-import com.proyecto.dtos.PutUsuarioImagenDto;
-import com.proyecto.dtos.UsuarioDto;
+import com.proyecto.dtos.*;
 import com.proyecto.models.ImagenModels;
 import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.UsuariosRepository;
@@ -11,10 +8,7 @@ import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
 import com.proyecto.utils.Sha1Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.Optional;
@@ -29,12 +23,30 @@ public class UsuariosService {
     @Autowired
     ImagenesService imagenesService;
 
-    public GetUsuarioDto obtenerUsuario(int idUsuario) {
+    public boolean verificarUser(LoginUserDto entrada) {
+        try {
+
+            Optional<UsuarioModels> user = usuariosRepository.loguearUsuario(entrada.getUser(), entrada.getClave());
+
+            if (user.isPresent()) {
+                return true;
+            } else {
+                throw new ApiException(401, "Credenciales invalidas.");
+            }
+
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+    public GetUsuarioDto obtenerUsuario(String userInput) {
 
         try {
             //ahora creo la caja donde los datos viajan de la db al backend
 
-            Optional<UsuarioModels> usuario = usuariosRepository.findById(idUsuario);
+            Optional<UsuarioModels> usuario = usuariosRepository.obtenerUsuario(userInput);
 
             /* pregunto y verifico si el molde de usuario esta presente, le cargo los archivos al getDto
                y los envio al frontend */
@@ -67,7 +79,6 @@ public class UsuariosService {
         }
     }
 
-    //
     public Integer crearUsuario(UsuarioDto entrada) {
         try {
             if (entrada.getUser().length() >= 8 && entrada.getUser().length() <= 30
