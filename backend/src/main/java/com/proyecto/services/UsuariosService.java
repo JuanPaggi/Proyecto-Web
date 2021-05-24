@@ -3,10 +3,12 @@ package com.proyecto.services;
 import com.proyecto.dtos.GetUsuarioDto;
 import com.proyecto.dtos.PutUsuarioDto;
 import com.proyecto.dtos.UsuarioDto;
+import com.proyecto.models.ImagenModels;
 import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.UsuariosRepository;
 import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
+import com.proyecto.utils.Sha1Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class UsuariosService {
 
     @Autowired
     UsuariosRepository usuariosRepository;
+
+    @Autowired
+    ImagenesService imagenesService;
 
     public GetUsuarioDto obtenerUsuario(int idUsuario) {
 
@@ -45,6 +50,7 @@ public class UsuariosService {
                 salida.setAdmin(usuario.get().getAdmin());
                 salida.setMailVerificado(usuario.get().getMailVerificado());
                 salida.setCodigoVerificacion(usuario.get().getCodigoVerificacion());
+                salida.setIdImagen(usuario.get().getImagenPerfil().getIdImagen());
 
                 return salida;
             } else {
@@ -79,7 +85,13 @@ public class UsuariosService {
                 Integer n = rand.nextInt(999999);
                 usuario.setCodigoVerificacion(n.toString());
 
-
+                byte[] hash = Sha1Hasher.hashBytes(entrada.getImagen());
+                Optional<ImagenModels> imagen = imagenesService.obtenerImagenPorHash(hash);
+                if (imagen.isPresent()) {
+                    usuario.setImagenPerfil(imagen.get());
+                } else {
+                    usuario.setImagenPerfil(imagenesService.cargarImagen(entrada.getImagen()));
+                }
 
                 usuario = usuariosRepository.save(usuario);
                 return usuario.getIdUsuario();
@@ -112,7 +124,7 @@ public class UsuariosService {
         try {
             Optional<UsuarioModels> userDB = usuariosRepository.findById(idUsuario);
 
-            if (entrada.getClave() == null){
+            if (entrada.getClave() == null) {
                 throw new ApiException(400, "Clave no enviada.");
             }
 

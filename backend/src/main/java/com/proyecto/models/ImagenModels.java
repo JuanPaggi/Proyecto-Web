@@ -29,10 +29,6 @@ public class ImagenModels {
     @Column(name = "fecha_subida")
     private Date fechaSubida;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_usuario", referencedColumnName = "id_usuario")
-    private UsuarioModels usuario;
-
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="id_imagen", referencedColumnName = "id_imagen", nullable = false, insertable = false, updatable = false)
     private List<UsuarioModels> usuarios;

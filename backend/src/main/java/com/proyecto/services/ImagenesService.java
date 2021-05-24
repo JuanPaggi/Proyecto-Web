@@ -8,7 +8,7 @@ import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -47,12 +47,12 @@ public class ImagenesService {
         }
     }
 
-    public ImagenModels obtenerImagenPorHash(byte[] hash) {
+    public Optional<ImagenModels> obtenerImagenPorHash(byte[] hash) {
         try {
             Optional<ImagenModels> imagenDB = imagenesRepository.findByHash(hash);
 
             if (imagenDB.isPresent()) {
-                return imagenDB.get();
+                return imagenDB;
             } else {
                 throw new ApiException(404, "La imagen no existe");
             }
@@ -64,11 +64,11 @@ public class ImagenesService {
         }
     }
 
-    public ImagenModels cargarImagen(byte[] imagen, UsuarioModels usuario) {
+    public ImagenModels cargarImagen(byte[] imagen) {
         try {
             ImagenModels imagenSave = new ImagenModels();
             imagenSave.setImagen(imagen);
-            imagenSave.setUsuario(usuario);
+            imagenSave.setFechaSubida(new Date());
             return imagenesRepository.save(imagenSave);
         } catch (Exception error) {
             throw new ApiException(500, "Error al cargar imagen");

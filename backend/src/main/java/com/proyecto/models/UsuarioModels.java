@@ -53,8 +53,4 @@ public class UsuarioModels {
     @JoinColumn(name="id_imagen", referencedColumnName = "id_imagen")
     private ImagenModels imagenPerfil;
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval=true)
-    @JoinColumn(name="id_usuario", referencedColumnName = "id_usuario", nullable = false, insertable = false, updatable = false)
-    private List<ImagenModels> imagenes;
-
 }
