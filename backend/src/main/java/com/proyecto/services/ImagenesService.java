@@ -51,11 +51,7 @@ public class ImagenesService {
         try {
             Optional<ImagenModels> imagenDB = imagenesRepository.findByHash(hash);
 
-            if (imagenDB.isPresent()) {
-                return imagenDB;
-            } else {
-                throw new ApiException(404, "La imagen no existe");
-            }
+            return imagenDB;
 
         } catch (ApiException error) {
             throw error;

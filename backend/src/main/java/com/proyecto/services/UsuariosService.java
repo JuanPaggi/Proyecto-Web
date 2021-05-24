@@ -2,6 +2,7 @@ package com.proyecto.services;
 
 import com.proyecto.dtos.GetUsuarioDto;
 import com.proyecto.dtos.PutUsuarioDto;
+import com.proyecto.dtos.PutUsuarioImagenDto;
 import com.proyecto.dtos.UsuarioDto;
 import com.proyecto.models.ImagenModels;
 import com.proyecto.models.UsuarioModels;
@@ -167,6 +168,31 @@ public class UsuariosService {
 
             } else {
                 throw new ApiException(404, "El usuario no existe.");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+    public void actualizarFotoPerfil(Integer idUsuario, PutUsuarioImagenDto body) {
+        try {
+            Optional<UsuarioModels> userDB = usuariosRepository.findById(idUsuario);
+
+            if (userDB.isPresent()){
+                byte[] hash = Sha1Hasher.hashBytes(body.getImagen());
+                Optional<ImagenModels> imagen = imagenesService.obtenerImagenPorHash(hash);
+
+                if (imagen.isPresent()){
+                    userDB.get().setImagenPerfil(imagen.get());
+                } else {
+                    userDB.get().setImagenPerfil(imagenesService.cargarImagen(body.getImagen()));
+                }
+                
+                usuariosRepository.save(userDB.get());
+            } else {
+                throw new ApiException(404, "El usuario no existe");
             }
         } catch (ApiException error) {
             throw error;

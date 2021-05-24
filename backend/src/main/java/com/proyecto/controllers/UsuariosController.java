@@ -2,6 +2,7 @@ package com.proyecto.controllers;
 
 import com.proyecto.dtos.GetUsuarioDto;
 import com.proyecto.dtos.PutUsuarioDto;
+import com.proyecto.dtos.PutUsuarioImagenDto;
 import com.proyecto.dtos.UsuarioDto;
 import com.proyecto.services.UsuariosService;
 import com.proyecto.utils.ApiException;
@@ -98,4 +99,26 @@ public class UsuariosController {
             }
         }
     }
+
+    @PutMapping("/fotoPerfil")
+    public ResponseEntity<Void> actualizarFotoPerfil (@RequestParam Integer idUsuario, @RequestBody PutUsuarioImagenDto body) {
+        try {
+            usuariosService.actualizarFotoPerfil(idUsuario, body);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+
+        } catch (ApiException error){
+            switch (error.getCode()) {
+                case 400:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                case 404:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
 }
