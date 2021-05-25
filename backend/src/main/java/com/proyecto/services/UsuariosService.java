@@ -8,8 +8,11 @@ import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
 import com.proyecto.utils.Sha1Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
@@ -23,13 +26,13 @@ public class UsuariosService {
     @Autowired
     ImagenesService imagenesService;
 
-    public boolean verificarUser(LoginUserDto entrada) {
+    public void verificarUser(LoginUserDto entrada, HttpServletRequest request) {
         try {
 
             Optional<UsuarioModels> user = usuariosRepository.loguearUsuario(entrada.getUser(), entrada.getClave());
 
             if (user.isPresent()) {
-                return true;
+                request.getSession(true).setAttribute("user", entrada.getUser());
             } else {
                 throw new ApiException(401, "Credenciales invalidas.");
             }
@@ -41,9 +44,16 @@ public class UsuariosService {
         }
     }
 
-    public GetUsuarioDto obtenerUsuario(String userInput) {
+    public GetUsuarioDto obtenerUsuario(HttpServletRequest request) {
 
         try {
+            String userInput = "";
+
+            if (request.getSession(false) != null) {
+                userInput = (String) request.getSession(false).getAttribute("user");
+            } else {
+                throw new ApiException(401, "No autorizado.");
+            }
             //ahora creo la caja donde los datos viajan de la db al backend
 
             Optional<UsuarioModels> usuario = usuariosRepository.obtenerUsuario(userInput);
@@ -84,6 +94,11 @@ public class UsuariosService {
             if (entrada.getUser().length() >= 8 && entrada.getUser().length() <= 30
                     && entrada.getClave().length() >= 8 && entrada.getClave().length() <= 50
                     && entrada.getMail().length() <= 100 && entrada.getMail().contains("@") && !entrada.getMail().contains("+")) {
+
+                Optional<UsuarioModels> usuarioExistente = usuariosRepository.comprobarUsuarioRepetido(entrada.getUser(), entrada.getMail());
+                if (usuarioExistente.isPresent()) {
+                    throw new ApiException(409, "El usuario ya existe");
+                }
 
                 UsuarioModels usuario = new UsuarioModels();
                 usuario.setUser(entrada.getUser());
@@ -138,9 +153,18 @@ public class UsuariosService {
         }
     }
 
-    public int actualizarUsuario(int idUsuario, PutUsuarioDto entrada) {
+    public int actualizarUsuario(HttpServletRequest request, PutUsuarioDto entrada) {
         try {
-            Optional<UsuarioModels> userDB = usuariosRepository.findById(idUsuario);
+            String userInput = "";
+
+            if (request.getSession(false) != null) {
+                userInput = (String) request.getSession(false).getAttribute("user");
+
+            } else {
+                throw new ApiException(401, "Usuario no autorizado.");
+            }
+
+            Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
 
             if (entrada.getClave() == null) {
                 throw new ApiException(400, "Clave no enviada.");
@@ -154,7 +178,9 @@ public class UsuariosService {
                     if (user.getClave().equals(entrada.getClave())
                             && entrada.getUser().length() >= 8 && entrada.getUser().length() <= 30) {
 
+                        request.getSession(true).setAttribute("user", entrada.getUser());
                         user.setUser(entrada.getUser());
+
                     } else {
                         throw new ApiException(400, "Los datos enviados no son validos.");
                     }
@@ -193,9 +219,17 @@ public class UsuariosService {
         }
     }
 
-    public void actualizarFotoPerfil(Integer idUsuario, PutUsuarioImagenDto body) {
+    public UsuarioModels actualizarFotoPerfil(HttpServletRequest request, PutUsuarioImagenDto body) {
         try {
-            Optional<UsuarioModels> userDB = usuariosRepository.findById(idUsuario);
+            String userInput = "";
+
+            if (request.getSession(false) != null) {  //Si la session es distinta de null , le concedo la autorizacion
+                userInput = (String) request.getSession(false).getAttribute("user");
+            } else {
+                throw new ApiException(401, "Usuario no autorizado.");
+            }
+
+            Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
 
             if (userDB.isPresent()) {
                 byte[] hash = Sha1Hasher.hashBytes(body.getImagen());
@@ -208,6 +242,7 @@ public class UsuariosService {
                 }
 
                 usuariosRepository.save(userDB.get());
+                return userDB.get();
             } else {
                 throw new ApiException(404, "El usuario no existe");
             }

@@ -1,18 +1,19 @@
 package com.proyecto.services;
 
-import com.proyecto.dtos.GetComentarioDto;
-import com.proyecto.dtos.GetEtiquetaDto;
-import com.proyecto.dtos.GetPublicacionDto;
-import com.proyecto.dtos.PublicacionDto;
+import com.proyecto.dtos.*;
 import com.proyecto.models.ComentarioModels;
 import com.proyecto.models.EtiquetaModels;
 import com.proyecto.models.PublicacionModels;
+import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.EtiquetasRepository;
 import com.proyecto.repository.PublicacionesRepository;
+import com.proyecto.repository.UsuariosRepository;
 import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,9 @@ public class PublicacionesService {
     @Autowired
     EtiquetasRepository etiquetasRepository;
 
+    @Autowired
+    UsuariosRepository usuariosRepository;
+
     public GetPublicacionDto obetenerPublicacion(int idPublicacion) {
 
         try {
@@ -38,6 +42,12 @@ public class PublicacionesService {
                 salida.setDescripcion(publicacion.get().getDescripcion());
                 salida.setFechaCreacion(publicacion.get().getFechaCreacion());
                 salida.setTitulo(publicacion.get().getTitulo());
+
+                GetShortUsuarioDto userDatos = new GetShortUsuarioDto();
+                userDatos.setUser(publicacion.get().getUsuario().getUser());
+                userDatos.setIdUsuario(publicacion.get().getUsuario().getIdUsuario());
+
+                salida.setUsuario(userDatos);
 
                 List<GetEtiquetaDto> etiquetas = new ArrayList<>();
                 for (EtiquetaModels it : publicacion.get().getEtiquetas()) {
@@ -58,6 +68,7 @@ public class PublicacionesService {
                 }
                 salida.setComentarios(comentarios);
 
+
                 return salida;
 
             } else {
@@ -71,9 +82,17 @@ public class PublicacionesService {
     }
 
 
-    public Integer crearPublicacion(PublicacionDto entrada) {
+    public Integer crearPublicacion(PublicacionDto entrada, HttpServletRequest request) {
 
         try {
+            String userInput = "";
+
+            if (request.getSession(false) != null) {
+                userInput = (String) request.getSession(false).getAttribute("user");
+
+            } else {
+                throw new ApiException(401, "Usuario no autorizado.");
+            }
 
             if (entrada.getDescripcion().length() <= 10000) {
 
@@ -81,6 +100,13 @@ public class PublicacionesService {
                 publicacion.setDescripcion(entrada.getDescripcion());
                 publicacion.setFechaCreacion(new Date()); //crea la fecha en el momento
                 publicacion.setTitulo(entrada.getTitulo());
+                Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
+
+                if (userDB.isPresent()) {
+                    publicacion.setUsuario(userDB.get());
+                } else {
+                    throw new ApiException(404, "El usuario no existe");
+                }
 
                 if (entrada.getEtiquetas() != null) {
                     List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(entrada.getEtiquetas());
