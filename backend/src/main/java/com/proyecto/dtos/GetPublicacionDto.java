@@ -31,4 +31,7 @@ public class GetPublicacionDto {
     @JsonProperty("comentarios")
     private List<GetComentarioDto> comentarios;
 
+    @JsonProperty ("usuario")
+    private GetShortUsuarioDto usuario;
+
 }

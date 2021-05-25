@@ -23,5 +23,4 @@ public class PublicacionDto {
     @JsonProperty("etiquetas")
     private List<Integer> etiquetas;
 
-
 }

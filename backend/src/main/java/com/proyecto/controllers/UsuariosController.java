@@ -1,9 +1,6 @@
 package com.proyecto.controllers;
 
-import com.proyecto.dtos.GetUsuarioDto;
-import com.proyecto.dtos.PutUsuarioDto;
-import com.proyecto.dtos.PutUsuarioImagenDto;
-import com.proyecto.dtos.UsuarioDto;
+import com.proyecto.dtos.*;
 import com.proyecto.services.UsuariosService;
 import com.proyecto.utils.ApiException;
 import org.slf4j.Logger;
@@ -12,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -23,14 +22,37 @@ public class UsuariosController {
     @Autowired
     UsuariosService usuariosService;
 
-    @GetMapping("")
-    public ResponseEntity<GetUsuarioDto> obtenerUsuario(@RequestParam Integer idUsuario) {
+    @PostMapping("/login")
+    public ResponseEntity<Void> verificarUsuario(@RequestBody LoginUserDto body, HttpServletRequest request) {
 
         try {
-            GetUsuarioDto salida = usuariosService.obtenerUsuario(idUsuario);
-            return new ResponseEntity<>(salida, HttpStatus.OK);
+            usuariosService.verificarUser(body, request);
+
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
+                case 401:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                default:
+                    log.error("ERROR : " + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<GetUsuarioDto> obtenerUsuario(HttpServletRequest request) {
+
+        try {
+            GetUsuarioDto salida = usuariosService.obtenerUsuario(request);
+            return new ResponseEntity<>(salida, HttpStatus.OK);
+
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 401:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
                 case 404:
                     log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -48,6 +70,9 @@ public class UsuariosController {
             return new ResponseEntity<>(usuario, HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
+                case 409:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
                 case 400:
                     log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -80,13 +105,16 @@ public class UsuariosController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Integer> actualizarUsuario(@RequestParam Integer idUsuario, @RequestBody PutUsuarioDto body) {
+    public ResponseEntity<Void> actualizarUsuario(@RequestBody PutUsuarioDto body, HttpServletRequest request) {
         try {
-            int salida = usuariosService.actualizarUsuario(idUsuario, body);
-            return new ResponseEntity<>(salida, HttpStatus.OK);
+            usuariosService.actualizarUsuario(request, body);
+            return new ResponseEntity<>(HttpStatus.OK);
 
-        } catch (ApiException error){
+        } catch (ApiException error) {
             switch (error.getCode()) {
+                case 401:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
                 case 400:
                     log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -101,12 +129,12 @@ public class UsuariosController {
     }
 
     @PutMapping("/fotoPerfil")
-    public ResponseEntity<Void> actualizarFotoPerfil (@RequestParam Integer idUsuario, @RequestBody PutUsuarioImagenDto body) {
+    public ResponseEntity<Void> actualizarFotoPerfil(@RequestBody PutUsuarioImagenDto body, HttpServletRequest request) {
         try {
-            usuariosService.actualizarFotoPerfil(idUsuario, body);
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            usuariosService.actualizarFotoPerfil(request, body);
+            return new ResponseEntity<>(HttpStatus.OK);
 
-        } catch (ApiException error){
+        } catch (ApiException error) {
             switch (error.getCode()) {
                 case 400:
                     log.error("ERROR : " + error.getMessage());
@@ -120,5 +148,4 @@ public class UsuariosController {
             }
         }
     }
-
 }
