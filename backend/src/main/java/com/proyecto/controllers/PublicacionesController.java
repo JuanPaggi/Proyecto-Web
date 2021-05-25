@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequestMapping("/publicaciones")
@@ -42,9 +44,9 @@ public class PublicacionesController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Integer> crearPublicacion(@RequestBody PublicacionDto body) {
+    public ResponseEntity<Integer> crearPublicacion(@RequestBody PublicacionDto body, HttpServletRequest request) {
         try {
-            Integer salida = publicacionesService.crearPublicacion(body);
+            Integer salida = publicacionesService.crearPublicacion(body, request);
             return new ResponseEntity<>(salida, HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
