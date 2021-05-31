@@ -71,7 +71,7 @@ public class EtiquetasService {
 
                 return etiqueta.getIdEtiqueta();
             } else {
-                throw new ApiException(400, "Los datos enviados no son validos");
+                throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
             }
 
         } catch (ApiException error) {

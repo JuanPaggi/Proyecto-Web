@@ -8,10 +8,7 @@ import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
 import com.proyecto.utils.Sha1Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
@@ -129,7 +126,7 @@ public class UsuariosService {
                 usuario = usuariosRepository.save(usuario);
                 return usuario.getIdUsuario();
             } else {
-                throw new ApiException(400, "Los datos enviados no son validos");
+                throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
             }
         } catch (ApiException error) {
             throw error;
@@ -182,7 +179,7 @@ public class UsuariosService {
                         user.setUser(entrada.getUser());
 
                     } else {
-                        throw new ApiException(400, "Los datos enviados no son validos.");
+                        throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
                     }
                 }
 
@@ -191,7 +188,7 @@ public class UsuariosService {
                     if (user.getClave().equals(entrada.getClave()) && entrada.getMail().length() <= 100) {
                         user.setMail(entrada.getMail());
                     } else {
-                        throw new ApiException(400, "Los datos enviados no son validos.");
+                        throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
                     }
                 }
 
@@ -202,7 +199,7 @@ public class UsuariosService {
 
                         user.setClave(entrada.getNuevaClave());
                     } else {
-                        throw new ApiException(400, "Los datos enviados no son validos.");
+                        throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
                     }
                 }
 
