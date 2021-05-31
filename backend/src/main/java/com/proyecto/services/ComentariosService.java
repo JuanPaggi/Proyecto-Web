@@ -64,7 +64,7 @@ public class ComentariosService {
 
                 return comentario.getIdComentario();
             } else {
-                throw new ApiException(400, "los datos enviados no son validos");
+                throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
             }
         } catch (ApiException error) {
             throw error;
@@ -107,3 +107,4 @@ public class ComentariosService {
         }
     }
 }
+

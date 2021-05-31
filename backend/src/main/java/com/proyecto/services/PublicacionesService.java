@@ -12,7 +12,6 @@ import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
@@ -121,7 +120,7 @@ public class PublicacionesService {
 
                 return publicacion.getIdPublicacion();
             } else {
-                throw new ApiException(400, "los datos enviados no son validos");
+                throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
             }
         } catch (ApiException error) {
             throw error;
