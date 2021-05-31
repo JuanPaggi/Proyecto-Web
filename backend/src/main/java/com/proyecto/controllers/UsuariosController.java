@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Capa de controlador para los usuarios.
+ * Donde se reciben todas las peticiones Rest.
+ */
 
 @RestController
 @RequestMapping("/usuarios")
@@ -23,11 +27,9 @@ public class UsuariosController {
     UsuariosService usuariosService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> verificarUsuario(@RequestBody LoginUserDto body, HttpServletRequest request) {
-
+    public ResponseEntity<Void> verificarUsuario(@RequestBody UserLoginDto body, HttpServletRequest request) {
         try {
             usuariosService.verificarUser(body, request);
-
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
@@ -42,12 +44,10 @@ public class UsuariosController {
     }
 
     @GetMapping("")
-    public ResponseEntity<GetUsuarioDto> obtenerUsuario(HttpServletRequest request) {
-
+    public ResponseEntity<UserResponseDto> obtenerUsuario(HttpServletRequest request) {
         try {
-            GetUsuarioDto salida = usuariosService.obtenerUsuario(request);
+            UserResponseDto salida = usuariosService.obtenerUsuario(request);
             return new ResponseEntity<>(salida, HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 401:
@@ -63,8 +63,7 @@ public class UsuariosController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Integer> crearUsuario(@RequestBody UsuarioDto body) {
-
+    public ResponseEntity<Integer> crearUsuario(@RequestBody UserCreateDto body) {
         try {
             Integer usuario = usuariosService.crearUsuario(body);
             return new ResponseEntity<>(usuario, HttpStatus.OK);
@@ -91,7 +90,6 @@ public class UsuariosController {
         try {
             usuariosService.borrarUsuario(idUsuario);
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -105,11 +103,10 @@ public class UsuariosController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Void> actualizarUsuario(@RequestBody PutUsuarioDto body, HttpServletRequest request) {
+    public ResponseEntity<Void> actualizarUsuario(@RequestBody UserModifyDto body, HttpServletRequest request) {
         try {
             usuariosService.actualizarUsuario(request, body);
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 401:
@@ -129,11 +126,10 @@ public class UsuariosController {
     }
 
     @PutMapping("/fotoPerfil")
-    public ResponseEntity<Void> actualizarFotoPerfil(@RequestBody PutUsuarioImagenDto body, HttpServletRequest request) {
+    public ResponseEntity<Void> actualizarFotoPerfil(@RequestBody UserPhotoDto body, HttpServletRequest request) {
         try {
             usuariosService.actualizarFotoPerfil(request, body);
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 400:
@@ -148,4 +144,5 @@ public class UsuariosController {
             }
         }
     }
+
 }

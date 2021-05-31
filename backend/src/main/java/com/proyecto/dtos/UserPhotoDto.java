@@ -1,16 +1,18 @@
 package com.proyecto.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
+/**
+ * DTO para actualizar al foto de perfil del usuario.
+ */
+
 @Getter
 @Setter
-public class EtiquetaDto {
+public class UserPhotoDto {
 
-    @JsonProperty("etiqueta")
-    private String etiqueta;
+    @JsonProperty("imagen")
+    private byte[] imagen;
 
 }

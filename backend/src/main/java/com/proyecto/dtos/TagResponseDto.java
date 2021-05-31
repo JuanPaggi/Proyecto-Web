@@ -1,16 +1,18 @@
 package com.proyecto.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
+/**
+ * DTO para devolver los datos de una etiqueta.
+ */
+
 @Getter
 @Setter
-public class GetEtiquetaDto {
+public class TagResponseDto {
 
-    @JsonProperty("idEtiqueta")
+    @JsonProperty("id_etiqueta")
     private int idEtiqueta;
 
     @JsonProperty("etiqueta")

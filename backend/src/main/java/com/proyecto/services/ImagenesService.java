@@ -1,7 +1,6 @@
 package com.proyecto.services;
 
 import com.proyecto.models.ImagenModels;
-import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.ImagenesRepository;
 import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
@@ -10,6 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Optional;
+
+/**
+ * Capa de servicio para las imagenes.
+ */
 
 @Service
 public class ImagenesService {
@@ -50,9 +53,7 @@ public class ImagenesService {
     public Optional<ImagenModels> obtenerImagenPorHash(byte[] hash) {
         try {
             Optional<ImagenModels> imagenDB = imagenesRepository.findByHash(hash);
-
             return imagenDB;
-
         } catch (ApiException error) {
             throw error;
         } catch (Exception error) {

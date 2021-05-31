@@ -10,6 +10,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Capa de controlador para las imagenes.
+ * Donde se reciben todas las peticiones Rest.
+ */
+
 @RestController
 @RequestMapping("imagenes")
 public class ImagenesController {
@@ -20,7 +25,8 @@ public class ImagenesController {
     ImagenesService imagenesService;
 
     @GetMapping(value = "", produces = MediaType.IMAGE_JPEG_VALUE)
-    public @ResponseBody ResponseEntity<byte[]> obtenerImagen(@RequestParam Integer idImagen) {
+    public @ResponseBody
+    ResponseEntity<byte[]> obtenerImagen(@RequestParam Integer idImagen) {
         try {
             return new ResponseEntity<>(imagenesService.obtenerBytePorId(idImagen), HttpStatus.OK);
         } catch (ApiException error) {

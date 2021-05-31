@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * Entidad de la tabla Etiquetas.
+ * Modelo correspondiente a la tabla etiquetas.
  */
 
 @Getter

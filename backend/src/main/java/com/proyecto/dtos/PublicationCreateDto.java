@@ -1,18 +1,18 @@
 package com.proyecto.dtos;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * DTO para crear una publicacion.
+ */
 
-@Data
 @Getter
 @Setter
-public class PublicacionDto {
+public class PublicationCreateDto {
 
     @JsonProperty("descripcion")
     private String descripcion;

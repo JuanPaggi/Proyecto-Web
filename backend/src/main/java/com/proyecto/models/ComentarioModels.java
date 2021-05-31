@@ -3,11 +3,12 @@ package com.proyecto.models;
 import lombok.Getter;
 import lombok.Setter;
 
-
 import javax.persistence.*;
 import java.util.Date;
 
-
+/**
+ * Modelo correspondiente a la tabla comentarios.
+ */
 
 @Getter
 @Setter
@@ -27,6 +28,7 @@ public class ComentarioModels {
     private Date fechaCreacion;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name ="id_publicacion", referencedColumnName = "id_publicacion")
+    @JoinColumn(name = "id_publicacion", referencedColumnName = "id_publicacion")
     private PublicacionModels publicacion;
+
 }

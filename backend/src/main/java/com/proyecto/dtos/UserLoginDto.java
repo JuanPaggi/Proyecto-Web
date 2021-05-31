@@ -1,14 +1,16 @@
 package com.proyecto.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
+/**
+ * DTO para loguear un usuario en la aplicacion.
+ */
+
 @Getter
 @Setter
-public class LoginUserDto {
+public class UserLoginDto {
 
     @JsonProperty("user")
     private String user;
