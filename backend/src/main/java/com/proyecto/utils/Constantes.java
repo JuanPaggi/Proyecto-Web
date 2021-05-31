@@ -8,5 +8,6 @@ public class Constantes {
 
     public static final String ERROR_GENERAL = "Se produjo un error inesperado.";
     public static final String ERROR_PUBLICACIONES_NOEXISTE = "la publicacion no existe";
+    public static final String ERROR_DATOS_INVALIDOS = "Los datos enviados no son validos";
 
 }
