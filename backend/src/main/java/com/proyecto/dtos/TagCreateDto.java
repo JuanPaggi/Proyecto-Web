@@ -1,17 +1,18 @@
 package com.proyecto.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javassist.CtBehavior;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
+/**
+ * DTO para crear una etiqueta.
+ */
+
 @Getter
 @Setter
-public class PutUsuarioImagenDto {
+public class TagCreateDto {
 
+    @JsonProperty("etiqueta")
+    private String etiqueta;
 
-    @JsonProperty("imagen")
-    private byte[] imagen;
 }

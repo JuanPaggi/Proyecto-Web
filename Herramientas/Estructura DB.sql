@@ -35,7 +35,7 @@ CREATE TABLE `imagenes` (
   `imagen` MEDIUMBLOB NOT NULL,
   `imagen_hash` BINARY(20) NOT NULL,
   `fecha_subida` DATETIME NOT NULL,
-  `id_usuario` INTEGER NOT NULL,
+  `id_usuario` INTEGER NULL,
   PRIMARY KEY (`id_imagen`),
 KEY (`id_usuario`)
 );
@@ -147,12 +147,12 @@ CREATE TABLE `publicaciones_etiquetas` (
 DROP TABLE IF EXISTS `comentarios`;
 
 CREATE TABLE `comentarios` (
-  `id_comentarios` INTEGER NOT NULL AUTO_INCREMENT,
+  `id_comentario` INTEGER NOT NULL AUTO_INCREMENT,
   `id_usuario` INTEGER NOT NULL,
   `fecha_creacion` DATETIME NOT NULL,
   `texto` VARCHAR(5000) NOT NULL,
   `id_publicacion` INTEGER NOT NULL,
-  PRIMARY KEY (`id_comentarios`),
+  PRIMARY KEY (`id_comentario`),
 KEY (`id_usuario`, `id_publicacion`)
 );
 

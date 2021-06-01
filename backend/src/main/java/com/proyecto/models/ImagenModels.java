@@ -9,6 +9,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Modelo correspondiente a la tabla imagenes.
+ */
+
 @Getter
 @Setter
 @Entity
@@ -30,11 +34,12 @@ public class ImagenModels {
     private Date fechaSubida;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_imagen", referencedColumnName = "id_imagen", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "id_imagen", referencedColumnName = "id_imagen", nullable = false, insertable = false, updatable = false)
     private List<UsuarioModels> usuarios;
 
     public void setImagen(byte[] imagen) throws NoSuchAlgorithmException {
         this.imagenHash = Sha1Hasher.hashBytes(imagen);
         this.imagen = imagen;
     }
+
 }

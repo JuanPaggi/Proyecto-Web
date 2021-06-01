@@ -1,48 +1,47 @@
 package com.proyecto.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.Date;
 
-/*
-    que datos quiero recibir
+/**
+ * DTO para crear un usuario.
  */
 
-@Data
 @Getter
 @Setter
-public class UsuarioDto {
+public class UserCreateDto {
 
-    @JsonProperty ("user")
+    @JsonProperty("user")
     private String user;
 
-    @JsonProperty ("clave")
+    @JsonProperty("clave")
     private String clave;
 
-    @JsonProperty ("mail")
+    @JsonProperty("mail")
     private String mail;
 
-    @JsonProperty ("nombre")
+    @JsonProperty("nombre")
     private String nombre;
 
-    @JsonProperty ("apellido")
+    @JsonProperty("apellido")
     private String apellido;
 
-    @JsonProperty ("mailVerificado")
+    @JsonProperty("mailVerificado")
     private Boolean mailVerificado;
 
-    @JsonProperty ("fechaNacimiento")
+    @JsonProperty("fechaNacimiento")
     private Date fechaNacimiento;
 
-    @JsonProperty ("codigoVerificacion")
+    @JsonProperty("codigoVerificacion")
     private Boolean codigoVerificacion;
 
-    @JsonProperty ("admin")
+    @JsonProperty("admin")
     private Boolean admin;
 
-    @JsonProperty ("imagen")
+    @JsonProperty("imagen")
     private byte[] imagen;
 
 }

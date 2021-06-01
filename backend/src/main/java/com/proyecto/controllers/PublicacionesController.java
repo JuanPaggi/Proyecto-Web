@@ -1,8 +1,7 @@
 package com.proyecto.controllers;
 
-
-import com.proyecto.dtos.GetPublicacionDto;
-import com.proyecto.dtos.PublicacionDto;
+import com.proyecto.dtos.PublicationResponseDto;
+import com.proyecto.dtos.PublicationCreateDto;
 import com.proyecto.services.PublicacionesService;
 import com.proyecto.utils.ApiException;
 import org.slf4j.Logger;
@@ -14,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Capa de controlador para las publicaciones.
+ * Donde se reciben todas las peticiones Rest.
+ */
 
 @RestController
 @RequestMapping("/publicaciones")
@@ -25,12 +28,10 @@ public class PublicacionesController {
     PublicacionesService publicacionesService;
 
     @GetMapping("")
-    public ResponseEntity<GetPublicacionDto> obtenerPublicacion(@RequestParam Integer idPublicacion) {
+    public ResponseEntity<PublicationResponseDto> obtenerPublicacion(@RequestParam(name = "id_publicacion") Integer idPublicacion) {
         try {
-
-            GetPublicacionDto salida = publicacionesService.obetenerPublicacion(idPublicacion);
+            PublicationResponseDto salida = publicacionesService.obetenerPublicacion(idPublicacion);
             return new ResponseEntity<>(salida, HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -44,7 +45,7 @@ public class PublicacionesController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Integer> crearPublicacion(@RequestBody PublicacionDto body, HttpServletRequest request) {
+    public ResponseEntity<Integer> crearPublicacion(@RequestBody PublicationCreateDto body, HttpServletRequest request) {
         try {
             Integer salida = publicacionesService.crearPublicacion(body, request);
             return new ResponseEntity<>(salida, HttpStatus.OK);
@@ -64,11 +65,10 @@ public class PublicacionesController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Void> borrarPublicacion(@RequestParam Integer idPublicacion) {
+    public ResponseEntity<Void> borrarPublicacion(@RequestParam(name = "id_publicacion") Integer idPublicacion) {
         try {
             publicacionesService.borrarPublicacion(idPublicacion);
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -83,11 +83,10 @@ public class PublicacionesController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Integer> actualizarPublicacion(@RequestParam Integer idPublicacion, @RequestBody PublicacionDto body) {
+    public ResponseEntity<Integer> actualizarPublicacion(@RequestParam(name = "id_publicacion") Integer idPublicacion, @RequestBody PublicationCreateDto body) {
         try {
             int salida = publicacionesService.actualizarPublicacion(idPublicacion, body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -99,4 +98,5 @@ public class PublicacionesController {
             }
         }
     }
+
 }

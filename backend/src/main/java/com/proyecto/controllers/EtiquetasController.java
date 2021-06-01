@@ -1,7 +1,7 @@
 package com.proyecto.controllers;
 
-import com.proyecto.dtos.GetEtiquetaDto;
-import com.proyecto.dtos.EtiquetaDto;
+import com.proyecto.dtos.TagResponseDto;
+import com.proyecto.dtos.TagCreateDto;
 import com.proyecto.services.EtiquetasService;
 import com.proyecto.utils.ApiException;
 import org.slf4j.Logger;
@@ -11,9 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 /**
- * Capa de controlador.
+ * Capa de controlador Para las etiquetas.
  * Donde se reciben todas las peticiones Rest.
  */
 
@@ -26,16 +25,11 @@ public class EtiquetasController {
     @Autowired
     EtiquetasService etiquetasService;
 
-    /**
-     * Se recibe un ID y se obtiene la informacion de la etiqueta.
-     */
-
     @GetMapping("")
-    public ResponseEntity<GetEtiquetaDto> obtenerEtiqueta(@RequestParam Integer idEtiqueta) {
+    public ResponseEntity<TagResponseDto> obtenerEtiqueta(@RequestParam(name = "id_etiqueta") Integer idEtiqueta) {
         try {
-            GetEtiquetaDto salida = etiquetasService.obtenerEtiqueta(idEtiqueta);
+            TagResponseDto salida = etiquetasService.obtenerEtiqueta(idEtiqueta);
             return new ResponseEntity<>(salida, HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -48,16 +42,11 @@ public class EtiquetasController {
         }
     }
 
-    /**
-     * Se recibe la informacion necesaria para crear un Etiqueta.
-     */
-
     @PostMapping("")
-    public ResponseEntity<Integer> crearEtiqueta(@RequestBody EtiquetaDto body) {
+    public ResponseEntity<Integer> crearEtiqueta(@RequestBody TagCreateDto body) {
         try {
             Integer salida = etiquetasService.crearEtiqueta(body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 400:
@@ -73,17 +62,11 @@ public class EtiquetasController {
         }
     }
 
-    /**
-     * Se recibe el idEtiqueta de la etiqueta que quiero eliminar
-     */
-
     @DeleteMapping("")
-    public ResponseEntity<Void> borrarEtiqueta(@RequestParam Integer idEtiqueta) {
+    public ResponseEntity<Void> borrarEtiqueta(@RequestParam(name = "id_etiqueta") Integer idEtiqueta) {
         try {
-
             etiquetasService.borrarEtiqueta(idEtiqueta);
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -97,11 +80,10 @@ public class EtiquetasController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Integer> actualziarEtiqueta(@RequestParam Integer idEtiqueta, @RequestBody EtiquetaDto body) {
+    public ResponseEntity<Integer> actualziarEtiqueta(@RequestParam(name = "id_etiqueta") Integer idEtiqueta, @RequestBody TagCreateDto body) {
         try {
             int salida = etiquetasService.actualizarEtiqueta(idEtiqueta, body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -113,4 +95,5 @@ public class EtiquetasController {
             }
         }
     }
+
 }

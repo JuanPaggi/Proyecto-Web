@@ -1,14 +1,16 @@
 package com.proyecto.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
+/**
+ * DTO para crear un comentario.
+ */
+
 @Getter
 @Setter
-public class ComentarioDto {
+public class CommentCreateDto {
 
     @JsonProperty("texto")
     private String texto;
