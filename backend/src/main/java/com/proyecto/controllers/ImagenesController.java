@@ -26,7 +26,7 @@ public class ImagenesController {
 
     @GetMapping(value = "", produces = MediaType.IMAGE_JPEG_VALUE)
     public @ResponseBody
-    ResponseEntity<byte[]> obtenerImagen(@RequestParam Integer idImagen) {
+    ResponseEntity<byte[]> obtenerImagen(@RequestParam(name = "id_imagen") Integer idImagen) {
         try {
             return new ResponseEntity<>(imagenesService.obtenerBytePorId(idImagen), HttpStatus.OK);
         } catch (ApiException error) {

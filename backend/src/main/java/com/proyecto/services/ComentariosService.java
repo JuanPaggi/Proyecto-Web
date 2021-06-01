@@ -4,12 +4,16 @@ import com.proyecto.dtos.CommentCreateDto;
 import com.proyecto.dtos.CommentResponseDto;
 import com.proyecto.models.ComentarioModels;
 import com.proyecto.models.PublicacionModels;
+import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.ComentariosRepository;
 import com.proyecto.repository.PublicacionesRepository;
+import com.proyecto.repository.UsuariosRepository;
 import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
 
@@ -25,6 +29,9 @@ public class ComentariosService {
 
     @Autowired
     PublicacionesRepository publicacionesRepository;
+
+    @Autowired
+    UsuariosRepository usuariosRepository;
 
     public CommentResponseDto obtenerComentario(int idComentario) {
         try {
@@ -45,12 +52,24 @@ public class ComentariosService {
         }
     }
 
-    public Integer crearComentario(CommentCreateDto entrada) {
+    public Integer crearComentario(CommentCreateDto entrada, HttpServletRequest request) {
         try {
+            String userInput = "";
+            if (request.getSession(false) != null) {
+                userInput = (String) request.getSession(false).getAttribute("user");
+            } else {
+                throw new ApiException(401, "Usuario no autorizado.");
+            }
             if (entrada.getTexto().length() <= 8000) {
                 ComentarioModels comentario = new ComentarioModels();
                 comentario.setTexto(entrada.getTexto());
                 comentario.setFechaCreacion(new Date());
+                Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
+                if (userDB.isPresent()) {
+                    comentario.setUsuario(userDB.get());
+                } else {
+                    throw new ApiException(404, "El usuario no existe");
+                }
                 Optional<PublicacionModels> publicacion = publicacionesRepository.findById(entrada.getIdPublicacion());
                 if (publicacion.isPresent()) {
                     comentario.setPublicacion(publicacion.get());

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Capa de controlador para los comentarios.
  * Donde se reciben todas las peticiones Rest.
@@ -26,7 +28,7 @@ public class ComentariosController {
     ComentariosService comentariosService;
 
     @GetMapping("")
-    public ResponseEntity<CommentResponseDto> obtenerComentario(@RequestParam Integer idComentario) {
+    public ResponseEntity<CommentResponseDto> obtenerComentario(@RequestParam(name = "id_comentario") Integer idComentario) {
         try {
             CommentResponseDto salida = comentariosService.obtenerComentario(idComentario);
             return new ResponseEntity<>(salida, HttpStatus.OK);
@@ -43,9 +45,9 @@ public class ComentariosController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Integer> crearComentario(@RequestBody CommentCreateDto body) {
+    public ResponseEntity<Integer> crearComentario(@RequestBody CommentCreateDto body, HttpServletRequest request) {
         try {
-            Integer salida = comentariosService.crearComentario(body);
+            Integer salida = comentariosService.crearComentario(body, request);
             return new ResponseEntity<>(salida, HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
@@ -63,7 +65,7 @@ public class ComentariosController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Void> borrarComentario(@RequestParam Integer idComentario) {
+    public ResponseEntity<Void> borrarComentario(@RequestParam(name = "id_comentario") Integer idComentario) {
         try {
             comentariosService.borrarComentario(idComentario);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -80,7 +82,7 @@ public class ComentariosController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Integer> actualizarComentario(@RequestParam Integer idComentario, @RequestBody CommentCreateDto body) {
+    public ResponseEntity<Integer> actualizarComentario(@RequestParam(name = "id_comentario") Integer idComentario, @RequestBody CommentCreateDto body) {
         try {
             int salida = comentariosService.actualizarComentario(idComentario, body);
             return new ResponseEntity<>(salida, HttpStatus.OK);

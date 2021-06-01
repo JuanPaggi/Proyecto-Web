@@ -31,4 +31,8 @@ public class ComentarioModels {
     @JoinColumn(name = "id_publicacion", referencedColumnName = "id_publicacion")
     private PublicacionModels publicacion;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private UsuarioModels usuario;
+
 }

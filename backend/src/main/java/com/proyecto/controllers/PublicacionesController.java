@@ -28,7 +28,7 @@ public class PublicacionesController {
     PublicacionesService publicacionesService;
 
     @GetMapping("")
-    public ResponseEntity<PublicationResponseDto> obtenerPublicacion(@RequestParam Integer idPublicacion) {
+    public ResponseEntity<PublicationResponseDto> obtenerPublicacion(@RequestParam(name = "id_publicacion") Integer idPublicacion) {
         try {
             PublicationResponseDto salida = publicacionesService.obetenerPublicacion(idPublicacion);
             return new ResponseEntity<>(salida, HttpStatus.OK);
@@ -65,7 +65,7 @@ public class PublicacionesController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Void> borrarPublicacion(@RequestParam Integer idPublicacion) {
+    public ResponseEntity<Void> borrarPublicacion(@RequestParam(name = "id_publicacion") Integer idPublicacion) {
         try {
             publicacionesService.borrarPublicacion(idPublicacion);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -83,7 +83,7 @@ public class PublicacionesController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Integer> actualizarPublicacion(@RequestParam Integer idPublicacion, @RequestBody PublicationCreateDto body) {
+    public ResponseEntity<Integer> actualizarPublicacion(@RequestParam(name = "id_publicacion") Integer idPublicacion, @RequestBody PublicationCreateDto body) {
         try {
             int salida = publicacionesService.actualizarPublicacion(idPublicacion, body);
             return new ResponseEntity<>(salida, HttpStatus.OK);

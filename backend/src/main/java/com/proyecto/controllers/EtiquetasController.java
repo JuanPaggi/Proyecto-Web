@@ -26,7 +26,7 @@ public class EtiquetasController {
     EtiquetasService etiquetasService;
 
     @GetMapping("")
-    public ResponseEntity<TagResponseDto> obtenerEtiqueta(@RequestParam Integer idEtiqueta) {
+    public ResponseEntity<TagResponseDto> obtenerEtiqueta(@RequestParam(name = "id_etiqueta") Integer idEtiqueta) {
         try {
             TagResponseDto salida = etiquetasService.obtenerEtiqueta(idEtiqueta);
             return new ResponseEntity<>(salida, HttpStatus.OK);
@@ -63,7 +63,7 @@ public class EtiquetasController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<Void> borrarEtiqueta(@RequestParam Integer idEtiqueta) {
+    public ResponseEntity<Void> borrarEtiqueta(@RequestParam(name = "id_etiqueta") Integer idEtiqueta) {
         try {
             etiquetasService.borrarEtiqueta(idEtiqueta);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -80,7 +80,7 @@ public class EtiquetasController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Integer> actualziarEtiqueta(@RequestParam Integer idEtiqueta, @RequestBody TagCreateDto body) {
+    public ResponseEntity<Integer> actualziarEtiqueta(@RequestParam(name = "id_etiqueta") Integer idEtiqueta, @RequestBody TagCreateDto body) {
         try {
             int salida = etiquetasService.actualizarEtiqueta(idEtiqueta, body);
             return new ResponseEntity<>(salida, HttpStatus.OK);
