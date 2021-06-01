@@ -9,6 +9,7 @@ import com.proyecto.utils.Constantes;
 import com.proyecto.utils.Sha1Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
@@ -31,6 +32,9 @@ public class UsuariosService {
         try {
             Optional<UsuarioModels> user = usuariosRepository.loguearUsuario(entrada.getUser(), entrada.getClave());
             if (user.isPresent()) {
+                if (!user.get().getMailVerificado()) {
+                    throw new ApiException(300, "Se creo una cuenta nueva");
+                }
                 request.getSession(true).setAttribute("user", entrada.getUser());
             } else {
                 throw new ApiException(401, "Credenciales invalidas.");
@@ -203,6 +207,27 @@ public class UsuariosService {
                 }
                 usuariosRepository.save(userDB.get());
                 return userDB.get();
+            } else {
+                throw new ApiException(404, "El usuario no existe");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+    public Boolean verificarCodigoMail(VerificacionCodigoDto body) {
+        try {
+            Optional<UsuarioModels> user = usuariosRepository.loguearUsuario(body.getUser(), body.getClave());
+            if (user.isPresent()) {
+                if (user.get().getCodigoVerificacion().equals(body.getCodigo())) {
+                    user.get().setMailVerificado(true);
+                    usuariosRepository.save(user.get());
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 throw new ApiException(404, "El usuario no existe");
             }
