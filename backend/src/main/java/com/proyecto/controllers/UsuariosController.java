@@ -148,10 +148,10 @@ public class UsuariosController {
         }
     }
 
-    @PostMapping("/verificacionMail")
-    public ResponseEntity<Boolean> verificarCodigo(@RequestBody VerificacionCodigoDto body) {
+    @GetMapping(path = "/verificarMail/{usuario}/{codigo}")
+    public ResponseEntity<Boolean> verificarCodigo(@PathVariable("usuario") String usuario, @PathVariable("codigo") String codigo) {
         try {
-            return new ResponseEntity<>(usuariosService.verificarCodigoMail(body), HttpStatus.OK);
+            return new ResponseEntity<>(usuariosService.verificarCodigoMail(usuario, codigo), HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
