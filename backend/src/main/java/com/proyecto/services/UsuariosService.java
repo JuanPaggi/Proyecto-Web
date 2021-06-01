@@ -6,13 +6,16 @@ import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.UsuariosRepository;
 import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
+import com.proyecto.utils.SendMail;
 import com.proyecto.utils.Sha1Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
+
 
 /**
  * Capa de servicio para los usuarios.
@@ -27,10 +30,16 @@ public class UsuariosService {
     @Autowired
     ImagenesService imagenesService;
 
+    @Autowired
+    SendMail sendMail;
+
     public void verificarUser(UserLoginDto entrada, HttpServletRequest request) {
         try {
             Optional<UsuarioModels> user = usuariosRepository.loguearUsuario(entrada.getUser(), entrada.getClave());
             if (user.isPresent()) {
+                if (!user.get().getMailVerificado()) {
+                    throw new ApiException(300, "Se creo una cuenta nueva");
+                }
                 request.getSession(true).setAttribute("user", entrada.getUser());
             } else {
                 throw new ApiException(401, "Credenciales invalidas.");
@@ -97,8 +106,8 @@ public class UsuariosService {
                 usuario.setFechaRegistro(new Date());
                 usuario.setMailVerificado(false);
                 Random rand = new Random();
-                Integer n = rand.nextInt(999999);
-                usuario.setCodigoVerificacion(n.toString());
+                Integer codigoRandom = rand.nextInt(999999);
+                usuario.setCodigoVerificacion(codigoRandom.toString());
                 if (entrada.getImagen() != null) {
                     byte[] hash = Sha1Hasher.hashBytes(entrada.getImagen());
                     Optional<ImagenModels> imagen = imagenesService.obtenerImagenPorHash(hash);
@@ -109,6 +118,15 @@ public class UsuariosService {
                     }
                 }
                 usuario = usuariosRepository.save(usuario);
+
+                try {
+                    sendMail.enviarMail(entrada.getMail(), "Ingrese al siguiente enlace para activar su cuenta: \n" +
+                            "http://localhost:8080/usuarios/verificarMail/" + entrada.getUser() + "/" + codigoRandom);
+                } catch (Exception error) {
+                    usuariosRepository.delete(usuario);
+                    throw new ApiException(500, "Fallo el envio del mail");
+                }
+
                 return usuario.getIdUsuario();
             } else {
                 throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
@@ -203,6 +221,27 @@ public class UsuariosService {
                 }
                 usuariosRepository.save(userDB.get());
                 return userDB.get();
+            } else {
+                throw new ApiException(404, "El usuario no existe");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+    public Boolean verificarCodigoMail(String usuario, String clave) {
+        try {
+            Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(usuario);
+            if (user.isPresent()) {
+                if (user.get().getCodigoVerificacion().equals(clave)) {
+                    user.get().setMailVerificado(true);
+                    usuariosRepository.save(user.get());
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 throw new ApiException(404, "El usuario no existe");
             }

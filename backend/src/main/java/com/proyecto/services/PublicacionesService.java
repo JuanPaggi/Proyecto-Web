@@ -87,7 +87,7 @@ public class PublicacionesService {
             if (entrada.getDescripcion().length() <= 10000) {
                 PublicacionModels publicacion = new PublicacionModels();
                 publicacion.setDescripcion(entrada.getDescripcion());
-                publicacion.setFechaCreacion(new Date()); //crea la fecha en el momento
+                publicacion.setFechaCreacion(new Date());
                 publicacion.setTitulo(entrada.getTitulo());
                 Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
                 if (userDB.isPresent()) {

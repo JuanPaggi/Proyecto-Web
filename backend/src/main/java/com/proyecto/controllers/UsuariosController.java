@@ -33,6 +33,9 @@ public class UsuariosController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
+                case 300:
+                    log.error("REDIRECTION : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
                 case 401:
                     log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -135,6 +138,22 @@ public class UsuariosController {
                 case 400:
                     log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                case 404:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @GetMapping(path = "/verificarMail/{usuario}/{codigo}")
+    public ResponseEntity<Boolean> verificarCodigo(@PathVariable("usuario") String usuario, @PathVariable("codigo") String codigo) {
+        try {
+            return new ResponseEntity<>(usuariosService.verificarCodigoMail(usuario, codigo), HttpStatus.OK);
+        } catch (ApiException error) {
+            switch (error.getCode()) {
                 case 404:
                     log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
