@@ -415,7 +415,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user\" : \"juanpaggi\",\r\n    \"clave\" : \"juanpaggi\",\r\n    \"mail\" : \"juanpaggi@hotmail.com\",\r\n    \"nombre\" : \"juan\",\r\n    \"apellido\" : \"paggi\",\r\n    \"fechaNacimiento\" : \"1996-01-26\",\r\n    \"admin\" : false\r\n}",
+							"raw": "{\r\n    \"user\" : \"pachipachi12\",\r\n    \"clave\" : \"pachipachi12\",\r\n    \"mail\" : \"pag123123@hotmail.com\",\r\n    \"nombre\" : \"juan\",\r\n    \"apellido\" : \"paggi\",\r\n    \"fechaNacimiento\" : \"1996-01-26\",\r\n    \"admin\" : false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -443,7 +443,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user\" : \"juanpaggi\",\r\n    \"clave\" : \"juanpaggi\"\r\n}",
+							"raw": "{\r\n    \"user\" : \"pachipachi\",\r\n    \"clave\" : \"pachipachi\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -553,7 +553,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/usuarios?id_usuario=5",
+							"raw": "http://localhost:8080/usuarios?idUsuario=13",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -564,8 +564,8 @@
 							],
 							"query": [
 								{
-									"key": "id_usuario",
-									"value": "5"
+									"key": "idUsuario",
+									"value": "13"
 								}
 							]
 						}
