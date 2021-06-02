@@ -5,11 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 /**
- *  Capa de Repositorio.
- *  Definimos las querys que utilizaremos con etiquetas.
+ * Capa de Repositorio.
+ * Definimos las querys que utilizaremos con etiquetas.
  */
 
 @Repository

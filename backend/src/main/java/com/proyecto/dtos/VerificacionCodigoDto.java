@@ -1,24 +1,24 @@
 package com.proyecto.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
+/**
+ * DTO para recibir los datos de una verificacion de mail.
+ */
+
 @Getter
 @Setter
-public class PutUsuarioDto {
+public class VerificacionCodigoDto {
 
-    @JsonProperty ("user")
+    @JsonProperty("user")
     private String user;
-
-    @JsonProperty ("mail")
-    private String mail;
 
     @JsonProperty ("clave")
     private String clave;
 
-    @JsonProperty ("nuevaClave")
-    private String nuevaClave;
+    @JsonProperty ("codigo")
+    private String codigo;
+
 }

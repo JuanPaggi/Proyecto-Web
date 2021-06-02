@@ -6,13 +6,20 @@ import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.UsuariosRepository;
 import com.proyecto.utils.ApiException;
 import com.proyecto.utils.Constantes;
+import com.proyecto.utils.SendMail;
 import com.proyecto.utils.Sha1Hasher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
+
+
+/**
+ * Capa de servicio para los usuarios.
+ */
 
 @Service
 public class UsuariosService {
@@ -23,17 +30,20 @@ public class UsuariosService {
     @Autowired
     ImagenesService imagenesService;
 
-    public void verificarUser(LoginUserDto entrada, HttpServletRequest request) {
+    @Autowired
+    SendMail sendMail;
+
+    public void verificarUser(UserLoginDto entrada, HttpServletRequest request) {
         try {
-
             Optional<UsuarioModels> user = usuariosRepository.loguearUsuario(entrada.getUser(), entrada.getClave());
-
             if (user.isPresent()) {
+                if (!user.get().getMailVerificado()) {
+                    throw new ApiException(300, "Se creo una cuenta nueva");
+                }
                 request.getSession(true).setAttribute("user", entrada.getUser());
             } else {
                 throw new ApiException(401, "Credenciales invalidas.");
             }
-
         } catch (ApiException error) {
             throw error;
         } catch (Exception error) {
@@ -41,25 +51,17 @@ public class UsuariosService {
         }
     }
 
-    public GetUsuarioDto obtenerUsuario(HttpServletRequest request) {
-
+    public UserResponseDto obtenerUsuario(HttpServletRequest request) {
         try {
             String userInput = "";
-
             if (request.getSession(false) != null) {
                 userInput = (String) request.getSession(false).getAttribute("user");
             } else {
                 throw new ApiException(401, "No autorizado.");
             }
-            //ahora creo la caja donde los datos viajan de la db al backend
-
             Optional<UsuarioModels> usuario = usuariosRepository.obtenerUsuario(userInput);
-
-            /* pregunto y verifico si el molde de usuario esta presente, le cargo los archivos al getDto
-               y los envio al frontend */
-
             if (usuario.isPresent()) {
-                GetUsuarioDto salida = new GetUsuarioDto();
+                UserResponseDto salida = new UserResponseDto();
                 salida.setIdUsuario(usuario.get().getIdUsuario());
                 salida.setUser(usuario.get().getUser());
                 salida.setMail(usuario.get().getMail());
@@ -70,11 +72,9 @@ public class UsuariosService {
                 salida.setAdmin(usuario.get().getAdmin());
                 salida.setMailVerificado(usuario.get().getMailVerificado());
                 salida.setCodigoVerificacion(usuario.get().getCodigoVerificacion());
-
                 if (usuario.get().getImagenPerfil() != null) {
                     salida.setIdImagen(usuario.get().getImagenPerfil().getIdImagen());
                 }
-
                 return salida;
             } else {
                 throw new ApiException(404, "El usuario no existe.");
@@ -86,17 +86,15 @@ public class UsuariosService {
         }
     }
 
-    public Integer crearUsuario(UsuarioDto entrada) {
+    public Integer crearUsuario(UserCreateDto entrada) {
         try {
             if (entrada.getUser().length() >= 8 && entrada.getUser().length() <= 30
                     && entrada.getClave().length() >= 8 && entrada.getClave().length() <= 50
                     && entrada.getMail().length() <= 100 && entrada.getMail().contains("@") && !entrada.getMail().contains("+")) {
-
                 Optional<UsuarioModels> usuarioExistente = usuariosRepository.comprobarUsuarioRepetido(entrada.getUser(), entrada.getMail());
                 if (usuarioExistente.isPresent()) {
                     throw new ApiException(409, "El usuario ya existe");
                 }
-
                 UsuarioModels usuario = new UsuarioModels();
                 usuario.setUser(entrada.getUser());
                 usuario.setMail(entrada.getMail());
@@ -107,13 +105,10 @@ public class UsuariosService {
                 usuario.setAdmin(entrada.getAdmin());
                 usuario.setFechaRegistro(new Date());
                 usuario.setMailVerificado(false);
-
                 Random rand = new Random();
-                Integer n = rand.nextInt(999999);
-                usuario.setCodigoVerificacion(n.toString());
-
+                Integer codigoRandom = rand.nextInt(999999);
+                usuario.setCodigoVerificacion(codigoRandom.toString());
                 if (entrada.getImagen() != null) {
-
                     byte[] hash = Sha1Hasher.hashBytes(entrada.getImagen());
                     Optional<ImagenModels> imagen = imagenesService.obtenerImagenPorHash(hash);
                     if (imagen.isPresent()) {
@@ -122,8 +117,16 @@ public class UsuariosService {
                         usuario.setImagenPerfil(imagenesService.cargarImagen(entrada.getImagen()));
                     }
                 }
-
                 usuario = usuariosRepository.save(usuario);
+
+                try {
+                    sendMail.enviarMail(entrada.getMail(), "Ingrese al siguiente enlace para activar su cuenta: \n" +
+                            "http://localhost:8080/usuarios/verificarMail/" + entrada.getUser() + "/" + codigoRandom);
+                } catch (Exception error) {
+                    usuariosRepository.delete(usuario);
+                    throw new ApiException(500, "Fallo el envio del mail");
+                }
+
                 return usuario.getIdUsuario();
             } else {
                 throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
@@ -136,7 +139,6 @@ public class UsuariosService {
     }
 
     public void borrarUsuario(int idUsuario) {
-
         try {
             if (!usuariosRepository.existsById(idUsuario)) {
                 throw new ApiException(404, "El usuario no existe");
@@ -150,62 +152,46 @@ public class UsuariosService {
         }
     }
 
-    public int actualizarUsuario(HttpServletRequest request, PutUsuarioDto entrada) {
+    public int actualizarUsuario(HttpServletRequest request, UserModifyDto entrada) {
         try {
             String userInput = "";
-
             if (request.getSession(false) != null) {
                 userInput = (String) request.getSession(false).getAttribute("user");
-
             } else {
                 throw new ApiException(401, "Usuario no autorizado.");
             }
-
             Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
-
             if (entrada.getClave() == null) {
                 throw new ApiException(400, "Clave no enviada.");
             }
-
             if (userDB.isPresent()) {
                 UsuarioModels user = userDB.get();
-
                 if (entrada.getUser() != null) {
-
                     if (user.getClave().equals(entrada.getClave())
                             && entrada.getUser().length() >= 8 && entrada.getUser().length() <= 30) {
-
                         request.getSession(true).setAttribute("user", entrada.getUser());
                         user.setUser(entrada.getUser());
-
                     } else {
                         throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
                     }
                 }
-
                 if (entrada.getMail() != null) {
-
                     if (user.getClave().equals(entrada.getClave()) && entrada.getMail().length() <= 100) {
                         user.setMail(entrada.getMail());
                     } else {
                         throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
                     }
                 }
-
                 if (entrada.getNuevaClave() != null) {
-
                     if (user.getClave().equals(entrada.getClave()) && entrada.getNuevaClave().length() >= 8 &&
                             entrada.getNuevaClave().length() <= 50) {
-
                         user.setClave(entrada.getNuevaClave());
                     } else {
                         throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
                     }
                 }
-
                 usuariosRepository.save(user);
                 return user.getIdUsuario();
-
             } else {
                 throw new ApiException(404, "El usuario no existe.");
             }
@@ -216,28 +202,23 @@ public class UsuariosService {
         }
     }
 
-    public UsuarioModels actualizarFotoPerfil(HttpServletRequest request, PutUsuarioImagenDto body) {
+    public UsuarioModels actualizarFotoPerfil(HttpServletRequest request, UserPhotoDto body) {
         try {
             String userInput = "";
-
-            if (request.getSession(false) != null) {  //Si la session es distinta de null , le concedo la autorizacion
+            if (request.getSession(false) != null) {
                 userInput = (String) request.getSession(false).getAttribute("user");
             } else {
                 throw new ApiException(401, "Usuario no autorizado.");
             }
-
             Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
-
             if (userDB.isPresent()) {
                 byte[] hash = Sha1Hasher.hashBytes(body.getImagen());
                 Optional<ImagenModels> imagen = imagenesService.obtenerImagenPorHash(hash);
-
                 if (imagen.isPresent()) {
                     userDB.get().setImagenPerfil(imagen.get());
                 } else {
                     userDB.get().setImagenPerfil(imagenesService.cargarImagen(body.getImagen()));
                 }
-
                 usuariosRepository.save(userDB.get());
                 return userDB.get();
             } else {
@@ -249,4 +230,87 @@ public class UsuariosService {
             throw new ApiException(500, Constantes.ERROR_GENERAL);
         }
     }
+
+    public Boolean verificarCodigoMail(String usuario, String codigo) {
+        try {
+            Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(usuario);
+            if (user.isPresent()) {
+                if (user.get().getCodigoVerificacion().equals(codigo)) {
+                    user.get().setMailVerificado(true);
+                    usuariosRepository.save(user.get());
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                throw new ApiException(404, "El usuario no existe");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+    public void verificarCodigoMailReintento(VerificacionCodigoDto body) {
+        try {
+            Optional<UsuarioModels> user = usuariosRepository.loguearUsuario(body.getUser(), body.getClave());
+            if (user.isPresent()) {
+                sendMail.enviarMail(user.get().getMail(), "Ingrese al siguiente enlace para activar su cuenta: \n" +
+                        "http://localhost:8080/usuarios/verificarMail/" + body.getUser() + "/" + user.get().getCodigoVerificacion());
+            } else {
+                throw new ApiException(404, "El usuario no existe");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+
+    public void restaurarClave(UserRestorePasswordDto body) {
+        try {
+            Optional<UsuarioModels> user = usuariosRepository.recuperarUsuarioMail(body.getMail());
+            if (user.isPresent()) {
+                Random rand = new Random();
+                Integer codigoNuevo = rand.nextInt(999999);
+                Integer claveNueva = rand.nextInt(99999999);
+                user.get().setCodigoVerificacion(codigoNuevo.toString());
+                user.get().setClaveTemporal(claveNueva.toString());
+                usuariosRepository.save(user.get());
+                sendMail.enviarMail(body.getMail(), "Clave temporal:" + claveNueva + ". \n"
+                        + "Ingrese al siguiente enlace para activar la clave temporal: http://localhost:8080/usuarios/activarClave/"
+                        + user.get().getUser() + "/" + codigoNuevo + " \n"
+                        + "Luego de activar la nueva clave, ingrese a su cuenta y cambie la clave temporal por seguridad.");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+
+    public Boolean activarClave(String usuario, String codigo) {
+        try {
+            Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(usuario);
+            if (user.isPresent()) {
+                if (user.get().getCodigoVerificacion().equals(codigo)) {
+                    user.get().setClave(user.get().getClaveTemporal());
+                    usuariosRepository.save(user.get());
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                throw new ApiException(404, "El usuario no existe");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
 }

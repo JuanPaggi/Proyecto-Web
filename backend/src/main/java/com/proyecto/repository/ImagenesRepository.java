@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Capa de Repositorio.
+ * Definimos las querys que utilizaremos con imagenes.
+ */
+
 @Repository
 public interface ImagenesRepository extends JpaRepository<ImagenModels, Integer> {
 

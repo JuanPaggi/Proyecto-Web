@@ -1,19 +1,21 @@
 package com.proyecto.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
 
-@Data
+/**
+ * DTO para devolver los datos de una publicacion.
+ */
+
 @Getter
 @Setter
-public class GetPublicacionDto {
+public class PublicationResponseDto {
 
-    @JsonProperty("idPublicacion")
+    @JsonProperty("id_publicacion")
     private int idPublicacion;
 
     @JsonProperty("descripcion")
@@ -26,12 +28,12 @@ public class GetPublicacionDto {
     private String titulo;
 
     @JsonProperty("etiquetas")
-    private List<GetEtiquetaDto> etiquetas;
+    private List<TagResponseDto> etiquetas;
 
     @JsonProperty("comentarios")
-    private List<GetComentarioDto> comentarios;
+    private List<CommentResponseDto> comentarios;
 
-    @JsonProperty ("usuario")
-    private GetShortUsuarioDto usuario;
+    @JsonProperty("usuario")
+    private UserNameResponseDto usuario;
 
 }

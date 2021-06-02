@@ -1,12 +1,15 @@
 package com.proyecto.models;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+
+/**
+ * Modelo correspondiente a la tabla usuarios.
+ */
 
 @Getter
 @Setter
@@ -49,6 +52,9 @@ public class UsuarioModels {
     @Column(name = "admin")
     private Boolean admin;
 
+    @Column(name = "clave_temporal")
+    private String claveTemporal;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_imagen", referencedColumnName = "id_imagen")
     private ImagenModels imagenPerfil;
@@ -57,6 +63,8 @@ public class UsuarioModels {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false, insertable = false, updatable = false)
     private List<PublicacionModels> publicaciones;
 
-
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false, insertable = false, updatable = false)
+    private List<ComentarioModels> comentarios;
 
 }

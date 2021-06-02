@@ -1,21 +1,19 @@
 package com.proyecto.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.Date;
 
-/*
-    que datos quiero devolver / enviar
+/**
+ * DTO para devolver los datos de un usuario.
  */
 
-@Data
 @Getter
 @Setter
-public class GetUsuarioDto {
+public class UserResponseDto {
 
-    @JsonProperty ("idUsuario")
+    @JsonProperty ("id_usuario")
     private int idUsuario;
 
     @JsonProperty ("user")
@@ -47,7 +45,5 @@ public class GetUsuarioDto {
 
     @JsonProperty ("idImagen")
     private int idImagen;
-
-
 
 }

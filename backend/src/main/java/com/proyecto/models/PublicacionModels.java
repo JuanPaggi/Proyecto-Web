@@ -2,9 +2,14 @@ package com.proyecto.models;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+
+/**
+ * Modelo correspondiente a la tabla publicaciones.
+ */
 
 @Getter
 @Setter
@@ -26,8 +31,6 @@ public class PublicacionModels {
     @Column(name = "titulo")
     private String titulo;
 
-
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "publicaciones_etiquetas",
             joinColumns =
@@ -44,4 +47,5 @@ public class PublicacionModels {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private UsuarioModels usuario;
+
 }

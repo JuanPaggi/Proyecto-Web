@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Capa de controlador para los usuarios.
+ * Donde se reciben todas las peticiones Rest.
+ */
 
 @RestController
 @RequestMapping("/usuarios")
@@ -23,14 +27,15 @@ public class UsuariosController {
     UsuariosService usuariosService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> verificarUsuario(@RequestBody LoginUserDto body, HttpServletRequest request) {
-
+    public ResponseEntity<Void> verificarUsuario(@RequestBody UserLoginDto body, HttpServletRequest request) {
         try {
             usuariosService.verificarUser(body, request);
-
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
+                case 300:
+                    log.error("REDIRECTION : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
                 case 401:
                     log.error("ERROR : " + error.getMessage());
                     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -42,12 +47,10 @@ public class UsuariosController {
     }
 
     @GetMapping("")
-    public ResponseEntity<GetUsuarioDto> obtenerUsuario(HttpServletRequest request) {
-
+    public ResponseEntity<UserResponseDto> obtenerUsuario(HttpServletRequest request) {
         try {
-            GetUsuarioDto salida = usuariosService.obtenerUsuario(request);
+            UserResponseDto salida = usuariosService.obtenerUsuario(request);
             return new ResponseEntity<>(salida, HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 401:
@@ -63,8 +66,7 @@ public class UsuariosController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Integer> crearUsuario(@RequestBody UsuarioDto body) {
-
+    public ResponseEntity<Integer> crearUsuario(@RequestBody UserCreateDto body) {
         try {
             Integer usuario = usuariosService.crearUsuario(body);
             return new ResponseEntity<>(usuario, HttpStatus.OK);
@@ -91,7 +93,6 @@ public class UsuariosController {
         try {
             usuariosService.borrarUsuario(idUsuario);
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:
@@ -105,11 +106,10 @@ public class UsuariosController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Void> actualizarUsuario(@RequestBody PutUsuarioDto body, HttpServletRequest request) {
+    public ResponseEntity<Void> actualizarUsuario(@RequestBody UserModifyDto body, HttpServletRequest request) {
         try {
             usuariosService.actualizarUsuario(request, body);
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 401:
@@ -129,11 +129,10 @@ public class UsuariosController {
     }
 
     @PutMapping("/fotoPerfil")
-    public ResponseEntity<Void> actualizarFotoPerfil(@RequestBody PutUsuarioImagenDto body, HttpServletRequest request) {
+    public ResponseEntity<Void> actualizarFotoPerfil(@RequestBody UserPhotoDto body, HttpServletRequest request) {
         try {
             usuariosService.actualizarFotoPerfil(request, body);
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 400:
@@ -148,4 +147,71 @@ public class UsuariosController {
             }
         }
     }
+
+    @GetMapping(path = "/verificarMail/{usuario}/{codigo}")
+    public ResponseEntity<Boolean> verificarMail(@PathVariable("usuario") String usuario, @PathVariable("codigo") String codigo) {
+        try {
+            return new ResponseEntity<>(usuariosService.verificarCodigoMail(usuario, codigo), HttpStatus.OK);
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @PostMapping(path = "/verificarMailReintento")
+    public ResponseEntity<Void> verificarMailReintento(VerificacionCodigoDto body) {
+        try {
+            usuariosService.verificarCodigoMailReintento(body);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @PostMapping(path = "/recuperarClave")
+    public ResponseEntity<Void> recuperarClave(@RequestBody UserRestorePasswordDto body) {
+        try {
+            usuariosService.restaurarClave(body);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @GetMapping(path = "/activarClave/{usuario}/{codigo}")
+    public ResponseEntity<Boolean> activarClave(@PathVariable("usuario") String usuario, @PathVariable("codigo") String codigo) {
+        try {
+            return new ResponseEntity<>(usuariosService.activarClave(usuario, codigo), HttpStatus.OK);
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
 }

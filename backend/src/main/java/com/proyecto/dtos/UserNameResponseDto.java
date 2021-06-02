@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * DTO para devolver el user name del usuario.
+ */
+
 @Getter
 @Setter
-public class GetShortUsuarioDto {
+public class UserNameResponseDto {
 
-    @JsonProperty("idUsuario")
+    @JsonProperty("id_usuario")
     private Integer idUsuario;
 
     @JsonProperty("user")
