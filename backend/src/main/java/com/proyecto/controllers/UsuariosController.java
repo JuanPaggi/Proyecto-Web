@@ -149,9 +149,59 @@ public class UsuariosController {
     }
 
     @GetMapping(path = "/verificarMail/{usuario}/{codigo}")
-    public ResponseEntity<Boolean> verificarCodigo(@PathVariable("usuario") String usuario, @PathVariable("codigo") String codigo) {
+    public ResponseEntity<Boolean> verificarMail(@PathVariable("usuario") String usuario, @PathVariable("codigo") String codigo) {
         try {
             return new ResponseEntity<>(usuariosService.verificarCodigoMail(usuario, codigo), HttpStatus.OK);
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @PostMapping(path = "/verificarMailReintento")
+    public ResponseEntity<Void> verificarMailReintento(VerificacionCodigoDto body) {
+        try {
+            usuariosService.verificarCodigoMailReintento(body);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @PostMapping(path = "/recuperarClave")
+    public ResponseEntity<Void> recuperarClave(@RequestBody UserRestorePasswordDto body) {
+        try {
+            usuariosService.restaurarClave(body);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ApiException error) {
+            switch (error.getCode()) {
+                case 404:
+                    log.error("ERROR : " + error.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    log.error("ERROR :" + error.getMessage(), error);
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @GetMapping(path = "/activarClave/{usuario}/{codigo}")
+    public ResponseEntity<Boolean> activarClave(@PathVariable("usuario") String usuario, @PathVariable("codigo") String codigo) {
+        try {
+            return new ResponseEntity<>(usuariosService.activarClave(usuario, codigo), HttpStatus.OK);
         } catch (ApiException error) {
             switch (error.getCode()) {
                 case 404:

@@ -231,12 +231,73 @@ public class UsuariosService {
         }
     }
 
-    public Boolean verificarCodigoMail(String usuario, String clave) {
+    public Boolean verificarCodigoMail(String usuario, String codigo) {
         try {
             Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(usuario);
             if (user.isPresent()) {
-                if (user.get().getCodigoVerificacion().equals(clave)) {
+                if (user.get().getCodigoVerificacion().equals(codigo)) {
                     user.get().setMailVerificado(true);
+                    usuariosRepository.save(user.get());
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                throw new ApiException(404, "El usuario no existe");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+    public void verificarCodigoMailReintento(VerificacionCodigoDto body) {
+        try {
+            Optional<UsuarioModels> user = usuariosRepository.loguearUsuario(body.getUser(), body.getClave());
+            if (user.isPresent()) {
+                sendMail.enviarMail(user.get().getMail(), "Ingrese al siguiente enlace para activar su cuenta: \n" +
+                        "http://localhost:8080/usuarios/verificarMail/" + body.getUser() + "/" + user.get().getCodigoVerificacion());
+            } else {
+                throw new ApiException(404, "El usuario no existe");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+
+    public void restaurarClave(UserRestorePasswordDto body) {
+        try {
+            Optional<UsuarioModels> user = usuariosRepository.recuperarUsuarioMail(body.getMail());
+            if (user.isPresent()) {
+                Random rand = new Random();
+                Integer codigoNuevo = rand.nextInt(999999);
+                Integer claveNueva = rand.nextInt(99999999);
+                user.get().setCodigoVerificacion(codigoNuevo.toString());
+                user.get().setClaveTemporal(claveNueva.toString());
+                usuariosRepository.save(user.get());
+                sendMail.enviarMail(body.getMail(), "Clave temporal:" + claveNueva + ". \n"
+                        + "Ingrese al siguiente enlace para activar la clave temporal: http://localhost:8080/usuarios/activarClave/"
+                        + user.get().getUser() + "/" + codigoNuevo + " \n"
+                        + "Luego de activar la nueva clave, ingrese a su cuenta y cambie la clave temporal por seguridad.");
+            }
+        } catch (ApiException error) {
+            throw error;
+        } catch (Exception error) {
+            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        }
+    }
+
+
+    public Boolean activarClave(String usuario, String codigo) {
+        try {
+            Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(usuario);
+            if (user.isPresent()) {
+                if (user.get().getCodigoVerificacion().equals(codigo)) {
+                    user.get().setClave(user.get().getClaveTemporal());
                     usuariosRepository.save(user.get());
                     return true;
                 } else {

@@ -52,6 +52,9 @@ public class UsuarioModels {
     @Column(name = "admin")
     private Boolean admin;
 
+    @Column(name = "clave_temporal")
+    private String claveTemporal;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_imagen", referencedColumnName = "id_imagen")
     private ImagenModels imagenPerfil;
