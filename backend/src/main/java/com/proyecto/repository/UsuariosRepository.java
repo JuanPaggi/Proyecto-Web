@@ -24,4 +24,7 @@ public interface UsuariosRepository extends JpaRepository<UsuarioModels, Integer
     @Query(value = "select * from usuarios where user = ?1 and mail = ?2", nativeQuery = true)
     Optional<UsuarioModels> comprobarUsuarioRepetido(String user, String mail);
 
+    @Query(value = "select * from usuarios where mail = ?1", nativeQuery = true)
+    Optional<UsuarioModels> recuperarUsuarioMail(String mail);
+
 }
