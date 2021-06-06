@@ -1,4 +1,4 @@
-package com.proyecto.utils;
+package com.proyecto.exceptions;
 
 import lombok.Getter;
 

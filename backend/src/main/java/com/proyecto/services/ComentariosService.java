@@ -8,7 +8,7 @@ import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.ComentariosRepository;
 import com.proyecto.repository.PublicacionesRepository;
 import com.proyecto.repository.UsuariosRepository;
-import com.proyecto.utils.ApiException;
+import com.proyecto.exceptions.ApiException;
 import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,89 +34,65 @@ public class ComentariosService {
     UsuariosRepository usuariosRepository;
 
     public CommentResponseDto obtenerComentario(int idComentario) {
-        try {
-            Optional<ComentarioModels> comentario = comentariosRepository.findById(idComentario);
-            if (comentario.isPresent()) {
-                CommentResponseDto salida = new CommentResponseDto();
-                salida.setIdComentario(comentario.get().getIdComentario());
-                salida.setTexto(comentario.get().getTexto());
-                salida.setFechaCreacion(comentario.get().getFechaCreacion());
-                return salida;
-            } else {
-                throw new ApiException(404, "El comentario no existe.");
-            }
-        } catch (ApiException error) {
-            throw error;
-        } catch (Exception error) {
-            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        Optional<ComentarioModels> comentario = comentariosRepository.findById(idComentario);
+        if (comentario.isPresent()) {
+            CommentResponseDto salida = new CommentResponseDto();
+            salida.setIdComentario(comentario.get().getIdComentario());
+            salida.setTexto(comentario.get().getTexto());
+            salida.setFechaCreacion(comentario.get().getFechaCreacion());
+            return salida;
+        } else {
+            throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }
     }
 
     public Integer crearComentario(CommentCreateDto entrada, HttpServletRequest request) {
-        try {
-            String userInput = "";
-            if (request.getSession(false) != null) {
-                userInput = (String) request.getSession(false).getAttribute("user");
+        String userInput = "";
+        if (request.getSession(false) != null) {
+            userInput = (String) request.getSession(false).getAttribute("user");
+        } else {
+            throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
+        }
+        if (entrada.getTexto().length() <= 8000) {
+            ComentarioModels comentario = new ComentarioModels();
+            comentario.setTexto(entrada.getTexto());
+            comentario.setFechaCreacion(new Date());
+            Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
+            if (userDB.isPresent()) {
+                comentario.setUsuario(userDB.get());
             } else {
-                throw new ApiException(401, "Usuario no autorizado.");
+                throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
             }
-            if (entrada.getTexto().length() <= 8000) {
-                ComentarioModels comentario = new ComentarioModels();
-                comentario.setTexto(entrada.getTexto());
-                comentario.setFechaCreacion(new Date());
-                Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
-                if (userDB.isPresent()) {
-                    comentario.setUsuario(userDB.get());
-                } else {
-                    throw new ApiException(404, "El usuario no existe");
-                }
-                Optional<PublicacionModels> publicacion = publicacionesRepository.findById(entrada.getIdPublicacion());
-                if (publicacion.isPresent()) {
-                    comentario.setPublicacion(publicacion.get());
-                } else {
-                    throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
-                }
-                comentario = comentariosRepository.save(comentario);
-                return comentario.getIdComentario();
+            Optional<PublicacionModels> publicacion = publicacionesRepository.findById(entrada.getIdPublicacion());
+            if (publicacion.isPresent()) {
+                comentario.setPublicacion(publicacion.get());
             } else {
-                throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
+                throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
             }
-        } catch (ApiException error) {
-            throw error;
-        } catch (Exception error) {
-            throw new ApiException(500, Constantes.ERROR_GENERAL);
+            comentario = comentariosRepository.save(comentario);
+            return comentario.getIdComentario();
+        } else {
+            throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
         }
     }
 
     public void borrarComentario(int idComentario) {
-        try {
-            if (!publicacionesRepository.existsById(idComentario)) {
-                throw new ApiException(404, "El comentario no existe");
-            } else {
-                comentariosRepository.deleteById(idComentario);
-            }
-        } catch (ApiException error) {
-            throw error;
-        } catch (Exception error) {
-            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        if (!publicacionesRepository.existsById(idComentario)) {
+            throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
+        } else {
+            comentariosRepository.deleteById(idComentario);
         }
     }
 
     public int actualizarComentario(int idComentario, CommentCreateDto body) {
-        try {
-            Optional<ComentarioModels> textoDB = comentariosRepository.findById(idComentario);
-            if (textoDB.isPresent()) {
-                ComentarioModels entrada = textoDB.get();
-                entrada.setTexto(body.getTexto());
-                comentariosRepository.save(entrada);
-                return entrada.getIdComentario();
-            } else {
-                throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
-            }
-        } catch (ApiException error) {
-            throw error;
-        } catch (Exception error) {
-            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        Optional<ComentarioModels> textoDB = comentariosRepository.findById(idComentario);
+        if (textoDB.isPresent()) {
+            ComentarioModels entrada = textoDB.get();
+            entrada.setTexto(body.getTexto());
+            comentariosRepository.save(entrada);
+            return entrada.getIdComentario();
+        } else {
+            throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }
     }
 
