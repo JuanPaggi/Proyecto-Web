@@ -8,7 +8,7 @@ import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.EtiquetasRepository;
 import com.proyecto.repository.PublicacionesRepository;
 import com.proyecto.repository.UsuariosRepository;
-import com.proyecto.utils.ApiException;
+import com.proyecto.exceptions.ApiException;
 import com.proyecto.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,123 +36,99 @@ public class PublicacionesService {
     UsuariosRepository usuariosRepository;
 
     public PublicationResponseDto obetenerPublicacion(int idPublicacion) {
-        try {
-            Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
-            if (publicacion.isPresent()) {
-                PublicationResponseDto salida = new PublicationResponseDto();
-                salida.setIdPublicacion(publicacion.get().getIdPublicacion());
-                salida.setDescripcion(publicacion.get().getDescripcion());
-                salida.setFechaCreacion(publicacion.get().getFechaCreacion());
-                salida.setTitulo(publicacion.get().getTitulo());
-                UserNameResponseDto userDatos = new UserNameResponseDto();
-                userDatos.setUser(publicacion.get().getUsuario().getUser());
-                userDatos.setIdUsuario(publicacion.get().getUsuario().getIdUsuario());
-                salida.setUsuario(userDatos);
-                List<TagResponseDto> etiquetas = new ArrayList<>();
-                for (EtiquetaModels it : publicacion.get().getEtiquetas()) {
-                    TagResponseDto etiquetaDto = new TagResponseDto();
-                    etiquetaDto.setIdEtiqueta(it.getIdEtiqueta());
-                    etiquetaDto.setEtiqueta(it.getEtiqueta());
-                    etiquetas.add(etiquetaDto);
-                }
-                salida.setEtiquetas(etiquetas);
-                List<CommentResponseDto> comentarios = new ArrayList<>();
-                for (ComentarioModels it : publicacion.get().getComentarios()) {
-                    CommentResponseDto comentarioDto = new CommentResponseDto();
-                    comentarioDto.setIdComentario(it.getIdComentario());
-                    comentarioDto.setTexto(it.getTexto());
-                    comentarioDto.setFechaCreacion(it.getFechaCreacion());
-                    comentarios.add(comentarioDto);
-                }
-                salida.setComentarios(comentarios);
-                return salida;
-            } else {
-                throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
+        Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
+        if (publicacion.isPresent()) {
+            PublicationResponseDto salida = new PublicationResponseDto();
+            salida.setIdPublicacion(publicacion.get().getIdPublicacion());
+            salida.setDescripcion(publicacion.get().getDescripcion());
+            salida.setFechaCreacion(publicacion.get().getFechaCreacion());
+            salida.setTitulo(publicacion.get().getTitulo());
+            UserNameResponseDto userDatos = new UserNameResponseDto();
+            userDatos.setUser(publicacion.get().getUsuario().getUser());
+            userDatos.setIdUsuario(publicacion.get().getUsuario().getIdUsuario());
+            salida.setUsuario(userDatos);
+            List<TagResponseDto> etiquetas = new ArrayList<>();
+            for (EtiquetaModels it : publicacion.get().getEtiquetas()) {
+                TagResponseDto etiquetaDto = new TagResponseDto();
+                etiquetaDto.setIdEtiqueta(it.getIdEtiqueta());
+                etiquetaDto.setEtiqueta(it.getEtiqueta());
+                etiquetas.add(etiquetaDto);
             }
-        } catch (ApiException error) {
-            throw error;
-        } catch (Exception error) {
-            throw new ApiException(500, Constantes.ERROR_GENERAL);
+            salida.setEtiquetas(etiquetas);
+            List<CommentResponseDto> comentarios = new ArrayList<>();
+            for (ComentarioModels it : publicacion.get().getComentarios()) {
+                CommentResponseDto comentarioDto = new CommentResponseDto();
+                comentarioDto.setIdComentario(it.getIdComentario());
+                comentarioDto.setTexto(it.getTexto());
+                comentarioDto.setFechaCreacion(it.getFechaCreacion());
+                comentarios.add(comentarioDto);
+            }
+            salida.setComentarios(comentarios);
+            return salida;
+        } else {
+            throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }
     }
 
     public Integer crearPublicacion(PublicationCreateDto entrada, HttpServletRequest request) {
-        try {
-            String userInput = "";
-            if (request.getSession(false) != null) {
-                userInput = (String) request.getSession(false).getAttribute("user");
+        String userInput = "";
+        if (request.getSession(false) != null) {
+            userInput = (String) request.getSession(false).getAttribute("user");
+        } else {
+            throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
+        }
+        if (entrada.getDescripcion().length() <= 10000) {
+            PublicacionModels publicacion = new PublicacionModels();
+            publicacion.setDescripcion(entrada.getDescripcion());
+            publicacion.setFechaCreacion(new Date());
+            publicacion.setTitulo(entrada.getTitulo());
+            Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
+            if (userDB.isPresent()) {
+                publicacion.setUsuario(userDB.get());
             } else {
-                throw new ApiException(401, "Usuario no autorizado.");
+                throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
             }
-            if (entrada.getDescripcion().length() <= 10000) {
-                PublicacionModels publicacion = new PublicacionModels();
-                publicacion.setDescripcion(entrada.getDescripcion());
-                publicacion.setFechaCreacion(new Date());
-                publicacion.setTitulo(entrada.getTitulo());
-                Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
-                if (userDB.isPresent()) {
-                    publicacion.setUsuario(userDB.get());
-                } else {
-                    throw new ApiException(404, "El usuario no existe");
+            if (entrada.getEtiquetas() != null) {
+                List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(entrada.getEtiquetas());
+                if (etiquetas.size() != entrada.getEtiquetas().size()) {
+                    throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
                 }
-                if (entrada.getEtiquetas() != null) {
-                    List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(entrada.getEtiquetas());
-                    if (etiquetas.size() != entrada.getEtiquetas().size()) {
-                        throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
-                    }
-                    publicacion.setEtiquetas(etiquetas);
-                }
-                publicacion = publicacionesRepository.save(publicacion);
-                return publicacion.getIdPublicacion();
-            } else {
-                throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
+                publicacion.setEtiquetas(etiquetas);
             }
-        } catch (ApiException error) {
-            throw error;
-        } catch (Exception error) {
-            throw new ApiException(500, Constantes.ERROR_GENERAL);
+            publicacion = publicacionesRepository.save(publicacion);
+            return publicacion.getIdPublicacion();
+        } else {
+            throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
         }
     }
 
     public void borrarPublicacion(int idPublicacion) {
-        try {
-            if (!publicacionesRepository.existsById(idPublicacion)) {
-                throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
-            } else {
-                publicacionesRepository.deleteById(idPublicacion);
-            }
-        } catch (ApiException error) {
-            throw error;
-        } catch (Exception error) {
-            throw new ApiException(500, Constantes.ERROR_GENERAL);
+        if (!publicacionesRepository.existsById(idPublicacion)) {
+            throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
+        } else {
+            publicacionesRepository.deleteById(idPublicacion);
         }
     }
 
     public int actualizarPublicacion(int idPublicacion, PublicationCreateDto body) {
-        try {
-            Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
-            if (publicacion.isPresent()) {
-                PublicacionModels entrada = publicacion.get();
-                if (body.getTitulo() != null) {
-                    entrada.setTitulo(body.getTitulo());
-                }
-                if (body.getDescripcion() != null) {
-                    entrada.setDescripcion(body.getDescripcion());
-                }
-                List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(body.getEtiquetas());
-                if (etiquetas.size() != body.getEtiquetas().size()) {
-                    throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
-                }
-                entrada.setEtiquetas(etiquetas);
-                publicacionesRepository.save(entrada);
-                return entrada.getIdPublicacion();
-            } else {
-                throw new ApiException(404, Constantes.ERROR_PUBLICACIONES_NOEXISTE);
+        Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
+        if (publicacion.isPresent()) {
+            PublicacionModels entrada = publicacion.get();
+            if (body.getTitulo() != null) {
+                entrada.setTitulo(body.getTitulo());
             }
-        } catch (ApiException error) {
-            throw error;
-        } catch (Exception error) {
-            throw new ApiException(500, Constantes.ERROR_GENERAL);
+            if (body.getDescripcion() != null) {
+                entrada.setDescripcion(body.getDescripcion());
+            }
+            List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(body.getEtiquetas());
+            if (etiquetas.size() != body.getEtiquetas().size()) {
+                throw new ApiException(404, "Alguna de las etiquetas recibidas no exite");
+            }
+            entrada.setEtiquetas(etiquetas);
+            publicacionesRepository.save(entrada);
+            return entrada.getIdPublicacion();
+        } else {
+            throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }
     }
 

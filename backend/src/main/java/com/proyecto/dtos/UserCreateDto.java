@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -15,31 +16,28 @@ import java.util.Date;
 public class UserCreateDto {
 
     @JsonProperty("user")
+    @NotNull
     private String user;
 
     @JsonProperty("clave")
+    @NotNull
     private String clave;
 
     @JsonProperty("mail")
+    @NotNull
     private String mail;
 
     @JsonProperty("nombre")
+    @NotNull
     private String nombre;
 
     @JsonProperty("apellido")
+    @NotNull
     private String apellido;
 
-    @JsonProperty("mailVerificado")
-    private Boolean mailVerificado;
-
     @JsonProperty("fechaNacimiento")
+    @NotNull
     private Date fechaNacimiento;
-
-    @JsonProperty("codigoVerificacion")
-    private Boolean codigoVerificacion;
-
-    @JsonProperty("admin")
-    private Boolean admin;
 
     @JsonProperty("imagen")
     private byte[] imagen;
