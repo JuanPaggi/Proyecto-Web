@@ -39,7 +39,4 @@ public class UserCreateDto {
     @NotNull
     private Date fechaNacimiento;
 
-    @JsonProperty("imagen")
-    private byte[] imagen;
-
 }

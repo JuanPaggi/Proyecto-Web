@@ -1,6 +1,7 @@
 package com.proyecto.services;
 
 import com.proyecto.models.ImagenModels;
+import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.ImagenesRepository;
 import com.proyecto.exceptions.ApiException;
 import com.proyecto.utils.Constantes;
@@ -44,10 +45,11 @@ public class ImagenesService {
         return imagenDB;
     }
 
-    public ImagenModels cargarImagen(byte[] imagen) throws NoSuchAlgorithmException {
+    public ImagenModels cargarImagen(byte[] imagen, UsuarioModels user) throws NoSuchAlgorithmException {
         ImagenModels imagenSave = new ImagenModels();
         imagenSave.setImagen(imagen);
         imagenSave.setFechaSubida(new Date());
+        imagenSave.setUsuario(user);
         return imagenesRepository.save(imagenSave);
     }
 
