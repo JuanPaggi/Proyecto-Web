@@ -33,4 +33,13 @@ public class EtiquetaModels {
     )
     private List<PublicacionModels> publicaciones;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "galerias_etiquetas",
+            joinColumns =
+            @JoinColumn(name = "id_etiqueta", referencedColumnName = "id_etiqueta"),
+            inverseJoinColumns =
+            @JoinColumn(name = "id_galeria", referencedColumnName = "id_galeria")
+    )
+    private List<GaleriaModels> galerias;
+
 }
