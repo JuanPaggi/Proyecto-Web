@@ -1,16 +1,15 @@
 package com.proyecto.controllers;
 
+import com.proyecto.controllers.rest.UsuariosRest;
 import com.proyecto.dtos.*;
 import com.proyecto.services.UsuariosService;
-import com.proyecto.utils.ApiException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Capa de controlador para los usuarios.
@@ -18,200 +17,56 @@ import javax.servlet.http.HttpServletRequest;
  */
 
 @RestController
-@RequestMapping("/usuarios")
-public class UsuariosController {
-
-    public static final Logger log = LoggerFactory.getLogger(UsuariosController.class);
+public class UsuariosController implements UsuariosRest {
 
     @Autowired
     UsuariosService usuariosService;
 
-    @PostMapping("/login")
-    public ResponseEntity<Void> verificarUsuario(@RequestBody UserLoginDto body, HttpServletRequest request) {
-        try {
-            usuariosService.verificarUser(body, request);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 300:
-                    log.error("REDIRECTION : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.MULTIPLE_CHOICES);
-                case 401:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-                default:
-                    log.error("ERROR : " + error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<ResponseDto> verificarUsuario(UserLoginDto body, HttpServletRequest request) {
+        usuariosService.verificarUser(body, request);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    @GetMapping("")
     public ResponseEntity<UserResponseDto> obtenerUsuario(HttpServletRequest request) {
-        try {
-            UserResponseDto salida = usuariosService.obtenerUsuario(request);
-            return new ResponseEntity<>(salida, HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 401:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-                case 404:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+        return new ResponseEntity<>(usuariosService.obtenerUsuario(request), HttpStatus.OK);
     }
 
-    @PostMapping("")
-    public ResponseEntity<Integer> crearUsuario(@RequestBody UserCreateDto body) {
-        try {
-            Integer usuario = usuariosService.crearUsuario(body);
-            return new ResponseEntity<>(usuario, HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 409:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.CONFLICT);
-                case 400:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                case 404:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error("ERROR : " + error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<ResponseDto> crearUsuario(UserCreateDto body) throws NoSuchAlgorithmException {
+        usuariosService.crearUsuario(body);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<Void> borrarUsuario(@RequestParam Integer idUsuario) {
-        try {
-            usuariosService.borrarUsuario(idUsuario);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 404:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error("ERROR :" + error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<ResponseDto> borrarUsuario(Integer idUsuario) {
+        usuariosService.borrarUsuario(idUsuario);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    @PutMapping("")
-    public ResponseEntity<Void> actualizarUsuario(@RequestBody UserModifyDto body, HttpServletRequest request) {
-        try {
-            usuariosService.actualizarUsuario(request, body);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 401:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-                case 400:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                case 404:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error("ERROR :" + error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<ResponseDto> actualizarUsuario(UserModifyDto body, HttpServletRequest request) {
+        usuariosService.actualizarUsuario(request, body);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    @PutMapping("/fotoPerfil")
-    public ResponseEntity<Void> actualizarFotoPerfil(@RequestBody UserPhotoDto body, HttpServletRequest request) {
-        try {
-            usuariosService.actualizarFotoPerfil(request, body);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 400:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                case 404:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error("ERROR :" + error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<ResponseDto> actualizarFotoPerfil(UserPhotoDto body, HttpServletRequest request) throws NoSuchAlgorithmException {
+        usuariosService.actualizarFotoPerfil(request, body);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/verificarMail/{usuario}/{codigo}")
-    public ResponseEntity<Boolean> verificarMail(@PathVariable("usuario") String usuario, @PathVariable("codigo") String codigo) {
-        try {
-            return new ResponseEntity<>(usuariosService.verificarCodigoMail(usuario, codigo), HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 404:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error("ERROR :" + error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<Boolean> verificarMail(String usuario, String codigo) {
+        return new ResponseEntity<>(usuariosService.verificarCodigoMail(usuario, codigo), HttpStatus.OK);
     }
 
-    @PostMapping(path = "/verificarMailReintento")
-    public ResponseEntity<Void> verificarMailReintento(VerificacionCodigoDto body) {
-        try {
-            usuariosService.verificarCodigoMailReintento(body);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 404:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error("ERROR :" + error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<ResponseDto> verificarMailReintento(VerificacionCodigoDto body) throws Exception {
+        usuariosService.verificarCodigoMailReintento(body);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    @PostMapping(path = "/recuperarClave")
-    public ResponseEntity<Void> recuperarClave(@RequestBody UserRestorePasswordDto body) {
-        try {
-            usuariosService.restaurarClave(body);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 404:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error("ERROR :" + error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<ResponseDto> recuperarClave(UserRestorePasswordDto body) throws Exception {
+        usuariosService.restaurarClave(body);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/activarClave/{usuario}/{codigo}")
-    public ResponseEntity<Boolean> activarClave(@PathVariable("usuario") String usuario, @PathVariable("codigo") String codigo) {
-        try {
-            return new ResponseEntity<>(usuariosService.activarClave(usuario, codigo), HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 404:
-                    log.error("ERROR : " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error("ERROR :" + error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<Boolean> activarClave(String usuario, String codigo) {
+        return new ResponseEntity<>(usuariosService.activarClave(usuario, codigo), HttpStatus.OK);
     }
 
 }

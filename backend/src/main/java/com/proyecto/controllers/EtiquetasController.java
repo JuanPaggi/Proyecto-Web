@@ -1,11 +1,10 @@
 package com.proyecto.controllers;
 
+import com.proyecto.controllers.rest.EtiquetasRest;
+import com.proyecto.dtos.ResponseDto;
 import com.proyecto.dtos.TagResponseDto;
 import com.proyecto.dtos.TagCreateDto;
 import com.proyecto.services.EtiquetasService;
-import com.proyecto.utils.ApiException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,83 +16,28 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping("/etiquetas")
-public class EtiquetasController {
-
-    public static final Logger log = LoggerFactory.getLogger(EtiquetasController.class);
+public class EtiquetasController implements EtiquetasRest {
 
     @Autowired
     EtiquetasService etiquetasService;
 
-    @GetMapping("")
-    public ResponseEntity<TagResponseDto> obtenerEtiqueta(@RequestParam(name = "id_etiqueta") Integer idEtiqueta) {
-        try {
-            TagResponseDto salida = etiquetasService.obtenerEtiqueta(idEtiqueta);
-            return new ResponseEntity<>(salida, HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 404:
-                    log.error("ERROR: " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error(error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<TagResponseDto> obtenerEtiqueta(Integer idEtiqueta) {
+        return new ResponseEntity<>(etiquetasService.obtenerEtiqueta(idEtiqueta), HttpStatus.OK);
     }
 
-    @PostMapping("")
-    public ResponseEntity<Integer> crearEtiqueta(@RequestBody TagCreateDto body) {
-        try {
-            Integer salida = etiquetasService.crearEtiqueta(body);
-            return new ResponseEntity<>(salida, HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 400:
-                    log.error("ERROR: " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                case 409:
-                    log.error("ERROR: " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.CONFLICT);
-                default:
-                    log.error(error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<ResponseDto> crearEtiqueta(TagCreateDto body) {
+        etiquetasService.crearEtiqueta(body);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<Void> borrarEtiqueta(@RequestParam(name = "id_etiqueta") Integer idEtiqueta) {
-        try {
-            etiquetasService.borrarEtiqueta(idEtiqueta);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 404:
-                    log.error("ERROR: " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error(error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<ResponseDto> borrarEtiqueta(Integer idEtiqueta) {
+        etiquetasService.borrarEtiqueta(idEtiqueta);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    @PutMapping("")
-    public ResponseEntity<Integer> actualziarEtiqueta(@RequestParam(name = "id_etiqueta") Integer idEtiqueta, @RequestBody TagCreateDto body) {
-        try {
-            int salida = etiquetasService.actualizarEtiqueta(idEtiqueta, body);
-            return new ResponseEntity<>(salida, HttpStatus.OK);
-        } catch (ApiException error) {
-            switch (error.getCode()) {
-                case 404:
-                    log.error("ERROR: " + error.getMessage());
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                default:
-                    log.error(error.getMessage(), error);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public ResponseEntity<ResponseDto> actualziarEtiqueta(Integer idEtiqueta, TagCreateDto body) {
+        etiquetasService.actualizarEtiqueta(idEtiqueta, body);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
 }
