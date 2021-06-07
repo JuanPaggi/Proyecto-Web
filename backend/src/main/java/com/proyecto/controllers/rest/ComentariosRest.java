@@ -1,7 +1,7 @@
 package com.proyecto.controllers.rest;
 
-import com.proyecto.dtos.CommentCreateDto;
-import com.proyecto.dtos.CommentResponseDto;
+import com.proyecto.dtos.comment.CommentCreateDto;
+import com.proyecto.dtos.comment.CommentResponseDto;
 import com.proyecto.dtos.ResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

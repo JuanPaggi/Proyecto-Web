@@ -2,8 +2,8 @@ package com.proyecto.controllers;
 
 import com.proyecto.controllers.rest.EtiquetasRest;
 import com.proyecto.dtos.ResponseDto;
-import com.proyecto.dtos.TagResponseDto;
-import com.proyecto.dtos.TagCreateDto;
+import com.proyecto.dtos.tag.TagResponseDto;
+import com.proyecto.dtos.tag.TagCreateDto;
 import com.proyecto.services.EtiquetasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

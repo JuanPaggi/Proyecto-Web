@@ -1,4 +1,4 @@
-package com.proyecto.dtos;
+package com.proyecto.dtos.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -7,15 +7,15 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 
 /**
- * DTO para crear una etiqueta.
+ * DTO para recibir los datos de una recuperacio nde mail.
  */
 
 @Getter
 @Setter
-public class TagCreateDto {
+public class UserRestorePasswordDto {
 
-    @JsonProperty("etiqueta")
+    @JsonProperty("mail")
     @NotNull
-    private String etiqueta;
+    private String mail;
 
 }

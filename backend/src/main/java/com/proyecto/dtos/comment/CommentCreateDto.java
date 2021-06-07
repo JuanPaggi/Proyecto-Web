@@ -1,4 +1,4 @@
-package com.proyecto.dtos;
+package com.proyecto.dtos.comment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

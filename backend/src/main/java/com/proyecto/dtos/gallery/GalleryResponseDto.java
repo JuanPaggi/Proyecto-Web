@@ -1,22 +1,24 @@
-package com.proyecto.dtos;
+package com.proyecto.dtos.gallery;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.proyecto.dtos.ImageResponseDto;
+import com.proyecto.dtos.tag.TagResponseDto;
+import com.proyecto.dtos.user.UserNameResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
 
-/**
- * DTO para devolver los datos de una publicacion.
- */
-
 @Getter
 @Setter
-public class PublicationResponseDto {
+public class GalleryResponseDto {
 
-    @JsonProperty("id_publicacion")
-    private int idPublicacion;
+    @JsonProperty("idGaleria")
+    private int idGaleria;
+
+    @JsonProperty("titulo")
+    private String titulo;
 
     @JsonProperty("descripcion")
     private String descripcion;
@@ -24,16 +26,13 @@ public class PublicationResponseDto {
     @JsonProperty("fechaCreacion")
     private Date fechaCreacion;
 
-    @JsonProperty("titulo")
-    private String titulo;
-
     @JsonProperty("etiquetas")
     private List<TagResponseDto> etiquetas;
 
-    @JsonProperty("comentarios")
-    private List<CommentResponseDto> comentarios;
-
     @JsonProperty("usuario")
     private UserNameResponseDto usuario;
+
+    @JsonProperty("imagenes")
+    private List<ImageResponseDto> imagenes;
 
 }

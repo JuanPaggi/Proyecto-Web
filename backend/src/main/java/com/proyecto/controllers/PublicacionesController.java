@@ -1,8 +1,8 @@
 package com.proyecto.controllers;
 
 import com.proyecto.controllers.rest.PublicacionesRest;
-import com.proyecto.dtos.PublicationResponseDto;
-import com.proyecto.dtos.PublicationCreateDto;
+import com.proyecto.dtos.publication.PublicationResponseDto;
+import com.proyecto.dtos.publication.PublicationCreateDto;
 import com.proyecto.dtos.ResponseDto;
 import com.proyecto.services.PublicacionesService;
 import org.springframework.beans.factory.annotation.Autowired;

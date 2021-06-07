@@ -1,21 +1,21 @@
-package com.proyecto.dtos;
+package com.proyecto.dtos.tag;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 /**
- * DTO para devolver los datos de una etiqueta.
+ * DTO para crear una etiqueta.
  */
 
 @Getter
 @Setter
-public class TagResponseDto {
-
-    @JsonProperty("id_etiqueta")
-    private int idEtiqueta;
+public class TagCreateDto {
 
     @JsonProperty("etiqueta")
+    @NotNull
     private String etiqueta;
 
 }

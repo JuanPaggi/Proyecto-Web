@@ -1,6 +1,6 @@
 package com.proyecto.services;
 
-import com.proyecto.dtos.*;
+import com.proyecto.dtos.user.*;
 import com.proyecto.models.ImagenModels;
 import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.UsuariosRepository;
