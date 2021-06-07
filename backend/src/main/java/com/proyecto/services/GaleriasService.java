@@ -80,7 +80,7 @@ public class GaleriasService {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }
     }
-    
+
     public void crearGaleria(GalleryCreateDto body, HttpServletRequest request) throws NoSuchAlgorithmException {
         String userInput = "";
         if (request.getSession(false) != null) {
