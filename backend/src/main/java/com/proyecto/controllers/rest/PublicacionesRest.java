@@ -1,7 +1,7 @@
 package com.proyecto.controllers.rest;
 
-import com.proyecto.dtos.PublicationCreateDto;
-import com.proyecto.dtos.PublicationResponseDto;
+import com.proyecto.dtos.publication.PublicationCreateDto;
+import com.proyecto.dtos.publication.PublicationResponseDto;
 import com.proyecto.dtos.ResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

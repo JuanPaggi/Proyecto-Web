@@ -1,6 +1,10 @@
 package com.proyecto.services;
 
-import com.proyecto.dtos.*;
+import com.proyecto.dtos.comment.CommentResponseDto;
+import com.proyecto.dtos.publication.PublicationCreateDto;
+import com.proyecto.dtos.publication.PublicationResponseDto;
+import com.proyecto.dtos.tag.TagResponseDto;
+import com.proyecto.dtos.user.UserNameResponseDto;
 import com.proyecto.models.ComentarioModels;
 import com.proyecto.models.EtiquetaModels;
 import com.proyecto.models.PublicacionModels;

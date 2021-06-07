@@ -1,6 +1,6 @@
 package com.proyecto.services;
 
-import com.proyecto.dtos.*;
+import com.proyecto.dtos.user.*;
 import com.proyecto.models.ImagenModels;
 import com.proyecto.models.UsuarioModels;
 import com.proyecto.repository.UsuariosRepository;
@@ -95,15 +95,6 @@ public class UsuariosService extends ResponseEntityExceptionHandler {
             Random rand = new Random();
             Integer codigoRandom = rand.nextInt(999999);
             usuario.setCodigoVerificacion(codigoRandom.toString());
-            if (entrada.getImagen() != null) {
-                byte[] hash = Sha1Hasher.hashBytes(entrada.getImagen());
-                Optional<ImagenModels> imagen = imagenesService.obtenerImagenPorHash(hash);
-                if (imagen.isPresent()) {
-                    usuario.setImagenPerfil(imagen.get());
-                } else {
-                    usuario.setImagenPerfil(imagenesService.cargarImagen(entrada.getImagen()));
-                }
-            }
             usuario = usuariosRepository.save(usuario);
 
             try {
@@ -183,7 +174,7 @@ public class UsuariosService extends ResponseEntityExceptionHandler {
             if (imagen.isPresent()) {
                 userDB.get().setImagenPerfil(imagen.get());
             } else {
-                userDB.get().setImagenPerfil(imagenesService.cargarImagen(body.getImagen()));
+                userDB.get().setImagenPerfil(imagenesService.cargarImagen(body.getImagen(), userDB.get()));
             }
             usuariosRepository.save(userDB.get());
             return userDB.get();

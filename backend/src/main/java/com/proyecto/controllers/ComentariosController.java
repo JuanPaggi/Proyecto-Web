@@ -1,8 +1,8 @@
 package com.proyecto.controllers;
 
 import com.proyecto.controllers.rest.ComentariosRest;
-import com.proyecto.dtos.CommentCreateDto;
-import com.proyecto.dtos.CommentResponseDto;
+import com.proyecto.dtos.comment.CommentCreateDto;
+import com.proyecto.dtos.comment.CommentResponseDto;
 import com.proyecto.dtos.ResponseDto;
 import com.proyecto.services.ComentariosService;
 import org.springframework.beans.factory.annotation.Autowired;

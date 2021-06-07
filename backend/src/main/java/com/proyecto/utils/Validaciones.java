@@ -1,6 +1,6 @@
 package com.proyecto.utils;
 
-import com.proyecto.dtos.UserCreateDto;
+import com.proyecto.dtos.user.UserCreateDto;
 
 public class Validaciones {
 

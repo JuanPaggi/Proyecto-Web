@@ -1,7 +1,7 @@
 package com.proyecto.services;
 
-import com.proyecto.dtos.CommentCreateDto;
-import com.proyecto.dtos.CommentResponseDto;
+import com.proyecto.dtos.comment.CommentCreateDto;
+import com.proyecto.dtos.comment.CommentResponseDto;
 import com.proyecto.models.ComentarioModels;
 import com.proyecto.models.PublicacionModels;
 import com.proyecto.models.UsuarioModels;

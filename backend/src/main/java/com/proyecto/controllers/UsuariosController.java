@@ -2,6 +2,7 @@ package com.proyecto.controllers;
 
 import com.proyecto.controllers.rest.UsuariosRest;
 import com.proyecto.dtos.*;
+import com.proyecto.dtos.user.*;
 import com.proyecto.services.UsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

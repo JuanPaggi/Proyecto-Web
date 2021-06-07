@@ -1,6 +1,7 @@
 package com.proyecto.controllers.rest;
 
 import com.proyecto.dtos.*;
+import com.proyecto.dtos.user.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

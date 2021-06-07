@@ -1,7 +1,7 @@
 package com.proyecto.services;
 
-import com.proyecto.dtos.TagResponseDto;
-import com.proyecto.dtos.TagCreateDto;
+import com.proyecto.dtos.tag.TagResponseDto;
+import com.proyecto.dtos.tag.TagCreateDto;
 import com.proyecto.models.EtiquetaModels;
 import com.proyecto.repository.EtiquetasRepository;
 import com.proyecto.exceptions.ApiException;
