@@ -10,6 +10,7 @@ import com.proyecto.repository.PublicacionesRepository;
 import com.proyecto.repository.UsuariosRepository;
 import com.proyecto.exceptions.ApiException;
 import com.proyecto.utils.Constantes;
+import com.proyecto.utils.Validaciones;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,13 +47,8 @@ public class ComentariosService {
         }
     }
 
-    public Integer crearComentario(CommentCreateDto entrada, HttpServletRequest request) {
-        String userInput = "";
-        if (request.getSession(false) != null) {
-            userInput = (String) request.getSession(false).getAttribute("user");
-        } else {
-            throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
-        }
+    public void crearComentario(CommentCreateDto entrada, HttpServletRequest request) {
+        String userInput = Validaciones.obtenerUserLogin(request);
         if (entrada.getTexto().length() <= 8000) {
             ComentarioModels comentario = new ComentarioModels();
             comentario.setTexto(entrada.getTexto());
@@ -69,28 +65,27 @@ public class ComentariosService {
             } else {
                 throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
             }
-            comentario = comentariosRepository.save(comentario);
-            return comentario.getIdComentario();
+            comentariosRepository.save(comentario);
         } else {
             throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
         }
     }
 
-    public void borrarComentario(int idComentario) {
-        if (!publicacionesRepository.existsById(idComentario)) {
+    public void borrarComentario(int idComentario, HttpServletRequest request) {
+        String userInput = Validaciones.obtenerUserLogin(request);
+        if (!comentariosRepository.existByIdUser(idComentario, userInput).isPresent()) {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         } else {
             comentariosRepository.deleteById(idComentario);
         }
     }
 
-    public int actualizarComentario(int idComentario, CommentCreateDto body) {
-        Optional<ComentarioModels> textoDB = comentariosRepository.findById(idComentario);
+    public void actualizarComentario(int idComentario, CommentCreateDto body, HttpServletRequest request) {
+        String userInput = Validaciones.obtenerUserLogin(request);
+        Optional<ComentarioModels> textoDB = comentariosRepository.existByIdUser(idComentario, userInput);
         if (textoDB.isPresent()) {
-            ComentarioModels entrada = textoDB.get();
-            entrada.setTexto(body.getTexto());
-            comentariosRepository.save(entrada);
-            return entrada.getIdComentario();
+            textoDB.get().setTexto(body.getTexto());
+            comentariosRepository.save(textoDB.get());
         } else {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }

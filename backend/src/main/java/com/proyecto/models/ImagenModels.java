@@ -34,7 +34,7 @@ public class ImagenModels {
     private Date fechaSubida;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_imagen", referencedColumnName = "id_imagen", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "id_imagen", referencedColumnName = "id_imagen")
     private List<UsuarioModels> usuarios;
 
     @ManyToOne(fetch = FetchType.LAZY)

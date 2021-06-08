@@ -52,7 +52,7 @@ CREATE TABLE `galerias` (
   `titulo` VARCHAR(200) NOT NULL UNIQUE,
   `descripcion` VARCHAR(10000) NOT NULL,
   `fecha_creacion` DATETIME NOT NULL,
-  `id_usuario` INTEGER NOT NULL,
+  `id_usuario` INTEGER NULL,
   PRIMARY KEY (`id_galeria`),
 KEY (`id_usuario`)
 );

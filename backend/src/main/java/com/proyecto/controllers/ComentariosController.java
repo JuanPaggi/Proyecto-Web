@@ -32,13 +32,13 @@ public class ComentariosController implements ComentariosRest {
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> borrarComentario(Integer idComentario) {
-        comentariosService.borrarComentario(idComentario);
+    public ResponseEntity<ResponseDto> borrarComentario(Integer idComentario, HttpServletRequest request) {
+        comentariosService.borrarComentario(idComentario, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> actualizarComentario(Integer idComentario, CommentCreateDto body) {
-        comentariosService.actualizarComentario(idComentario, body);
+    public ResponseEntity<ResponseDto> actualizarComentario(Integer idComentario, CommentCreateDto body, HttpServletRequest request) {
+        comentariosService.actualizarComentario(idComentario, body, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 

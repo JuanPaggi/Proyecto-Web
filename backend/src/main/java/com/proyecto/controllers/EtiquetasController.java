@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Capa de controlador Para las etiquetas.
  * Donde se reciben todas las peticiones Rest.
@@ -25,18 +27,18 @@ public class EtiquetasController implements EtiquetasRest {
         return new ResponseEntity<>(etiquetasService.obtenerEtiqueta(idEtiqueta), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> crearEtiqueta(TagCreateDto body) {
-        etiquetasService.crearEtiqueta(body);
+    public ResponseEntity<ResponseDto> crearEtiqueta(TagCreateDto body, HttpServletRequest request) {
+        etiquetasService.crearEtiqueta(body, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> borrarEtiqueta(Integer idEtiqueta) {
-        etiquetasService.borrarEtiqueta(idEtiqueta);
+    public ResponseEntity<ResponseDto> borrarEtiqueta(Integer idEtiqueta, HttpServletRequest request) {
+        etiquetasService.borrarEtiqueta(idEtiqueta, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> actualziarEtiqueta(Integer idEtiqueta, TagCreateDto body) {
-        etiquetasService.actualizarEtiqueta(idEtiqueta, body);
+    public ResponseEntity<ResponseDto> actualziarEtiqueta(Integer idEtiqueta, TagCreateDto body, HttpServletRequest request) {
+        etiquetasService.actualizarEtiqueta(idEtiqueta, body, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
