@@ -16,6 +16,7 @@ import com.proyecto.repository.GaleriasRepository;
 import com.proyecto.repository.UsuariosRepository;
 import com.proyecto.utils.Constantes;
 import com.proyecto.utils.Sha1Hasher;
+import com.proyecto.utils.Validaciones;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,17 +83,12 @@ public class GaleriasService {
     }
 
     public void crearGaleria(GalleryCreateDto body, HttpServletRequest request) throws NoSuchAlgorithmException {
-        String userInput = "";
-        if (request.getSession(false) != null) {
-            userInput = (String) request.getSession(false).getAttribute("user");
-        } else {
-            throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
-        }
+        String userInput = Validaciones.obtenerUserLogin(request);
         Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(userInput);
         if (!user.isPresent()) {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }
-        if(!user.get().getAdmin()){
+        if (!user.get().getAdmin()) {
             throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
         }
         GaleriaModels galeria = new GaleriaModels();
@@ -121,25 +117,18 @@ public class GaleriasService {
     }
 
     public void borrarGaleria(Integer idGaleria, HttpServletRequest request) {
-        if (request.getSession(false) != null) {
-            String userInput = (String) request.getSession(false).getAttribute("user");
-
-            Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(userInput);
-            if (!user.isPresent()) {
-                throw new ApiException(404, "El usuario no existe");
-            }
-            if(!user.get().getAdmin()){
-                throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
-            }
-
-            if (!galeriasRepository.existsById(idGaleria)) {
-                throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
-            } else {
-                galeriasRepository.deleteById(idGaleria);
-            }
-
-        } else {
+        String userInput = Validaciones.obtenerUserLogin(request);
+        Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(userInput);
+        if (!user.isPresent()) {
+            throw new ApiException(404, "El usuario no existe");
+        }
+        if (!user.get().getAdmin()) {
             throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
+        }
+        if (!galeriasRepository.existsById(idGaleria)) {
+            throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
+        } else {
+            galeriasRepository.deleteById(idGaleria);
         }
     }
 

@@ -19,9 +19,9 @@ public interface PublicacionesRest {
     ResponseEntity<ResponseDto> crearPublicacion(@Validated @RequestBody PublicationCreateDto body, HttpServletRequest request);
 
     @DeleteMapping("")
-    ResponseEntity<ResponseDto> borrarPublicacion(Integer idPublicacion);
+    ResponseEntity<ResponseDto> borrarPublicacion(@RequestParam(name = "id_publicacion") Integer idPublicacion, HttpServletRequest request);
 
     @PutMapping("")
-    ResponseEntity<ResponseDto> actualizarPublicacion(@Validated @RequestParam(name = "id_publicacion") Integer idPublicacion, @RequestBody PublicationCreateDto body);
+    ResponseEntity<ResponseDto> actualizarPublicacion(@Validated @RequestParam(name = "id_publicacion") Integer idPublicacion, @RequestBody PublicationCreateDto body, HttpServletRequest request);
 
 }

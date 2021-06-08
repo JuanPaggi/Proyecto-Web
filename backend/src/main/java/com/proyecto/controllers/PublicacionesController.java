@@ -32,13 +32,13 @@ public class PublicacionesController implements PublicacionesRest {
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> borrarPublicacion(Integer idPublicacion) {
-        publicacionesService.borrarPublicacion(idPublicacion);
+    public ResponseEntity<ResponseDto> borrarPublicacion(Integer idPublicacion, HttpServletRequest request) {
+        publicacionesService.borrarPublicacion(idPublicacion, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> actualizarPublicacion(Integer idPublicacion, PublicationCreateDto body) {
-        publicacionesService.actualizarPublicacion(idPublicacion, body);
+    public ResponseEntity<ResponseDto> actualizarPublicacion(Integer idPublicacion, PublicationCreateDto body, HttpServletRequest request) {
+        publicacionesService.actualizarPublicacion(idPublicacion, body, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 

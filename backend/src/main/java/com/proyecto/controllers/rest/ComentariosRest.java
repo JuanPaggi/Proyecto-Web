@@ -19,9 +19,9 @@ public interface ComentariosRest {
     ResponseEntity<ResponseDto> crearComentario(@Validated @RequestBody CommentCreateDto body, HttpServletRequest request);
 
     @DeleteMapping("")
-    ResponseEntity<ResponseDto> borrarComentario(@RequestParam(name = "id_comentario") Integer idComentario);
+    ResponseEntity<ResponseDto> borrarComentario(@RequestParam(name = "id_comentario") Integer idComentario, HttpServletRequest request);
 
     @PutMapping("")
-    ResponseEntity<ResponseDto> actualizarComentario(@Validated @RequestParam(name = "id_comentario") Integer idComentario, @RequestBody CommentCreateDto body);
+    ResponseEntity<ResponseDto> actualizarComentario(@Validated @RequestParam(name = "id_comentario") Integer idComentario, @RequestBody CommentCreateDto body, HttpServletRequest request);
 
 }
