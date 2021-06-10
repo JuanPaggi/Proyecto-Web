@@ -1,10 +1,11 @@
 <div class="header">
-    <div *ngIf="!user && this.router.url != '/login'">
-        <a routerLink="/login">Ingresar</a>
+    <a class="titulo-web" routerLink="/">Proyecto Web</a>
+    <div class="boton-login" *ngIf="!user && this.router.url != '/login'">
+        <a class="boton-login" routerLink="/login">Ingresar</a>
     </div>
-    <div *ngIf="user">
+    <div class="boton-login" *ngIf="user">
         <div>
-            <strong>Bienvenido, {{ user.nombre }} {{ user.apellido }}</strong>
+            <strong style="margin-right: 5px;">Bienvenido, {{ user.nombre }} {{ user.apellido }}</strong>
             <button (click)="clickedSalir()">
                 Cerrar sesión
             </button>

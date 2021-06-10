@@ -1,0 +1,22 @@
+.login{
+    height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor-login{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+.titulo-login{
+    font-size: 20px;
+}
+
+.margen-separador{
+    margin-bottom: 5px;
+}

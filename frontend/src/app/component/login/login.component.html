@@ -1,13 +1,13 @@
-<div *ngIf="!user">
-    <span>Iniciar Sesion</span>
-    <form >
-        <input type="username" [(ngModel)]="usuario" [ngModelOptions]="{ standalone: true }"
-            placeholder="Usuario" maxlength="50" />
-        <input type="password" [(ngModel)]="clave" [ngModelOptions]="{ standalone: true }"
-            placeholder="Clave" maxlength="50" />
-        <div [innerHtml]="htmlToAdd"></div>
-        <button (click)="ComprobarUsuario()" type="submit">
+<div class="login" *ngIf="!user">
+    <div class="contenedor-login">
+        <span class="titulo-login margen-separador">Iniciar Sesion</span>
+        <input class="margen-separador" type="username" [(ngModel)]="usuario" [ngModelOptions]="{ standalone: true }" placeholder="Usuario"
+            maxlength="50" />
+        <input class="margen-separador" type="password" [(ngModel)]="clave" [ngModelOptions]="{ standalone: true }" placeholder="Clave"
+            maxlength="50" />
+        <div class="margen-separador" [innerHtml]="htmlToAdd"></div>
+        <button class="margen-separador" (click)="ComprobarUsuario()" type="submit">
             Ingresar
         </button>
-    </form>
+    </div>
 </div>
