@@ -66,10 +66,6 @@ public class UsuariosService extends ResponseEntityExceptionHandler {
             salida.setFechaNacimiento(usuario.get().getFechaNacimiento());
             salida.setAdmin(usuario.get().getAdmin());
             salida.setMailVerificado(usuario.get().getMailVerificado());
-            salida.setCodigoVerificacion(usuario.get().getCodigoVerificacion());
-            if (usuario.get().getImagenPerfil() != null) {
-                salida.setIdImagen(usuario.get().getImagenPerfil().getIdImagen());
-            }
             return salida;
         } else {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);

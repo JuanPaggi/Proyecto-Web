@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class EtiquetasService {
+export class TagService {
 
   constructor(
     private http: HttpClient
@@ -16,7 +16,7 @@ export class EtiquetasService {
   public getTag(idEtiqueta: number): Observable<TagResponseDto> {
     let headers = {};
     return this.http.get<TagResponseDto>(
-      environment.apiEndpoint + 'etiquetas/' + idEtiqueta,
+      environment.apiEndpoint + '/etiquetas/' + idEtiqueta,
       headers
     )
   }

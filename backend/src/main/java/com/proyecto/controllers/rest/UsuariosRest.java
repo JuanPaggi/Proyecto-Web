@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 public interface UsuariosRest {
 
     @PostMapping("/login")
-    ResponseEntity<ResponseDto> verificarUsuario(@Validated @RequestBody UserLoginDto body, HttpServletRequest request);
+    ResponseEntity<Boolean> verificarUsuario(@Validated @RequestBody UserLoginDto body, HttpServletRequest request);
 
     @GetMapping("")
     ResponseEntity<UserResponseDto> obtenerUsuario(HttpServletRequest request);

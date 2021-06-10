@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { TagResponseDto } from 'src/app/dtos/TagResponseDto';
-import { EtiquetasService } from 'src/app/services/etiquetas/etiquetas.service';
+import { Component, OnInit, Output,EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -9,35 +7,10 @@ import { EtiquetasService } from 'src/app/services/etiquetas/etiquetas.service';
 })
 export class HomeComponent implements OnInit {
 
-  tag: TagResponseDto = new TagResponseDto();
-
   constructor(
-    private etiquetaService: EtiquetasService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.getTag();
-  }
-
-  private getTag(){
-    this.etiquetaService.getTag(1).subscribe(
-      (response) => {
-        this.tag = response;
-      },
-      (error) => {
-        switch (error.status){
-          case 404:
-            console.log("Fallo 404");
-            break;
-          case 500:
-            console.log("Fallo 500");
-            break;
-          default:
-            console.log("NO SE SABE QUE PASO!");
-            break;
-        }
-      }
-    )
   }
 
 }

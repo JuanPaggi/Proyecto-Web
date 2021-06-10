@@ -1,5 +1,9 @@
 .header{
-    height: 70px;
-    width: 100%;
-    background-color: blueviolet;
+    height: 50px;
+    width: 100% - 20px;
+    background-color: rgb(211, 245, 253);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 20px;
 }

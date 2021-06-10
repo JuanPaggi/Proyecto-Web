@@ -1,3 +1,13 @@
 <div class="header">
-    
+    <div *ngIf="!user && this.router.url != '/login'">
+        <a routerLink="/login">Ingresar</a>
+    </div>
+    <div *ngIf="user">
+        <div>
+            <strong>Bienvenido, {{ user.nombre }} {{ user.apellido }}</strong>
+            <button (click)="clickedSalir()">
+                Cerrar sesión
+            </button>
+        </div>
+    </div>
 </div>

@@ -41,7 +41,7 @@ public class PublicacionesService {
     UsuariosRepository usuariosRepository;
 
     public PublicationResponseDto obetenerPublicacion(int idPublicacion) {
-        Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
+        Optional<PublicacionModels> publicacion = publicacionesRepository.findById(idPublicacion);
         if (publicacion.isPresent()) {
             PublicationResponseDto salida = new PublicationResponseDto();
             salida.setIdPublicacion(publicacion.get().getIdPublicacion());
