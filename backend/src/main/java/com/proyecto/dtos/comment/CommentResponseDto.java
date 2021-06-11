@@ -1,6 +1,7 @@
 package com.proyecto.dtos.comment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.proyecto.dtos.user.UserNameResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,5 +23,8 @@ public class CommentResponseDto {
 
     @JsonProperty("fechaCreacion")
     private Date fechaCreacion;
+
+    @JsonProperty("user")
+    private UserNameResponseDto user;
 
 }

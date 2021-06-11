@@ -8,12 +8,16 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RequestMapping("/publicaciones")
 public interface PublicacionesRest {
 
     @GetMapping("")
     ResponseEntity<PublicationResponseDto> obtenerPublicacion(@RequestParam(name = "id_publicacion") Integer idPublicacion);
+
+    @GetMapping("/todas")
+    ResponseEntity<List<PublicationResponseDto>> obtenerTodasPublicacion();
 
     @PostMapping("")
     ResponseEntity<ResponseDto> crearPublicacion(@Validated @RequestBody PublicationCreateDto body, HttpServletRequest request);

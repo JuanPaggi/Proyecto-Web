@@ -1,3 +1,16 @@
-<section>
-    <p>Etiqueta: {{ tag.etiqueta }}</p>
-</section>
+<div class="home">
+    <div class="publicacion" *ngFor="let item of publicaciones">
+        <div class="titulo-publicacion"> {{item.titulo}} </div>
+        <p class="descripcion-publicacion"> {{item.descripcion}} </p>
+        <div class="datos-publicacion"> Creado por <strong style="text-decoration: underline;" >{{item.usuario.user}}</strong>
+            a las {{item.horarioCreacionString}}hs el {{item.fechaCreacionString}} 
+        </div>
+        <br>
+        <div>Comentarios:</div>
+        <div class="comentarios" *ngFor="let item2 of item.comentarios;">
+            <div> {{item2.user.user}} : {{item2.texto}} </div>
+            <div class="datos-comentario"> Publicado a las {{item2.horarioCreacionString}}hs el {{item2.fechaCreacionString}} </div>
+        </div>
+    </div>
+
+</div>

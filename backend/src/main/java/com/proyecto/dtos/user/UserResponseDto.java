@@ -37,13 +37,7 @@ public class UserResponseDto {
     @JsonProperty ("fechaNacimiento")
     private Date fechaNacimiento;
 
-    @JsonProperty ("codigoVerificacion")
-    private String codigoVerificacion;
-
     @JsonProperty ("admin")
     private Boolean admin;
-
-    @JsonProperty ("idImagen")
-    private int idImagen;
 
 }

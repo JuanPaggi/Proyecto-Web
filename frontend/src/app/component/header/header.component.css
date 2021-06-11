@@ -1,5 +1,30 @@
 .header{
-    height: 70px;
-    width: 100%;
-    background-color: blueviolet;
+    height: 50px;
+    width: 100% - 40px;
+    background-color: rgb(211, 245, 253);
+    display: flex;
+    padding: 0 20px;
+}
+
+.boton-login{
+    width: 50%;
+    height: 100%;
+    display: inherit;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.titulo-web{
+    width: 50%;
+    height: 100%;
+    display: inherit;
+    align-items: center;
+    font-size: 25px;
+    color: black;
+    text-decoration: none;
+}
+
+.boton-login{
+    text-decoration: none;
+    color: black;
 }

@@ -40,8 +40,50 @@ public class PublicacionesService {
     @Autowired
     UsuariosRepository usuariosRepository;
 
+    public List<PublicationResponseDto> obtenerTodasPublicaciones() {
+        List<PublicacionModels> publicaciones = publicacionesRepository.findAll();
+        List<PublicationResponseDto> salida = new ArrayList<>();
+        for (PublicacionModels it : publicaciones) {
+            PublicationResponseDto dto = new PublicationResponseDto();
+            dto.setIdPublicacion(it.getIdPublicacion());
+            dto.setDescripcion(it.getDescripcion());
+            dto.setFechaCreacion(it.getFechaCreacion());
+            dto.setTitulo(it.getTitulo());
+            UserNameResponseDto userDatos = new UserNameResponseDto();
+            userDatos.setUser(it.getUsuario().getUser());
+            userDatos.setIdUsuario(it.getUsuario().getIdUsuario());
+            dto.setUsuario(userDatos);
+            List<TagResponseDto> etiquetas = new ArrayList<>();
+            for (EtiquetaModels it1 : it.getEtiquetas()) {
+                TagResponseDto etiquetaDto = new TagResponseDto();
+                etiquetaDto.setIdEtiqueta(it1.getIdEtiqueta());
+                etiquetaDto.setEtiqueta(it1.getEtiqueta());
+                etiquetas.add(etiquetaDto);
+            }
+            dto.setEtiquetas(etiquetas);
+            List<CommentResponseDto> comentarios = new ArrayList<>();
+            for (ComentarioModels it1 : it.getComentarios()) {
+                CommentResponseDto comentarioDto = new CommentResponseDto();
+                comentarioDto.setIdComentario(it1.getIdComentario());
+                comentarioDto.setTexto(it1.getTexto());
+                comentarioDto.setFechaCreacion(it.getFechaCreacion());
+
+                UserNameResponseDto userCommentDatos = new UserNameResponseDto();
+                userCommentDatos.setUser(it1.getUsuario().getUser());
+                userCommentDatos.setIdUsuario(it1.getUsuario().getIdUsuario());
+                comentarioDto.setUser(userCommentDatos);
+
+                comentarios.add(comentarioDto);
+            }
+            dto.setComentarios(comentarios);
+
+            salida.add(dto);
+        }
+        return salida;
+    }
+
     public PublicationResponseDto obetenerPublicacion(int idPublicacion) {
-        Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
+        Optional<PublicacionModels> publicacion = publicacionesRepository.findById(idPublicacion);
         if (publicacion.isPresent()) {
             PublicationResponseDto salida = new PublicationResponseDto();
             salida.setIdPublicacion(publicacion.get().getIdPublicacion());

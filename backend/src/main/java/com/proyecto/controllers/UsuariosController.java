@@ -23,9 +23,9 @@ public class UsuariosController implements UsuariosRest {
     @Autowired
     UsuariosService usuariosService;
 
-    public ResponseEntity<ResponseDto> verificarUsuario(UserLoginDto body, HttpServletRequest request) {
+    public ResponseEntity<Boolean> verificarUsuario(UserLoginDto body, HttpServletRequest request) {
         usuariosService.verificarUser(body, request);
-        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     public ResponseEntity<UserResponseDto> obtenerUsuario(HttpServletRequest request) {
