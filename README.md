@@ -23,5 +23,11 @@ Proyecto Web con Backend y Frontend
 #### Levantar proyecto
 - ng serve -o
 
+Para levantar el proyecto en red
+	1) Colocar la url con ip publica en origin del properties del backend.
+	2) Cambiar la url del backend en enviroments en el frontend.
+	3) ng serve --disable-host-check --host "ipLocal"
+	Se levanta en: ipPublica:4200
+
 #### Compilar Proyecto
 - ng build
