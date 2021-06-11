@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { EventEmitter, Injectable, Output } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/dtos/User.model';
 import { UsuarioDatosDto } from 'src/app/dtos/UsuarioDatosDto';

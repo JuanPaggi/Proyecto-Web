@@ -9,6 +9,8 @@ import { HomeComponent } from './component/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './component/login/login.component';
+import { PublicationComponent } from './component/publication/publication.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,8 @@ import { LoginComponent } from './component/login/login.component';
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    PublicationComponent
   ],
   imports: [
     AppRoutingModule,
@@ -24,7 +27,7 @@ import { LoginComponent } from './component/login/login.component';
     FormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

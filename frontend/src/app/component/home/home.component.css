@@ -1,3 +1,44 @@
 .home{
-    height: calc(100vh - 120px);
+    min-height: calc(100vh - 120px);
+    max-width: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+
+.publicacion{
+    border: 1px solid black;
+    margin-top: 10px;
+    padding: 20px;
+    max-width: 50%;
+    min-width: 25%;
+}
+
+.comentarios{
+    border: 2px solid black;
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.titulo-publicacion{
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.datos-publicacion{
+    font-size: 12px;
+}
+
+.descripcion-publicacion{
+    font-size: 14px;
+}
+
+.datos-comentario{
+    font-size: 12px;
 }

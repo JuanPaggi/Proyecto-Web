@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Capa de controlador para las publicaciones.
@@ -25,6 +26,10 @@ public class PublicacionesController implements PublicacionesRest {
 
     public ResponseEntity<PublicationResponseDto> obtenerPublicacion(Integer idPublicacion) {
         return new ResponseEntity<>(publicacionesService.obetenerPublicacion(idPublicacion), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<PublicationResponseDto>> obtenerTodasPublicacion() {
+        return new ResponseEntity<>(publicacionesService.obtenerTodasPublicaciones(), HttpStatus.OK);
     }
 
     public ResponseEntity<ResponseDto> crearPublicacion(PublicationCreateDto body, HttpServletRequest request) {
