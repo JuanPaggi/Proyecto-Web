@@ -29,4 +29,11 @@ export class CommentService {
     );
   }
 
+  public deleteComment(id_comentario): Observable<void> {
+    return this.http.delete<void>(
+      environment.apiEndpoint + '/comentarios/' + id_comentario,
+      this.headers
+    );
+  }
+
 }

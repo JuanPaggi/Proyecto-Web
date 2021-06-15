@@ -1,7 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CommentCreateDto } from 'src/app/dtos/CommentCreateDto';
-import { CommentResponseDto } from 'src/app/dtos/CommentResponseDto';
 import { PublicationResponseDto } from 'src/app/dtos/PublicationResponseDto';
 import { User } from 'src/app/dtos/User.model';
 import { CommentService } from 'src/app/services/comments/comment.service';
@@ -84,6 +83,31 @@ export class HomeComponent implements OnInit {
         );
       },
       (error) => {
+        switch (error.status) {
+          case 401:
+            this.usuariosSrv.setUserLoggedOut();
+            window.location.href = '/';
+            break;
+          case 404:
+            this.htmlToAdd = '<p class="text-danger">No existe.</p>';
+            break;
+          default:
+            this.htmlToAdd = '<p class="text-danger">Error en el servidor.</p>';
+        }
+      }
+    );
+  }
+
+  public borrarComentario(indice_publicacion:number, id_comentario: number) {
+    this.commentSrv.deleteComment(id_comentario).subscribe(
+      (response)=>{
+        for (let index = 0; index < this.publicaciones[indice_publicacion].comentarios.length; index++) {
+          if (this.publicaciones[indice_publicacion].comentarios[index].id_comentario == id_comentario) {
+            this.publicaciones[indice_publicacion].comentarios.splice(index,1);
+          }
+        }
+      },
+      (error)=>{
         switch (error.status) {
           case 401:
             this.usuariosSrv.setUserLoggedOut();
