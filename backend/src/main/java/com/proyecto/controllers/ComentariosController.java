@@ -27,9 +27,8 @@ public class ComentariosController implements ComentariosRest {
         return new ResponseEntity<>(comentariosService.obtenerComentario(idComentario), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> crearComentario(CommentCreateDto body, HttpServletRequest request) {
-        comentariosService.crearComentario(body, request);
-        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
+    public ResponseEntity<Integer> crearComentario(CommentCreateDto body, HttpServletRequest request) {
+        return new ResponseEntity<>(comentariosService.crearComentario(body, request), HttpStatus.OK);
     }
 
     public ResponseEntity<ResponseDto> borrarComentario(Integer idComentario, HttpServletRequest request) {

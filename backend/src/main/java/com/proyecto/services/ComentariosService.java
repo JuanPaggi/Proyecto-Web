@@ -42,15 +42,21 @@ public class ComentariosService {
             salida.setIdComentario(comentario.get().getIdComentario());
             salida.setTexto(comentario.get().getTexto());
             salida.setFechaCreacion(comentario.get().getFechaCreacion());
+
+            UserNameResponseDto userCommentDatos = new UserNameResponseDto();
+            userCommentDatos.setUser(comentario.get().getUsuario().getUser());
+            userCommentDatos.setIdUsuario(comentario.get().getUsuario().getIdUsuario());
+            salida.setUser(userCommentDatos);
+
             return salida;
         } else {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }
     }
 
-    public void crearComentario(CommentCreateDto entrada, HttpServletRequest request) {
+    public Integer crearComentario(CommentCreateDto entrada, HttpServletRequest request) {
         String userInput = Validaciones.obtenerUserLogin(request);
-        if (entrada.getTexto().length() <= 8000) {
+        if (entrada.getTexto().length() <= 3000) {
             ComentarioModels comentario = new ComentarioModels();
             comentario.setTexto(entrada.getTexto());
             comentario.setFechaCreacion(new Date());
@@ -66,7 +72,7 @@ public class ComentariosService {
             } else {
                 throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
             }
-            comentariosRepository.save(comentario);
+            return comentariosRepository.save(comentario).getIdComentario();
         } else {
             throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
         }

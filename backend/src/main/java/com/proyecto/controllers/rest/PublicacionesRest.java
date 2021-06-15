@@ -13,8 +13,8 @@ import java.util.List;
 @RequestMapping("/publicaciones")
 public interface PublicacionesRest {
 
-    @GetMapping("")
-    ResponseEntity<PublicationResponseDto> obtenerPublicacion(@RequestParam(name = "id_publicacion") Integer idPublicacion);
+    @GetMapping("/{id_publicacion}")
+    ResponseEntity<PublicationResponseDto> obtenerPublicacion(@PathVariable("id_publicacion") Integer idPublicacion);
 
     @GetMapping("/todas")
     ResponseEntity<List<PublicationResponseDto>> obtenerTodasPublicacion();

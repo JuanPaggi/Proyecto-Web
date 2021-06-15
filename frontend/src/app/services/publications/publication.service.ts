@@ -21,4 +21,11 @@ export class PublicationService {
     );
   }
 
+  public get_publication(id_publicacion): Observable<PublicationResponseDto> {
+    return this.http.get<PublicationResponseDto>(
+      environment.apiEndpoint + '/publicaciones/' + id_publicacion,
+      this.headers
+    );
+  }
+
 }
