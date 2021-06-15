@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/comentarios")
 public interface ComentariosRest {
 
-    @GetMapping("")
-    ResponseEntity<CommentResponseDto> obtenerComentario(@RequestParam(name = "id_comentario") Integer idComentario);
+    @GetMapping("/{id_comentario}")
+    ResponseEntity<CommentResponseDto> obtenerComentario(@PathVariable("id_comentario") Integer idComentario);
 
     @PostMapping("")
-    ResponseEntity<ResponseDto> crearComentario(@Validated @RequestBody CommentCreateDto body, HttpServletRequest request);
+    ResponseEntity<Integer> crearComentario(@Validated @RequestBody CommentCreateDto body, HttpServletRequest request);
 
     @DeleteMapping("")
     ResponseEntity<ResponseDto> borrarComentario(@RequestParam(name = "id_comentario") Integer idComentario, HttpServletRequest request);

@@ -66,7 +66,7 @@ public class PublicacionesService {
                 CommentResponseDto comentarioDto = new CommentResponseDto();
                 comentarioDto.setIdComentario(it1.getIdComentario());
                 comentarioDto.setTexto(it1.getTexto());
-                comentarioDto.setFechaCreacion(it.getFechaCreacion());
+                comentarioDto.setFechaCreacion(it1.getFechaCreacion());
 
                 UserNameResponseDto userCommentDatos = new UserNameResponseDto();
                 userCommentDatos.setUser(it1.getUsuario().getUser());

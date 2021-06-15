@@ -18,10 +18,11 @@
 }
 
 .comentarios{
-    border: 2px solid black;
+    border: 1px solid black;
     margin-top: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 5px;
+    width: 80%;
 }
 
 .titulo-publicacion{
@@ -41,4 +42,25 @@
 
 .datos-comentario{
     font-size: 12px;
+}
+
+.caja-nuevo-comentario{
+    margin-top: 10px;
+}
+
+.input-comentario-nuevo{
+    border: 1px solid black;
+    margin-top: 10px;
+    border-radius: 5px;
+    padding: 5px;
+    height: 50px;
+    width: 80%;
+    resize: none;
+}
+
+.caja-texto-comentario{
+    font-size: 14px;
+    white-space: initial;
+    overflow: hidden;
+    word-wrap: break-word;
 }
