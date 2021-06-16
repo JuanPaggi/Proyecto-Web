@@ -1,7 +1,8 @@
 <div class="header">
     <a class="titulo-web" routerLink="/">Proyecto Web</a>
-    <div class="boton-login" *ngIf="!user && this.router.url != '/login'">
-        <a class="boton-login" routerLink="/login">Ingresar</a>
+    <div class="boton-login">
+        <a *ngIf="!user" class="boton-login" routerLink="/login">Ingresar</a>
+        <a class="boton-registro" routerLink="/registro">Registro</a>
     </div>
     <div class="boton-login" *ngIf="user">
         <div>

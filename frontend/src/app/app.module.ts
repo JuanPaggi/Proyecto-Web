@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './component/login/login.component';
 import { PublicationComponent } from './component/publication/publication.component';
 import { DatePipe } from '@angular/common';
+import { RegisterComponent } from './component/register/register.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { DatePipe } from '@angular/common';
     FooterComponent,
     HomeComponent,
     LoginComponent,
-    PublicationComponent
+    PublicationComponent,
+    RegisterComponent
   ],
   imports: [
     AppRoutingModule,
