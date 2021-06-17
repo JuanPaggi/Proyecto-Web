@@ -1,0 +1,21 @@
+<section class="register">
+    <div class="contenedor-register">
+        <span class="titulo-login margen-separador">Registro</span>
+        <input class="margen-separador" type="username" [(ngModel)]="usuario" [ngModelOptions]="{ standalone: true }"
+            placeholder="Usuario" maxlength="50" />
+        <input class="margen-separador" type="password" [(ngModel)]="clave" [ngModelOptions]="{ standalone: true }"
+            placeholder="Clave" maxlength="50" />
+        <input class="margen-separador" type="password" [(ngModel)]="claveRepetir"
+            [ngModelOptions]="{ standalone: true }" placeholder="Repetir clave" maxlength="50" />
+        <input class="margen-separador" type="text" [(ngModel)]="nombre" [ngModelOptions]="{ standalone: true }"
+            placeholder="Nombre" maxlength="50" />
+        <input class="margen-separador" type="text" [(ngModel)]="apellido" [ngModelOptions]="{ standalone: true }"
+            placeholder="Apellido" maxlength="50" />
+        <input class="margen-separador" type="text" [(ngModel)]="mail" [ngModelOptions]="{ standalone: true }"
+            placeholder="e-mail" maxlength="100" />
+        <div class="margen-separador" [innerHtml]="htmlToAdd"></div>
+        <button class="margen-separador" (click)="registrarUsuario()" type="submit">
+            Registro
+        </button>
+    </div>
+</section>
