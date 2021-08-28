@@ -1,0 +1,18 @@
+.register{
+    height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor-register{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+.margen-separador{
+    margin-bottom: 5px;
+}

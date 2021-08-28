@@ -1,6 +1,7 @@
 package com.proyecto.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.proyecto.dtos.user.UserNameResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 

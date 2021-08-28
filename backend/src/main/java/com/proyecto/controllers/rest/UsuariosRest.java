@@ -1,6 +1,7 @@
 package com.proyecto.controllers.rest;
 
 import com.proyecto.dtos.*;
+import com.proyecto.dtos.user.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 public interface UsuariosRest {
 
     @PostMapping("/login")
-    ResponseEntity<ResponseDto> verificarUsuario(@Validated @RequestBody UserLoginDto body, HttpServletRequest request);
+    ResponseEntity<Boolean> verificarUsuario(@Validated @RequestBody UserLoginDto body, HttpServletRequest request);
 
     @GetMapping("")
     ResponseEntity<UserResponseDto> obtenerUsuario(HttpServletRequest request);

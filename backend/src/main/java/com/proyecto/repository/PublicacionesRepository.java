@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface PublicacionesRepository extends JpaRepository<PublicacionModels, Integer> {
 
-    @Query(value = "select * from publicaciones where id_publicacion= ?1", nativeQuery = true)
-    Optional<PublicacionModels> obtenerPublicacion(int idPublicacion);
+    @Query(value = "select * from publicaciones where id_publicacion = ?1 and id_usuario = (select id_usuario from usuarios where user = ?2)", nativeQuery = true)
+    Optional<PublicacionModels> existByIdUser(int id, String user);
 
 }

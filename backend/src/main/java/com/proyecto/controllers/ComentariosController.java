@@ -1,8 +1,8 @@
 package com.proyecto.controllers;
 
 import com.proyecto.controllers.rest.ComentariosRest;
-import com.proyecto.dtos.CommentCreateDto;
-import com.proyecto.dtos.CommentResponseDto;
+import com.proyecto.dtos.comment.CommentCreateDto;
+import com.proyecto.dtos.comment.CommentResponseDto;
 import com.proyecto.dtos.ResponseDto;
 import com.proyecto.services.ComentariosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +27,17 @@ public class ComentariosController implements ComentariosRest {
         return new ResponseEntity<>(comentariosService.obtenerComentario(idComentario), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> crearComentario(CommentCreateDto body, HttpServletRequest request) {
-        comentariosService.crearComentario(body, request);
+    public ResponseEntity<Integer> crearComentario(CommentCreateDto body, HttpServletRequest request) {
+        return new ResponseEntity<>(comentariosService.crearComentario(body, request), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseDto> borrarComentario(Integer idComentario, HttpServletRequest request) {
+        comentariosService.borrarComentario(idComentario, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> borrarComentario(Integer idComentario) {
-        comentariosService.borrarComentario(idComentario);
-        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
-    }
-
-    public ResponseEntity<ResponseDto> actualizarComentario(Integer idComentario, CommentCreateDto body) {
-        comentariosService.actualizarComentario(idComentario, body);
+    public ResponseEntity<ResponseDto> actualizarComentario(Integer idComentario, CommentCreateDto body, HttpServletRequest request) {
+        comentariosService.actualizarComentario(idComentario, body, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 

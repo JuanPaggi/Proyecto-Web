@@ -1,8 +1,8 @@
 package com.proyecto.controllers;
 
 import com.proyecto.controllers.rest.PublicacionesRest;
-import com.proyecto.dtos.PublicationResponseDto;
-import com.proyecto.dtos.PublicationCreateDto;
+import com.proyecto.dtos.publication.PublicationResponseDto;
+import com.proyecto.dtos.publication.PublicationCreateDto;
 import com.proyecto.dtos.ResponseDto;
 import com.proyecto.services.PublicacionesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Capa de controlador para las publicaciones.
@@ -27,18 +28,22 @@ public class PublicacionesController implements PublicacionesRest {
         return new ResponseEntity<>(publicacionesService.obetenerPublicacion(idPublicacion), HttpStatus.OK);
     }
 
+    public ResponseEntity<List<PublicationResponseDto>> obtenerTodasPublicacion() {
+        return new ResponseEntity<>(publicacionesService.obtenerTodasPublicaciones(), HttpStatus.OK);
+    }
+
     public ResponseEntity<ResponseDto> crearPublicacion(PublicationCreateDto body, HttpServletRequest request) {
         publicacionesService.crearPublicacion(body, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> borrarPublicacion(Integer idPublicacion) {
-        publicacionesService.borrarPublicacion(idPublicacion);
+    public ResponseEntity<ResponseDto> borrarPublicacion(Integer idPublicacion, HttpServletRequest request) {
+        publicacionesService.borrarPublicacion(idPublicacion, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> actualizarPublicacion(Integer idPublicacion, PublicationCreateDto body) {
-        publicacionesService.actualizarPublicacion(idPublicacion, body);
+    public ResponseEntity<ResponseDto> actualizarPublicacion(Integer idPublicacion, PublicationCreateDto body, HttpServletRequest request) {
+        publicacionesService.actualizarPublicacion(idPublicacion, body, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 

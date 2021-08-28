@@ -1,6 +1,10 @@
 package com.proyecto.services;
 
-import com.proyecto.dtos.*;
+import com.proyecto.dtos.comment.CommentResponseDto;
+import com.proyecto.dtos.publication.PublicationCreateDto;
+import com.proyecto.dtos.publication.PublicationResponseDto;
+import com.proyecto.dtos.tag.TagResponseDto;
+import com.proyecto.dtos.user.UserNameResponseDto;
 import com.proyecto.models.ComentarioModels;
 import com.proyecto.models.EtiquetaModels;
 import com.proyecto.models.PublicacionModels;
@@ -10,6 +14,7 @@ import com.proyecto.repository.PublicacionesRepository;
 import com.proyecto.repository.UsuariosRepository;
 import com.proyecto.exceptions.ApiException;
 import com.proyecto.utils.Constantes;
+import com.proyecto.utils.Validaciones;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +40,50 @@ public class PublicacionesService {
     @Autowired
     UsuariosRepository usuariosRepository;
 
+    public List<PublicationResponseDto> obtenerTodasPublicaciones() {
+        List<PublicacionModels> publicaciones = publicacionesRepository.findAll();
+        List<PublicationResponseDto> salida = new ArrayList<>();
+        for (PublicacionModels it : publicaciones) {
+            PublicationResponseDto dto = new PublicationResponseDto();
+            dto.setIdPublicacion(it.getIdPublicacion());
+            dto.setDescripcion(it.getDescripcion());
+            dto.setFechaCreacion(it.getFechaCreacion());
+            dto.setTitulo(it.getTitulo());
+            UserNameResponseDto userDatos = new UserNameResponseDto();
+            userDatos.setUser(it.getUsuario().getUser());
+            userDatos.setIdUsuario(it.getUsuario().getIdUsuario());
+            dto.setUsuario(userDatos);
+            List<TagResponseDto> etiquetas = new ArrayList<>();
+            for (EtiquetaModels it1 : it.getEtiquetas()) {
+                TagResponseDto etiquetaDto = new TagResponseDto();
+                etiquetaDto.setIdEtiqueta(it1.getIdEtiqueta());
+                etiquetaDto.setEtiqueta(it1.getEtiqueta());
+                etiquetas.add(etiquetaDto);
+            }
+            dto.setEtiquetas(etiquetas);
+            List<CommentResponseDto> comentarios = new ArrayList<>();
+            for (ComentarioModels it1 : it.getComentarios()) {
+                CommentResponseDto comentarioDto = new CommentResponseDto();
+                comentarioDto.setIdComentario(it1.getIdComentario());
+                comentarioDto.setTexto(it1.getTexto());
+                comentarioDto.setFechaCreacion(it1.getFechaCreacion());
+
+                UserNameResponseDto userCommentDatos = new UserNameResponseDto();
+                userCommentDatos.setUser(it1.getUsuario().getUser());
+                userCommentDatos.setIdUsuario(it1.getUsuario().getIdUsuario());
+                comentarioDto.setUser(userCommentDatos);
+
+                comentarios.add(comentarioDto);
+            }
+            dto.setComentarios(comentarios);
+
+            salida.add(dto);
+        }
+        return salida;
+    }
+
     public PublicationResponseDto obetenerPublicacion(int idPublicacion) {
-        Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
+        Optional<PublicacionModels> publicacion = publicacionesRepository.findById(idPublicacion);
         if (publicacion.isPresent()) {
             PublicationResponseDto salida = new PublicationResponseDto();
             salida.setIdPublicacion(publicacion.get().getIdPublicacion());
@@ -70,13 +117,8 @@ public class PublicacionesService {
         }
     }
 
-    public Integer crearPublicacion(PublicationCreateDto entrada, HttpServletRequest request) {
-        String userInput = "";
-        if (request.getSession(false) != null) {
-            userInput = (String) request.getSession(false).getAttribute("user");
-        } else {
-            throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
-        }
+    public void crearPublicacion(PublicationCreateDto entrada, HttpServletRequest request) {
+        String userInput = Validaciones.obtenerUserLogin(request);
         if (entrada.getDescripcion().length() <= 10000) {
             PublicacionModels publicacion = new PublicacionModels();
             publicacion.setDescripcion(entrada.getDescripcion());
@@ -95,23 +137,24 @@ public class PublicacionesService {
                 }
                 publicacion.setEtiquetas(etiquetas);
             }
-            publicacion = publicacionesRepository.save(publicacion);
-            return publicacion.getIdPublicacion();
+            publicacionesRepository.save(publicacion);
         } else {
             throw new ApiException(400, Constantes.ERROR_DATOS_INVALIDOS);
         }
     }
 
-    public void borrarPublicacion(int idPublicacion) {
-        if (!publicacionesRepository.existsById(idPublicacion)) {
+    public void borrarPublicacion(int idPublicacion, HttpServletRequest request) {
+        String userInput = Validaciones.obtenerUserLogin(request);
+        if (!publicacionesRepository.existByIdUser(idPublicacion, userInput).isPresent()) {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         } else {
             publicacionesRepository.deleteById(idPublicacion);
         }
     }
 
-    public int actualizarPublicacion(int idPublicacion, PublicationCreateDto body) {
-        Optional<PublicacionModels> publicacion = publicacionesRepository.obtenerPublicacion(idPublicacion);
+    public void actualizarPublicacion(int idPublicacion, PublicationCreateDto body, HttpServletRequest request) {
+        String userInput = Validaciones.obtenerUserLogin(request);
+        Optional<PublicacionModels> publicacion = publicacionesRepository.existByIdUser(idPublicacion, userInput);
         if (publicacion.isPresent()) {
             PublicacionModels entrada = publicacion.get();
             if (body.getTitulo() != null) {
@@ -126,7 +169,6 @@ public class PublicacionesService {
             }
             entrada.setEtiquetas(etiquetas);
             publicacionesRepository.save(entrada);
-            return entrada.getIdPublicacion();
         } else {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }
