@@ -39,9 +39,11 @@ export class HomeComponent implements OnInit {
   public obtenerPublicaciones() {
     this.publicationSrv.get_all_publication().subscribe(
       (response) => {
+        console.log(response);
         for (let index = 0; index < response.length; index++) {
           response[index].fechaCreacionString = this.datepipe.transform(response[index].fechaCreacion, 'dd-MM-yyyy');
           response[index].horarioCreacionString = this.datepipe.transform(response[index].fechaCreacion, 'HH:mm:ss');
+
           for (let index2 = 0; index2 < response[index].comentarios.length; index2++) {
             response[index].comentarios[index2].fechaCreacionString = this.datepipe.transform(response[index].comentarios[index2].fechaCreacion, 'dd-MM-yyyy');
             response[index].comentarios[index2].horarioCreacionString = this.datepipe.transform(response[index].comentarios[index2].fechaCreacion, 'HH:mm:ss');
@@ -122,5 +124,6 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+
 
 }

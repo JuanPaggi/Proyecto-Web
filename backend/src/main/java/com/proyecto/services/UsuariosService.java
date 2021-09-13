@@ -95,7 +95,7 @@ public class UsuariosService extends ResponseEntityExceptionHandler {
 
             try {
                 sendMail.enviarMail(entrada.getMail(), "Ingrese al siguiente enlace para activar su cuenta: \n" +
-                        "http://localhost:8080/usuarios/verificarMail/" + entrada.getUser() + "/" + codigoRandom);
+                        "http://localhost:8082/usuarios/verificarMail/" + entrada.getUser() + "/" + codigoRandom);
             } catch (Exception error) {
                 usuariosRepository.delete(usuario);
                 throw new ApiException(500, Constantes.ERROR_FALLO_MAIL);

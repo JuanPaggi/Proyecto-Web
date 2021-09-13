@@ -1,9 +1,11 @@
 .header{
     height: 50px;
     width: 100% - 40px;
-    background-color: rgb(211, 245, 253);
+    background: rgb(251,161,161);
+    background: linear-gradient(90deg, rgba(251,161,161,1) 0%, rgba(251,161,161,1) 0%, rgba(240,65,65,1) 100%);
     display: flex;
     padding: 0 20px;
+    justify-content: center;
 }
 
 .boton-login{
@@ -19,18 +21,35 @@
     height: 100%;
     display: inherit;
     align-items: center;
-    font-size: 25px;
-    color: black;
+    justify-content: flex-start;
+    font-size: 35px;
+    color: rgb(255, 255, 255);
     text-decoration: none;
+    font-family: 'Dancing Script', cursive;
+    
 }
 
 .boton-login{
     text-decoration: none;
-    color: black;
+    color: rgb(255, 255, 255);
+    transition: .5s;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.boton-login:hover{
+    color: rgb(128, 128, 128);
+} .boton-registro:hover{
+    color: rgb(128, 128, 128);
 }
 
 .boton-registro{
     text-decoration: none;
-    color: black;
+    color: rgb(255, 255, 255);
     margin-left: 10px;
+    transition: .5s;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.menu{
+    display: flex;
 }
