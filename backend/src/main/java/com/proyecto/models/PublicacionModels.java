@@ -22,7 +22,7 @@ public class PublicacionModels {
     @Column(name = "id_publicacion")
     private int idPublicacion;
 
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", columnDefinition = "varchar(10000)")
     private String descripcion;
 
     @Column(name = "fecha_creacion")
