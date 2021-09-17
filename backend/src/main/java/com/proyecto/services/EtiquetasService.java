@@ -43,7 +43,7 @@ public class EtiquetasService {
     public void crearEtiqueta(TagCreateDto entrada, HttpServletRequest request) {
         String userInput = Validaciones.obtenerUserLogin(request);
         Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(userInput);
-        if (user.isPresent()) {
+        if (user.isPresent() && user.get().getAdmin()) {
             if (entrada.getEtiqueta().length() <= 100) {
                 Integer existedb = etiquetasRepository.verificarExisteEtiqueta(entrada.getEtiqueta());
                 if (existedb.equals(1)) {
