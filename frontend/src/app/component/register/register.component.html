@@ -1,20 +1,20 @@
 <section class="register">
     <div class="contenedor-register">
-        <span class="titulo-login margen-separador">Registro</span>
-        <input class="margen-separador" type="username" [(ngModel)]="usuario" [ngModelOptions]="{ standalone: true }"
+        <span class="titulo-register margen-separador">Registro</span>
+        <input class="margen-separador input" type="username" [(ngModel)]="usuario" [ngModelOptions]="{ standalone: true }"
             placeholder="Usuario" maxlength="50" />
-        <input class="margen-separador" type="password" [(ngModel)]="clave" [ngModelOptions]="{ standalone: true }"
+        <input class="margen-separador input" type="password" [(ngModel)]="clave" [ngModelOptions]="{ standalone: true }"
             placeholder="Clave" maxlength="50" />
-        <input class="margen-separador" type="password" [(ngModel)]="claveRepetir"
+        <input class="margen-separador input" type="password" [(ngModel)]="claveRepetir"
             [ngModelOptions]="{ standalone: true }" placeholder="Repetir clave" maxlength="50" />
-        <input class="margen-separador" type="text" [(ngModel)]="nombre" [ngModelOptions]="{ standalone: true }"
+        <input class="margen-separador input" type="text" [(ngModel)]="nombre" [ngModelOptions]="{ standalone: true }"
             placeholder="Nombre" maxlength="50" />
-        <input class="margen-separador" type="text" [(ngModel)]="apellido" [ngModelOptions]="{ standalone: true }"
+        <input class="margen-separador input" type="text" [(ngModel)]="apellido" [ngModelOptions]="{ standalone: true }"
             placeholder="Apellido" maxlength="50" />
-        <input class="margen-separador" type="text" [(ngModel)]="mail" [ngModelOptions]="{ standalone: true }"
+        <input class="margen-separador input" type="text" [(ngModel)]="mail" [ngModelOptions]="{ standalone: true }"
             placeholder="e-mail" maxlength="100" />
-        <div class="margen-separador" [innerHtml]="htmlToAdd"></div>
-        <button class="margen-separador" (click)="registrarUsuario()" type="submit">
+        <div class="margen-separador input" [innerHtml]="htmlToAdd"></div>
+        <button class="margen-separador boton-registro" (click)="registrarUsuario()" type="submit">
             Registro
         </button>
     </div>

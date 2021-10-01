@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 public class TagCreateDto {
 
     @JsonProperty("etiqueta")
-    @NotNull
     private String etiqueta;
 
 }
