@@ -2,12 +2,17 @@
     <div class="publicacion" *ngFor="let item of publicaciones;let i = index">
         <div class="titulo-publicacion"> {{item.titulo}} </div>
         <p class="descripcion-publicacion"> {{item.descripcion}} </p>
+        <div class="etiqueta" *ngFor="let item2 of item.etiquetas">
+            <strong>Etiquetas:</strong>
+            <span class="tag"> {{item2.etiqueta}}</span>
+        </div>
         <div class="datos-publicacion"> Creado por <strong
                 style="text-decoration: underline;">{{item.usuario.user}}</strong>
             a las {{item.horarioCreacionString}}hs el {{item.fechaCreacionString}}
         </div>
+        
         <br>
-        <div>Comentarios:</div>
+        <div><strong>Comentarios:</strong></div>
         <div class="comentarios" *ngFor="let item2 of item.comentarios;">
             <div class="caja-texto-comentario"> <strong style="font-size: 15px;">{{item2.user.user}}:</strong>
                 {{item2.texto}} </div>
