@@ -1,6 +1,6 @@
 .home{
     min-height: calc(100vh - 120px);
-    max-width: auto;
+    width: 100%;
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
