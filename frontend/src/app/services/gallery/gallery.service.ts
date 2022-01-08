@@ -12,11 +12,20 @@ export class GalleryService {
   constructor(private http: HttpClient) {
   }
 
+  private headers = { withCredentials: true };
+
   public  getGallery(idGaleria: number): Observable <GalleryResponseDto> {
-    let headers = {};
     return this.http.get<GalleryResponseDto>(
-      environment.apiEndpoint + '/galeria/' + idGaleria,
-      headers
+      environment.apiEndpoint + '/galerias/' + idGaleria,
+      this.headers
     )
   }
+
+  public  getAll(): Observable <GalleryResponseDto[]> {
+    return this.http.get<GalleryResponseDto[]>(
+      environment.apiEndpoint + '/galerias/all',
+      this.headers
+    )
+  }
+
 }

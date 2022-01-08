@@ -1,0 +1,18 @@
+
+<section class="contenedor-panel">
+    <div class="table">
+        <div class="table-row" >
+            <div class="element-table-list">Lista</div>
+            <div class="element-table-title">Titulo</div>
+            <div class="element-table-opcions">Opciones</div>
+        </div>
+        <div class="table-row" *ngFor="let item of gallerys;let i = index" >
+            <div class="element-table-list">{{i+1}}</div>
+            <div class="element-table-title">{{item.titulo}}</div>
+            <div class="element-table-opcions">
+                <button>Editar</button>
+                <button>Borrar</button>
+            </div>
+        </div>
+    </div>
+</section>

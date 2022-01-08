@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @RequestMapping("/usuarios")
 public interface UsuariosRest {
@@ -17,6 +18,9 @@ public interface UsuariosRest {
 
     @GetMapping("")
     ResponseEntity<UserResponseDto> obtenerUsuario(HttpServletRequest request);
+
+    @GetMapping("/allUser")
+    ResponseEntity<List<UserResponseDto>> getAllUser(HttpServletRequest request);
 
     @PostMapping("")
     ResponseEntity<ResponseDto> crearUsuario(@Validated @RequestBody UserCreateDto body) throws NoSuchAlgorithmException;

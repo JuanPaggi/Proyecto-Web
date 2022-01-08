@@ -8,12 +8,16 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RequestMapping("/etiquetas")
 public interface EtiquetasRest {
 
     @GetMapping("/{idEtiqueta}")
     ResponseEntity<TagResponseDto> obtenerEtiqueta(@PathVariable("idEtiqueta") Integer idEtiqueta);
+
+    @GetMapping("/all")
+    ResponseEntity<List<TagResponseDto>> getAll(HttpServletRequest request);
 
     @PostMapping("")
     ResponseEntity<ResponseDto> crearEtiqueta(@Validated @RequestBody TagCreateDto body, HttpServletRequest request);

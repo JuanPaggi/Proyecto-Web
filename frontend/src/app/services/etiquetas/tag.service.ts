@@ -13,11 +13,19 @@ export class TagService {
     private http: HttpClient
   ) { }
 
+  private headers = { withCredentials: true };
+
   public getTag(idEtiqueta: number): Observable<TagResponseDto> {
-    let headers = {};
     return this.http.get<TagResponseDto>(
       environment.apiEndpoint + '/etiquetas/' + idEtiqueta,
-      headers
+      this.headers
+    )
+  }
+
+  public getAll(): Observable<TagResponseDto[]> {
+    return this.http.get<TagResponseDto[]>(
+      environment.apiEndpoint + '/etiquetas/all',
+      this.headers
     )
   }
 

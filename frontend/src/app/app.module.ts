@@ -14,10 +14,10 @@ import { DatePipe } from '@angular/common';
 import { RegisterComponent } from './component/register/register.component';
 import { HomeComponent } from './component/home/home.component';
 import { PanelComponent } from './component/panel/panel.component';
-import { PanelUsuariosComponent } from './component/panel-usuarios/panel-usuarios.component';
-import { PanelEtiquetasComponent } from './component/panel-etiquetas/panel-etiquetas.component';
-import { PanelGaleriasComponent } from './component/panel-galerias/panel-galerias.component';
-import { PanelPublicacionesComponent } from './component/panel-publicaciones/panel-publicaciones.component';
+import { PanelUsuariosComponent } from './component/panel/panel-usuarios/panel-usuarios.component';
+import { PanelEtiquetasComponent } from './component/panel/panel-etiquetas/panel-etiquetas.component';
+import { PanelGaleriasComponent } from './component/panel/panel-galerias/panel-galerias.component';
+import { PanelPublicacionesComponent } from './component/panel/panel-publicaciones/panel-publicaciones.component';
 
 @NgModule({
   declarations: [
