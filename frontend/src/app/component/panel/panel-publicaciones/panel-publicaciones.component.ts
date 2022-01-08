@@ -44,4 +44,26 @@ export class PanelPublicacionesComponent implements OnInit {
     );
   }
 
+  public deletePublication(idPublicacion: number){
+    this.publicationSrv.delete(idPublicacion).subscribe(
+      () => {
+        this.publicaciones.forEach((item, index) => {
+          if (item.id_publicacion == idPublicacion) {
+            this.publicaciones.splice(index,1)
+          }
+        })
+        this.htmlToAdd = '<p class="text-danger">Publicacion eliminada correctamente.</p>';
+      },
+      (error) => {
+        switch (error.status) {
+          case 404:
+            this.htmlToAdd = '<p class="text-danger">No existe.</p>';
+            break;
+          default:
+            this.htmlToAdd = '<p class="text-danger">Error en el servidor.</p>';
+        }
+      }
+    )
+  }
+
 }

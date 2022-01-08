@@ -79,19 +79,20 @@ public class UsuariosService extends ResponseEntityExceptionHandler {
         List<UsuarioModels> users = usuariosRepository.findAll();
         List<UserResponseDto> result = new ArrayList<>();
         users.forEach(it -> {
-                    UserResponseDto user = new UserResponseDto();
-                    user.setIdUsuario(it.getIdUsuario());
-                    user.setUser(it.getUser());
-                    user.setMail(it.getMail());
-                    user.setNombre(it.getNombre());
-                    user.setApellido(it.getApellido());
-                    user.setFechaRegistro(it.getFechaRegistro());
-                    user.setFechaNacimiento(it.getFechaNacimiento());
-                    user.setAdmin(it.getAdmin());
-                    user.setMailVerificado(it.getMailVerificado());
-                    result.add(user);
-                }
-        );
+            if (!it.getAdmin()) {
+                UserResponseDto user = new UserResponseDto();
+                user.setIdUsuario(it.getIdUsuario());
+                user.setUser(it.getUser());
+                user.setMail(it.getMail());
+                user.setNombre(it.getNombre());
+                user.setApellido(it.getApellido());
+                user.setFechaRegistro(it.getFechaRegistro());
+                user.setFechaNacimiento(it.getFechaNacimiento());
+                user.setAdmin(it.getAdmin());
+                user.setMailVerificado(it.getMailVerificado());
+                result.add(user);
+            }
+        });
         return result;
 
     }
@@ -131,21 +132,21 @@ public class UsuariosService extends ResponseEntityExceptionHandler {
         }
     }
 
-    public void borrarUsuario(int idUsuario) {
-        if (!usuariosRepository.existsById(idUsuario)) {
+    public void borrarUsuario(int idUsuario, HttpServletRequest request) {
+        Validaciones.obtenerUserLogin(request);
+        Optional<UsuarioModels> usuario = usuariosRepository.findById(idUsuario);
+        if (!usuario.isPresent()) {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
+        }
+        if (usuario.get().getAdmin()) {
+            throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
         } else {
             usuariosRepository.deleteById(idUsuario);
         }
     }
 
     public int actualizarUsuario(HttpServletRequest request, UserModifyDto entrada) {
-        String userInput = "";
-        if (request.getSession(false) != null) {
-            userInput = (String) request.getSession(false).getAttribute("user");
-        } else {
-            throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
-        }
+        String userInput = Validaciones.obtenerUserLogin(request);
         Optional<UsuarioModels> userDB = usuariosRepository.obtenerUsuario(userInput);
         if (userDB.isPresent()) {
             UsuarioModels user = userDB.get();

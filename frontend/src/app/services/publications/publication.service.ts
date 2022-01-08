@@ -28,4 +28,11 @@ export class PublicationService {
     );
   }
 
+  public delete(id_publicacion): Observable<void> {
+    return this.http.delete<void>(
+      environment.apiEndpoint + '/publicaciones/' + id_publicacion,
+      this.headers
+    );
+  }
+
 }

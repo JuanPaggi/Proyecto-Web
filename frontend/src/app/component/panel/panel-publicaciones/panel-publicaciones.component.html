@@ -11,8 +11,9 @@
             <div class="element-table-title">{{item.titulo}}</div>
             <div class="element-table-opcions">
                 <button>Editar</button>
-                <button>Borrar</button>
+                <button (click)="deletePublication(item.id_publicacion)">Borrar</button>
             </div>
         </div>
+        <div [innerHtml]="htmlToAdd"></div>
     </div>
 </section>
