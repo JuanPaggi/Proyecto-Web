@@ -18,6 +18,7 @@ import { PanelUsuariosComponent } from './component/panel/panel-usuarios/panel-u
 import { PanelEtiquetasComponent } from './component/panel/panel-etiquetas/panel-etiquetas.component';
 import { PanelGaleriasComponent } from './component/panel/panel-galerias/panel-galerias.component';
 import { PanelPublicacionesComponent } from './component/panel/panel-publicaciones/panel-publicaciones.component';
+import { GallerysComponent } from './component/gallerys/gallerys.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { PanelPublicacionesComponent } from './component/panel/panel-publicacion
     PanelPublicacionesComponent,
     PanelUsuariosComponent,
     PanelEtiquetasComponent,
-    PanelGaleriasComponent
+    PanelGaleriasComponent,
+    GallerysComponent
   ],
   imports: [
     AppRoutingModule,

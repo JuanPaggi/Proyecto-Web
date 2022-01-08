@@ -26,8 +26,8 @@ public class GaleriaController implements GaleriaRest {
         return new ResponseEntity<>(galeriasService.obtenerGaleria(idGaleria), HttpStatus.OK);
     }
 
-    public ResponseEntity<List<GalleryResponseDto>> getAll(HttpServletRequest request) {
-        return new ResponseEntity<>(galeriasService.getAll(request), HttpStatus.OK);
+    public ResponseEntity<List<GalleryResponseDto>> getAll() {
+        return new ResponseEntity<>(galeriasService.getAll(), HttpStatus.OK);
     }
 
     public ResponseEntity<ResponseDto> crearGaleria(GalleryCreateDto body, HttpServletRequest request) throws NoSuchAlgorithmException {

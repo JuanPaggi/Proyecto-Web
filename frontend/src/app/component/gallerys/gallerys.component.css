@@ -1,0 +1,25 @@
+.gallery-card{
+    background-color: rgb(212, 212, 236);
+    height: 200px;
+    margin: 50px 0;
+}
+
+.gallery-container{
+    display: grid;
+    grid-template-columns: repeat(3, 180px);
+    grid-column-gap: 100px;
+    padding: 50px 0;
+}
+
+.gallery-card-title{
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+@media(max-width:768px){
+    .gallery-container {
+       grid-template-columns: repeat(2, 180px);
+       grid-column-gap: 80px;
+    }
+  }

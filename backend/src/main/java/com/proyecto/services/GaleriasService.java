@@ -82,8 +82,7 @@ public class GaleriasService {
         }
     }
 
-    public List<GalleryResponseDto> getAll(HttpServletRequest request) {
-        Validaciones.obtenerUserLogin(request);
+    public List<GalleryResponseDto> getAll() {
         List<GaleriaModels> gallerys = galeriasRepository.getAll();
         List<GalleryResponseDto> result = new ArrayList<>();
         gallerys.forEach(it ->{

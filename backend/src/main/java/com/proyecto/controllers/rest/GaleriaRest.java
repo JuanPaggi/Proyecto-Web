@@ -17,7 +17,7 @@ public interface GaleriaRest {
     ResponseEntity<GalleryResponseDto> obtenerGaleria(@RequestParam(name = "id_galeria") Integer idGaleria);
 
     @GetMapping("/all")
-    ResponseEntity<List<GalleryResponseDto>> getAll(HttpServletRequest request);
+    ResponseEntity<List<GalleryResponseDto>> getAll();
 
     @PostMapping("")
     ResponseEntity<ResponseDto> crearGaleria(@RequestBody GalleryCreateDto body, HttpServletRequest request) throws NoSuchAlgorithmException;
