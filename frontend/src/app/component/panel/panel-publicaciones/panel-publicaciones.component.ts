@@ -66,4 +66,8 @@ export class PanelPublicacionesComponent implements OnInit {
     )
   }
 
+  public updatePublication(idPublicacion: number){
+
+  }
+
 }
