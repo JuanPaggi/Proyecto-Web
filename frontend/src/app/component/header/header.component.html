@@ -5,12 +5,16 @@
             <a class="boton-login" routerLink="/login">Ingresar</a>
             <a class="boton-registro" routerLink="/registro">Registro</a>
         </div>
-        <div class="boton-login" *ngIf="user">
+        <div class="boton-login" *ngIf="user" (click)="showDropdown()">
             <div>
                 <strong style="margin-right: 5px;">Bienvenido, {{ user.nombre }} {{ user.apellido }}</strong>
-                <button (click)="clickedSalir()">
-                    Cerrar sesión
-                </button>
+               
+                <div *ngIf="dropdownShow" class="dropdown-menu">
+                    <button routerLink="/panel">Panel</button>
+                    <button (click)="clickedSalir()">
+                        Cerrar sesión
+                    </button>
+                </div>
             </div>
         </div>
     </div>

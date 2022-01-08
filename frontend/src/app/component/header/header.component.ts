@@ -12,6 +12,8 @@ export class HeaderComponent implements OnInit {
 
   user: User;
 
+  dropdownShow: boolean = false;
+
   constructor(
     private usuariosSrv: UserService,
     public router: Router
@@ -25,6 +27,14 @@ export class HeaderComponent implements OnInit {
   clickedSalir() {
     this.usuariosSrv.setUserLoggedOut();
     window.location.href = '/';
+  }
+
+  showDropdown(){
+    if (this.dropdownShow) {
+      this.dropdownShow = false;
+    } else {
+      this.dropdownShow = true;
+    }
   }
 
 }

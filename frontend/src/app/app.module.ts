@@ -5,23 +5,35 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './component/header/header.component';
 import { FooterComponent } from './component/footer/footer.component';
-import { HomeComponent } from './component/home/home.component';
+import { EventComponent } from './component/event/event.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './component/login/login.component';
 import { PublicationComponent } from './component/publication/publication.component';
 import { DatePipe } from '@angular/common';
 import { RegisterComponent } from './component/register/register.component';
+import { HomeComponent } from './component/home/home.component';
+import { PanelComponent } from './component/panel/panel.component';
+import { PanelUsuariosComponent } from './component/panel-usuarios/panel-usuarios.component';
+import { PanelEtiquetasComponent } from './component/panel-etiquetas/panel-etiquetas.component';
+import { PanelGaleriasComponent } from './component/panel-galerias/panel-galerias.component';
+import { PanelPublicacionesComponent } from './component/panel-publicaciones/panel-publicaciones.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    HomeComponent,
+    EventComponent,
     LoginComponent,
     PublicationComponent,
-    RegisterComponent
+    RegisterComponent,
+    HomeComponent,
+    PanelComponent,
+    PanelPublicacionesComponent,
+    PanelUsuariosComponent,
+    PanelEtiquetasComponent,
+    PanelGaleriasComponent
   ],
   imports: [
     AppRoutingModule,

@@ -52,3 +52,11 @@
 .menu{
     display: flex;
 }
+
+.dropdown-menu{
+    position: absolute;
+    background: red;
+    padding: 1% 2%;
+    display: flex;
+    flex-direction: column;
+}
