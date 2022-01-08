@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Capa de controlador Para las etiquetas.
@@ -25,6 +26,10 @@ public class EtiquetasController implements EtiquetasRest {
 
     public ResponseEntity<TagResponseDto> obtenerEtiqueta(Integer idEtiqueta) {
         return new ResponseEntity<>(etiquetasService.obtenerEtiqueta(idEtiqueta), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<TagResponseDto>> getAll(HttpServletRequest request) {
+        return new ResponseEntity<>(etiquetasService.getAll(request), HttpStatus.OK);
     }
 
     public ResponseEntity<ResponseDto> crearEtiqueta(TagCreateDto body, HttpServletRequest request) {

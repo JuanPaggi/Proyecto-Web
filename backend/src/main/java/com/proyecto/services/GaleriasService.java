@@ -82,6 +82,20 @@ public class GaleriasService {
         }
     }
 
+    public List<GalleryResponseDto> getAll() {
+        List<GaleriaModels> gallerys = galeriasRepository.getAll();
+        List<GalleryResponseDto> result = new ArrayList<>();
+        gallerys.forEach(it ->{
+            GalleryResponseDto gallery = new GalleryResponseDto();
+            gallery.setIdGaleria(it.getIdGaleria());
+            gallery.setDescripcion(it.getDescripcion());
+            gallery.setTitulo(it.getTitulo());
+            gallery.setFechaCreacion(it.getFechaCreacion());
+            result.add(gallery);
+        });
+        return result;
+    }
+
     public void crearGaleria(GalleryCreateDto body, HttpServletRequest request) throws NoSuchAlgorithmException {
         String userInput = Validaciones.obtenerUserLogin(request);
         Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(userInput);

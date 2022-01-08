@@ -15,9 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Capa de servicio para los usuarios.
@@ -70,6 +68,32 @@ public class UsuariosService extends ResponseEntityExceptionHandler {
         } else {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }
+    }
+
+    public List<UserResponseDto> obtenerTodosUsuarios(HttpServletRequest request) {
+        if (request.getSession(false) != null) {
+            request.getSession(false).getAttribute("user");
+        } else {
+            throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
+        }
+        List<UsuarioModels> users = usuariosRepository.findAll();
+        List<UserResponseDto> result = new ArrayList<>();
+        users.forEach(it -> {
+                    UserResponseDto user = new UserResponseDto();
+                    user.setIdUsuario(it.getIdUsuario());
+                    user.setUser(it.getUser());
+                    user.setMail(it.getMail());
+                    user.setNombre(it.getNombre());
+                    user.setApellido(it.getApellido());
+                    user.setFechaRegistro(it.getFechaRegistro());
+                    user.setFechaNacimiento(it.getFechaNacimiento());
+                    user.setAdmin(it.getAdmin());
+                    user.setMailVerificado(it.getMailVerificado());
+                    result.add(user);
+                }
+        );
+        return result;
+
     }
 
     public Integer crearUsuario(UserCreateDto entrada) throws NoSuchAlgorithmException {

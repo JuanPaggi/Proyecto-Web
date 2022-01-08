@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
               console.log(response);
               this.usuarioDatos = response;
               this.logIn(response.user, response.nombre, response.apellido, response.id_usuario);
-              window.location.href = '/';
+              window.location.href = '/event';
             });
         } else {
           this.htmlToAdd = '<p>Datos Incorrectos<p>';

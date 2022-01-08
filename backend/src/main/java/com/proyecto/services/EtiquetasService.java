@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -38,6 +40,19 @@ public class EtiquetasService {
         } else {
             throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
         }
+    }
+
+    public List<TagResponseDto> getAll(HttpServletRequest request) {
+        Validaciones.obtenerUserLogin(request);
+        List<EtiquetaModels> tags = etiquetasRepository.findAll();
+        List<TagResponseDto> result = new ArrayList<>();
+        tags.forEach(it ->{
+            TagResponseDto tag = new TagResponseDto();
+            tag.setIdEtiqueta(it.getIdEtiqueta());
+            tag.setEtiqueta(it.getEtiqueta());
+            result.add(tag);
+        });
+        return result;
     }
 
     public void crearEtiqueta(TagCreateDto entrada, HttpServletRequest request) {

@@ -1,0 +1,18 @@
+<section class="size-viewport contenedor">
+
+    <div class="menu-lateral">
+        <a class="panel-lateral-boton" (click)="opcion = 'publications'">Publicaciones</a>
+        <a class="panel-lateral-boton" (click)="opcion = 'users'">Usuarios</a>
+        <a class="panel-lateral-boton" (click)="opcion = 'tags'">Etiquetas</a>
+        <a class="panel-lateral-boton" (click)="opcion = 'gallery'">Galerias</a>
+    </div>
+
+    <div class="panel-principal">
+        <app-panel-publicaciones *ngIf="opcion == 'publications' "></app-panel-publicaciones>
+        <app-panel-usuarios *ngIf="opcion == 'users' "></app-panel-usuarios>
+        <app-panel-etiquetas *ngIf="opcion == 'tags' "></app-panel-etiquetas>
+        <app-panel-galerias *ngIf="opcion == 'gallery' "></app-panel-galerias>
+    </div>
+    
+
+</section>

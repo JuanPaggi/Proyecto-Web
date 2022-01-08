@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * Capa de controlador para los usuarios.
@@ -30,6 +31,10 @@ public class UsuariosController implements UsuariosRest {
 
     public ResponseEntity<UserResponseDto> obtenerUsuario(HttpServletRequest request) {
         return new ResponseEntity<>(usuariosService.obtenerUsuario(request), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<UserResponseDto>> getAllUser(HttpServletRequest request) {
+        return new ResponseEntity<>(usuariosService.obtenerTodosUsuarios(request), HttpStatus.OK);
     }
 
     public ResponseEntity<ResponseDto> crearUsuario(UserCreateDto body) throws NoSuchAlgorithmException {

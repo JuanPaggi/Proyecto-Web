@@ -10,6 +10,5 @@ export class GalleryResponseDto{
     fechaCreacion: Date;
     etiquetas: TagResponseDto[];
     usuario: UserNameResponseDto;
-    imagenes: ImageResponseDto;
-
+    imagenes: ImageResponseDto[];
 }

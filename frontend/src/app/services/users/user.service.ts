@@ -33,6 +33,13 @@ export class UserService {
     );
   }
 
+  public get_all(): Observable<UsuarioDatosDto[]> {
+    return this.http.get<UsuarioDatosDto[]>(
+      environment.apiEndpoint + '/usuarios/allUser',
+      this.headers
+    );
+  }
+
   //Metodos para la sesion
 
   setUserLoggedIn(user: User) {

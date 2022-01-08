@@ -1,0 +1,68 @@
+.contenedor{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    height: calc(100vh - 120px);
+}
+
+.panel-principal{
+    width: calc(100% - 280px);
+    height: 100%;
+}
+
+.menu-lateral{
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    min-height: calc(100vh - 120px);
+    background-color:rgb(182, 230, 236);
+}
+
+.panel-lateral-boton{
+    background: rgb(111,146,153);
+    background: linear-gradient(166deg, rgb(131, 171, 179) 0%, rgba(125,190,195,1) 28%, rgb(210, 226, 230) 100%);
+    height: 50px;
+    min-height: 10px;
+    display: flex;
+    align-items: center;
+    padding-left: 10%;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+/* Child component styles */
+
+.contenedor-panel{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table{
+    width: 50%;
+    height: auto;
+}
+
+.table-row{
+    height: 50px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    padding-left: 5%;
+}
+
+.element-table-list{
+    width: 20%;
+}
+
+.element-table-title{
+    width: 50%;
+}
+
+.element-table-opcions{
+    width: 30%;
+    display: flex;
+    justify-content: space-around;
+}

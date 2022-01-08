@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/galerias")
@@ -23,6 +24,10 @@ public class GaleriaController implements GaleriaRest {
 
     public ResponseEntity<GalleryResponseDto> obtenerGaleria(Integer idGaleria) {
         return new ResponseEntity<>(galeriasService.obtenerGaleria(idGaleria), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<GalleryResponseDto>> getAll() {
+        return new ResponseEntity<>(galeriasService.getAll(), HttpStatus.OK);
     }
 
     public ResponseEntity<ResponseDto> crearGaleria(GalleryCreateDto body, HttpServletRequest request) throws NoSuchAlgorithmException {
