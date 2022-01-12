@@ -6,7 +6,8 @@
 
 .panel-principal{
     width: calc(100% - 280px);
-    min-height: inherit;
+    height: calc(100vh - 120px);
+    overflow-y: scroll;
 }
 
 .menu-lateral{
