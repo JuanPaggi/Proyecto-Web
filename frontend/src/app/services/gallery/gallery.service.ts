@@ -28,7 +28,7 @@ export class GalleryService {
     )
   }
 
-  public delete(id_gallery): Observable<void> {
+  public delete(id_gallery: number): Observable<void> {
     return this.http.delete<void>(
       environment.apiEndpoint + '/galerias/' + id_gallery,
       this.headers

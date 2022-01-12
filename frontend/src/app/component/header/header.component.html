@@ -10,7 +10,7 @@
                 <strong style="margin-right: 5px;">Bienvenido, {{ user.nombre }} {{ user.apellido }}</strong>
                
                 <div *ngIf="dropdownShow" class="dropdown-menu">
-                    <button routerLink="/panel">Panel</button>
+                    <button *ngIf="user.admin" routerLink="/panel">Panel</button>
                     <button (click)="clickedSalir()">
                         Cerrar sesión
                     </button>

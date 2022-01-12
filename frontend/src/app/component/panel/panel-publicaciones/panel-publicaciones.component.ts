@@ -12,6 +12,8 @@ export class PanelPublicacionesComponent implements OnInit {
 
   htmlToAdd: String;
 
+  opcion: String = "table"
+
   publicaciones: PublicationResponseDto[];
 
   constructor(

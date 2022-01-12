@@ -3,4 +3,5 @@ export class User {
   nombre: String;
   apellido: String;
   idUsuario: number;
+  admin: boolean;
 }
