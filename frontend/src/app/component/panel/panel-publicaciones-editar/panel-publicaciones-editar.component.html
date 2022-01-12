@@ -8,6 +8,12 @@
     <span>Descripcion</span>
     <textarea class="publication-description" [(ngModel)]="descripcion" cols="30" rows="10"></textarea>
 
+    <span class="publication-tags-title">Etiquetas</span>
+    <div *ngFor="let item of tags;let i = index">
+        <input type="checkbox" >
+        <span>{{i+1}} : {{item.etiqueta}}</span>
+    </div>
+
     <button class="publication-edit-button" (click)="editPublication()">Editar</button>
     
     <div [innerHtml]="htmlToAdd"></div>
