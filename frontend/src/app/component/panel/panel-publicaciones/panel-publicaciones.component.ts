@@ -13,6 +13,7 @@ export class PanelPublicacionesComponent implements OnInit {
   htmlToAdd: String;
 
   opcion: String = "table"
+  idPublicacionEdit:number
 
   publicaciones: PublicationResponseDto[];
 
@@ -69,7 +70,8 @@ export class PanelPublicacionesComponent implements OnInit {
   }
 
   public updatePublication(idPublicacion: number){
-
+    this.idPublicacionEdit = idPublicacion
+    this.opcion = 'edit'
   }
 
 }

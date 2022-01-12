@@ -2,9 +2,9 @@
     <div class="publicacion" *ngFor="let item of publicaciones;let i = index">
         <div class="titulo-publicacion"> {{item.titulo}} </div>
         <p class="descripcion-publicacion"> {{item.descripcion}} </p>
-        <div class="etiqueta" *ngFor="let item2 of item.etiquetas">
+        <div class="etiqueta" >
             <strong>Etiquetas:</strong>
-            <span class="tag"> {{item2.etiqueta}}</span>
+            <span class="tag" *ngFor="let item2 of item.etiquetas"> ({{item2.etiqueta}})</span>
         </div>
         <div class="datos-publicacion"> Creado por <strong
                 style="text-decoration: underline;">{{item.usuario.user}}</strong>

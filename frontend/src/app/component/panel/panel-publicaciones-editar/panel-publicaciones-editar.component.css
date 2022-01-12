@@ -17,11 +17,7 @@
     overflow: auto;
 }
 
-.publication-create-button{
+.publication-edit-button{
     margin-top: 20px;
     width: 120px;
-}
-
-.publication-tags-title{
-    margin-top: 20px;
 }
