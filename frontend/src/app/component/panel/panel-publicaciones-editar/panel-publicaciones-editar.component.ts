@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PublicationCreateDto } from 'src/app/dtos/PublicationCreateDto';
-import { TagResponseDto } from 'src/app/dtos/TagResponseDto';
 import { TagService } from 'src/app/services/etiquetas/tag.service';
 import { PublicationService } from 'src/app/services/publications/publication.service';
 import { UserService } from 'src/app/services/users/user.service';
@@ -55,7 +54,8 @@ export class PanelPublicacionesEditarComponent implements OnInit {
 
   public editPublication(){
     let body = new PublicationCreateDto()
-    if (this.titulo == null || this.descripcion == null) {
+    if (this.titulo == null || this.descripcion == null ||
+      this.titulo == "" || this.descripcion == "") {
       this.htmlToAdd = '<p>Campos Vacios.</p>';
     } else {
       body.titulo = this.titulo

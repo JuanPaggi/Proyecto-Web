@@ -14,6 +14,11 @@ export class PanelEtiquetasComponent implements OnInit {
 
   tags: TagResponseDto[];
 
+  option: String = "table"
+
+  etiquetaEdit:String
+  idEtiquetaEdit:number
+
   constructor(
     private tagsSrv: TagService,
     private userSrv: UserService
@@ -43,4 +48,36 @@ export class PanelEtiquetasComponent implements OnInit {
       }
     );
   }
+
+  public updatePublication(idEtiqueta: number, etiqueta:String){
+    this.etiquetaEdit = etiqueta
+    this.idEtiquetaEdit = idEtiqueta
+    this.option = 'edit'
+  }
+
+  public deleteTag(idEtiqueta: number){
+    this.tagsSrv.deleteTag(idEtiqueta).subscribe(
+      () => {
+        this.tags.forEach((item, index) => {
+          if (item.id_etiqueta == idEtiqueta) {
+            this.tags.splice(index,1)
+          }
+        })
+        this.htmlToAdd = '<p class="text-danger">Etiqueta eliminada correctamente.</p>';
+      },
+      (error) => {
+        switch (error.status) {
+          case 401:
+            this.htmlToAdd = '<p class="text-danger">No Autorizado.</p>';
+            break;
+          case 404:
+            this.htmlToAdd = '<p class="text-danger">No existe.</p>';
+            break;
+          default:
+            this.htmlToAdd = '<p class="text-danger">Error en el servidor.</p>';
+        }
+      }
+    )
+  }
+
 }

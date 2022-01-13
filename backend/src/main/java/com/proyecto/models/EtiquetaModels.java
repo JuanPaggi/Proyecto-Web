@@ -24,7 +24,7 @@ public class EtiquetaModels {
     @Column(name = "etiqueta")
     private String etiqueta;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinTable(name = "publicaciones_etiquetas",
             joinColumns =
             @JoinColumn(name = "id_etiqueta", referencedColumnName = "id_etiqueta"),

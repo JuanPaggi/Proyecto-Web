@@ -25,7 +25,7 @@ public interface EtiquetasRest {
     @DeleteMapping("")
     ResponseEntity<ResponseDto> borrarEtiqueta(@RequestParam(name = "id_etiqueta") Integer idEtiqueta, HttpServletRequest request);
 
-    @PutMapping("")
-    ResponseEntity<ResponseDto> actualziarEtiqueta(@Validated @RequestParam(name = "id_etiqueta") Integer idEtiqueta, @RequestBody TagCreateDto body, HttpServletRequest request);
+    @PutMapping("/{idEtiqueta}")
+    ResponseEntity<ResponseDto> actualziarEtiqueta(@PathVariable("idEtiqueta") Integer idEtiqueta, @RequestBody TagCreateDto body, HttpServletRequest request);
 
 }

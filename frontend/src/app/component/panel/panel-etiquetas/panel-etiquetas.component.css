@@ -1,0 +1,14 @@
+.tags-container{
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.tags-input-title{
+    width: 300px;
+}
+
+.tags-button{
+    margin-top: 20px;
+    width: 120px;
+}
