@@ -22,10 +22,10 @@ public interface PublicacionesRest {
     @PostMapping("")
     ResponseEntity<ResponseDto> crearPublicacion(@Validated @RequestBody PublicationCreateDto body, HttpServletRequest request);
 
-    @DeleteMapping("")
-    ResponseEntity<ResponseDto> borrarPublicacion(@RequestParam(name = "id_publicacion") Integer idPublicacion, HttpServletRequest request);
+    @DeleteMapping("/{id_publicacion}")
+    ResponseEntity<ResponseDto> borrarPublicacion(@PathVariable("id_publicacion") Integer idPublicacion, HttpServletRequest request);
 
-    @PutMapping("")
-    ResponseEntity<ResponseDto> actualizarPublicacion(@Validated @RequestParam(name = "id_publicacion") Integer idPublicacion, @RequestBody PublicationCreateDto body, HttpServletRequest request);
+    @PutMapping("/{id_publicacion}")
+    ResponseEntity<ResponseDto> actualizarPublicacion(@PathVariable("id_publicacion") Integer idPublicacion, @RequestBody PublicationCreateDto body, HttpServletRequest request);
 
 }

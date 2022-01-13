@@ -1,4 +1,4 @@
 export class TagResponseDto{
-    idEtiqueta: number;
+    id_etiqueta: number;
     etiqueta: String;
 }

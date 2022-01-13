@@ -42,8 +42,8 @@ public class UsuariosController implements UsuariosRest {
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
-    public ResponseEntity<ResponseDto> borrarUsuario(Integer idUsuario) {
-        usuariosService.borrarUsuario(idUsuario);
+    public ResponseEntity<ResponseDto> borrarUsuario(Integer idUsuario, HttpServletRequest request) {
+        usuariosService.borrarUsuario(idUsuario, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 

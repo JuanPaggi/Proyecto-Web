@@ -22,7 +22,7 @@ public interface GaleriaRest {
     @PostMapping("")
     ResponseEntity<ResponseDto> crearGaleria(@RequestBody GalleryCreateDto body, HttpServletRequest request) throws NoSuchAlgorithmException;
 
-    @DeleteMapping("")
-    ResponseEntity<ResponseDto> borrarGaleria(@RequestParam(name = "id_galeria") Integer idGaleria, HttpServletRequest request);
+    @DeleteMapping("/{id_galeria}")
+    ResponseEntity<ResponseDto> borrarGaleria(@PathVariable("id_galeria") Integer idPublicacion, HttpServletRequest request);
 
 }

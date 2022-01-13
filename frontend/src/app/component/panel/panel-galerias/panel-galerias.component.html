@@ -1,5 +1,6 @@
 
 <section class="contenedor-panel">
+    <h3>Galerias</h3>
     <div class="table">
         <div class="table-row" >
             <div class="element-table-list">Lista</div>
@@ -11,8 +12,9 @@
             <div class="element-table-title">{{item.titulo}}</div>
             <div class="element-table-opcions">
                 <button>Editar</button>
-                <button>Borrar</button>
+                <button (click)="deleteGallerys(item.id_galeria)">Borrar</button>
             </div>
         </div>
+        <div [innerHtml]="htmlToAdd"></div>
     </div>
 </section>

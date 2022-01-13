@@ -27,6 +27,7 @@ export class PanelGaleriasComponent implements OnInit {
     this.gallerySrv.getAll().subscribe(
       (response) => {
         this.gallerys = response;
+        console.log(response)
       },
       (error) => {
         switch (error.status) {
@@ -43,4 +44,27 @@ export class PanelGaleriasComponent implements OnInit {
       }
     );
   }
+
+  public deleteGallerys(idGallery: number){
+    this.gallerySrv.delete(idGallery).subscribe(
+      () => {
+        this.gallerys.forEach((item, index) => {
+          if (item.id_galeria == idGallery) {
+            this.gallerys.splice(index,1)
+          }
+        })
+        this.htmlToAdd = '<p class="text-danger">Galeria eliminada correctamente.</p>';
+      },
+      (error) => {
+        switch (error.status) {
+          case 404:
+            this.htmlToAdd = '<p class="text-danger">No existe.</p>';
+            break;
+          default:
+            this.htmlToAdd = '<p class="text-danger">Error en el servidor.</p>';
+        }
+      }
+    )
+  }
+
 }

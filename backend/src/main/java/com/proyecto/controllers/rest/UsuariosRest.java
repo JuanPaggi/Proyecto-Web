@@ -26,7 +26,7 @@ public interface UsuariosRest {
     ResponseEntity<ResponseDto> crearUsuario(@Validated @RequestBody UserCreateDto body) throws NoSuchAlgorithmException;
 
     @DeleteMapping("")
-    ResponseEntity<ResponseDto> borrarUsuario(Integer idUsuario);
+    ResponseEntity<ResponseDto> borrarUsuario(Integer idUsuario, HttpServletRequest request);
 
     @PutMapping("")
     ResponseEntity<ResponseDto> actualizarUsuario(@Validated @RequestBody UserModifyDto body, HttpServletRequest request);

@@ -1,6 +1,13 @@
 
 <section class="contenedor-panel">
-    <div class="table">
+    <h3>Publicaciones</h3>
+    <div *ngIf="opcion == 'create'">
+        <app-panel-publicaciones-crear></app-panel-publicaciones-crear>
+    </div>
+    <div *ngIf="opcion == 'edit'">
+        <app-panel-publicaciones-editar [idPublication]="idPublicacionEdit"></app-panel-publicaciones-editar>
+    </div>
+    <div *ngIf="opcion == 'table'" class="table">
         <div class="table-row" >
             <div class="element-table-list">Lista</div>
             <div class="element-table-title">Titulo</div>
@@ -10,9 +17,12 @@
             <div class="element-table-list">{{i+1}}</div>
             <div class="element-table-title">{{item.titulo}}</div>
             <div class="element-table-opcions">
-                <button>Editar</button>
-                <button>Borrar</button>
+                <button (click)="updatePublication(item.id_publicacion)">Editar</button>
+                <button (click)="deletePublication(item.id_publicacion)">Borrar</button>
             </div>
         </div>
+        <div [innerHtml]="htmlToAdd"></div>
     </div>
+    <button *ngIf="opcion == 'table'" class="create-publication-button" (click)="opcion = 'create'">Crear Publicacion</button>
+    <button *ngIf="opcion == 'create' || opcion == 'edit'" class="create-publication-button" (click)="opcion = 'table'">Volver</button>
 </section>

@@ -1,0 +1,21 @@
+<h3>Editar Publicacion</h3>
+
+<div class="publication-container">
+
+    <span>Titulo</span>
+    <input class="publication-input-title" type="text" [(ngModel)]="titulo" maxlength="50">
+    
+    <span>Descripcion</span>
+    <textarea class="publication-description" [(ngModel)]="descripcion" cols="30" rows="10"></textarea>
+
+    <span class="publication-tags-title">Etiquetas</span>
+    <div *ngFor="let item of tagsSelect;let i = index">
+        <input type="checkbox" [checked]="item.value" (change)="selectTag(item.id,$event)">
+        <span>{{i+1}} : {{item.etiqueta}}</span>
+    </div>
+
+    <button class="publication-edit-button" (click)="editPublication()">Editar</button>
+    
+    <div [innerHtml]="htmlToAdd"></div>
+    
+</div>

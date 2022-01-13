@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 public class GalleryResponseDto {
 
-    @JsonProperty("idGaleria")
+    @JsonProperty("id_galeria")
     private int idGaleria;
 
     @JsonProperty("titulo")

@@ -21,8 +21,7 @@ export class LoginComponent implements OnInit {
   htmlToAdd: String;
 
   constructor(
-    private usuariosSrv: UserService,
-    private router: Router
+    private usuariosSrv: UserService
   ) {
   }
 
@@ -42,7 +41,7 @@ export class LoginComponent implements OnInit {
             .subscribe((response) => {
               console.log(response);
               this.usuarioDatos = response;
-              this.logIn(response.user, response.nombre, response.apellido, response.id_usuario);
+              this.logIn(response.user, response.nombre, response.apellido, response.id_usuario, response.admin);
               window.location.href = '/event';
             });
         } else {
@@ -61,8 +60,8 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  logIn(user: String, nombre: String, apellido: String, idUsuario: number) {
-    let u: User = { user, nombre, apellido, idUsuario };
+  logIn(user: String, nombre: String, apellido: String, idUsuario: number, admin:boolean) {
+    let u: User = { user, nombre, apellido, idUsuario, admin };
     this.usuariosSrv.setUserLoggedIn(u);
   }
 

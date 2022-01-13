@@ -1,4 +1,4 @@
-<section class="size-viewport contenedor">
+<section *ngIf="user.admin" class="size-viewport contenedor">
 
     <div class="menu-lateral">
         <a class="panel-lateral-boton" (click)="opcion = 'publications'">Publicaciones</a>
