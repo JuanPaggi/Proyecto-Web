@@ -37,6 +37,14 @@ export class PublicationService {
     );
   }
 
+  public edit_publication(id_publicacion: number, body: PublicationCreateDto): Observable<void> {
+    return this.http.put<void>(
+      environment.apiEndpoint + '/publicaciones/' + id_publicacion,
+      body,
+      this.headers
+    );
+  }
+
   public delete(id_publicacion): Observable<void> {
     return this.http.delete<void>(
       environment.apiEndpoint + '/publicaciones/' + id_publicacion,

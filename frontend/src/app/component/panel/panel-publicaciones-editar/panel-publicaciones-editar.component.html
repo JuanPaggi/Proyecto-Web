@@ -9,8 +9,8 @@
     <textarea class="publication-description" [(ngModel)]="descripcion" cols="30" rows="10"></textarea>
 
     <span class="publication-tags-title">Etiquetas</span>
-    <div *ngFor="let item of tags;let i = index">
-        <input type="checkbox" >
+    <div *ngFor="let item of tagsSelect;let i = index">
+        <input type="checkbox" [checked]="item.value" (change)="selectTag(item.id,$event)">
         <span>{{i+1}} : {{item.etiqueta}}</span>
     </div>
 

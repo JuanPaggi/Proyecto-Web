@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PublicationResponseDto } from 'src/app/dtos/PublicationResponseDto';
+import { PublicationCreateDto } from 'src/app/dtos/PublicationCreateDto';
 import { TagResponseDto } from 'src/app/dtos/TagResponseDto';
 import { TagService } from 'src/app/services/etiquetas/tag.service';
 import { PublicationService } from 'src/app/services/publications/publication.service';
@@ -17,9 +17,10 @@ export class PanelPublicacionesEditarComponent implements OnInit {
 
   titulo:String
   descripcion:String
-  tags: TagResponseDto[]
 
   tagsSelect: TagsValues[]
+
+  tagsResult: number[]
 
   htmlToAdd: String;
 
@@ -29,6 +30,7 @@ export class PanelPublicacionesEditarComponent implements OnInit {
     private userSrv: UserService
   ) {
     this.tagsSelect = []
+    this.tagsResult = []
    }
 
   ngOnInit(): void {
@@ -38,8 +40,6 @@ export class PanelPublicacionesEditarComponent implements OnInit {
   public getPublication(){
     this.publicationSrv.get_publication(this.idPublication).subscribe(
       (response)=>{
-        console.log(response)
-        console.log(this.tagsSelect)
         this.titulo = response.titulo
         this.descripcion = response.descripcion
         this.tagsSelect.forEach(it=>{
@@ -54,20 +54,58 @@ export class PanelPublicacionesEditarComponent implements OnInit {
   }
 
   public editPublication(){
-    
+    let body = new PublicationCreateDto()
+    if (this.titulo == null || this.descripcion == null) {
+      this.htmlToAdd = '<p>Campos Vacios.</p>';
+    } else {
+      body.titulo = this.titulo
+      body.descripcion = this.descripcion
+      body.etiquetas = this.generateTags()
+      this.publicationSrv.edit_publication(this.idPublication,body).subscribe(
+        () => {
+          this.htmlToAdd = '<p>Publicacion editada con exito.</p>';
+        },
+        (error) => {
+          switch (error.status) {
+            case 401:
+              this.userSrv.setUserLoggedOut();
+              window.location.href = '/';
+              break;
+            default:
+              this.htmlToAdd = '<p>Error en el servidor.</p>';
+          }
+        }
+      )
+    }
+  }
+
+  private generateTags() {
+    this.tagsResult = []
+    this.tagsSelect.forEach(it => {
+      if (it.value) {
+        this.tagsResult.push(it.id)
+      }
+    })
+    return this.tagsResult
   }
 
   public getTags() {
     this.tagSrv.getAll().subscribe(
       (response) => {
         response.forEach(it => {
-          this.tagsSelect.push(new TagsValues(it.id_etiqueta, false))
+          this.tagsSelect.push(new TagsValues(it.id_etiqueta, false, it.etiqueta))
         })
-        this.tags = response
         this.getPublication()
       }
     )
   }
 
+  public selectTag(id: number, e) {
+    this.tagsSelect.forEach(it => {
+      if (id == it.id) {
+        it.value = e.target.checked
+      }
+    })
+  }
 
 }

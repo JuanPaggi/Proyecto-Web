@@ -77,7 +77,7 @@ export class PanelPublicacionesCrearComponent implements OnInit {
       (response) => {
         console.log(response)
         response.forEach(it => {
-          this.tagsSelect.push(new TagsValues(it.id_etiqueta, false))
+          this.tagsSelect.push(new TagsValues(it.id_etiqueta, false, it.etiqueta))
         })
         this.tags = response
       }
@@ -95,11 +95,15 @@ export class PanelPublicacionesCrearComponent implements OnInit {
 }
 
 export class TagsValues {
+
   id: number
   value: boolean
+  etiqueta: String
 
-  constructor(id, value) {
+  constructor(id: number, value: boolean, etiqueta: String) {
     this.id = id
     this.value = value
+    this.etiqueta = etiqueta
   }
+
 }
