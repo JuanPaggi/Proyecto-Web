@@ -1,7 +1,13 @@
 
 <section class="contenedor-panel">
     <h3>Galerias</h3>
-    <div class="table">
+    <div *ngIf=" option == 'edit' ">
+
+    </div>
+    <div *ngIf="option == 'create'">
+        <app-panel-galerias-crear></app-panel-galerias-crear>
+    </div>
+    <div *ngIf="option == 'table'" class="table">
         <div class="table-row" >
             <div class="element-table-list">Lista</div>
             <div class="element-table-title">Titulo</div>
@@ -17,4 +23,8 @@
         </div>
         <div [innerHtml]="htmlToAdd"></div>
     </div>
+    <button *ngIf="option == 'table'" class="create-button" (click)="option = 'create'">Crear
+        Galeria</button>
+    <button *ngIf="option == 'create' || option == 'edit'" class="create-button"
+        (click)="option = 'table'">Volver</button>
 </section>

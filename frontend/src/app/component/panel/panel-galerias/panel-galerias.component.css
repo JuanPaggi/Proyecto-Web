@@ -1,0 +1,14 @@
+.gallery-container{
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.gallery-input-title{
+    width: 300px;
+}
+
+.gallery-button{
+    margin-top: 20px;
+    width: 120px;
+}

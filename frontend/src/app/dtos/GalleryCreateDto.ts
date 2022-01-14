@@ -1,9 +1,8 @@
-import { ImageResponseDto } from "./ImageResponseDto";
-import { TagResponseDto } from "./TagResponseDto";
+import { Byte } from "@angular/compiler/src/util";
 
 export class GalleryCreateDto{
     titulo: String;
     descripcion: String;
-    etiquetas: TagResponseDto[];
-    imagenes: ImageResponseDto[];
+    etiquetas: number[];
+    imagenes: Byte[][];
 }

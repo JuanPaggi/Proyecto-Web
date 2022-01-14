@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { GalleryCreateDto } from 'src/app/dtos/GalleryCreateDto';
 import { GalleryResponseDto } from 'src/app/dtos/GalleryResponseDto';
 import { environment } from 'src/environments/environment';
 
@@ -26,6 +27,14 @@ export class GalleryService {
       environment.apiEndpoint + '/galerias/all',
       this.headers
     )
+  }
+
+  public create(body: GalleryCreateDto): Observable<void> {
+    return this.http.post<void>(
+      environment.apiEndpoint + '/galerias',
+      body,
+      this.headers
+    );
   }
 
   public delete(id_gallery: number): Observable<void> {

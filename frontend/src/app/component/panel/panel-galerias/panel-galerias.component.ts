@@ -11,6 +11,7 @@ import { UserService } from 'src/app/services/users/user.service';
 export class PanelGaleriasComponent implements OnInit {
 
   htmlToAdd: String;
+  option: String = "table";
 
   gallerys: GalleryResponseDto[];
 
