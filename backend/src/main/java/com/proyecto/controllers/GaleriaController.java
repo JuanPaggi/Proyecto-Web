@@ -35,6 +35,11 @@ public class GaleriaController implements GaleriaRest {
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
     }
 
+    public ResponseEntity<ResponseDto> editarGaleria(Integer idGallery, GalleryCreateDto body, HttpServletRequest request) throws NoSuchAlgorithmException {
+        galeriasService.editGaleria(idGallery, body, request);
+        return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);
+    }
+
     public ResponseEntity<ResponseDto> borrarGaleria(Integer idGaleria, HttpServletRequest request) {
         galeriasService.borrarGaleria(idGaleria, request);
         return new ResponseEntity<>(ResponseDto.getInstanceOk(), HttpStatus.OK);

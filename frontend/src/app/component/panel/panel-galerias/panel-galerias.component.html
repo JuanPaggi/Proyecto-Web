@@ -2,7 +2,7 @@
 <section class="contenedor-panel">
     <h3>Galerias</h3>
     <div *ngIf=" option == 'edit' ">
-
+        <app-panel-galerias-edit [idGallery]="idGalleryEdit"></app-panel-galerias-edit>
     </div>
     <div *ngIf="option == 'create'">
         <app-panel-galerias-crear></app-panel-galerias-crear>
@@ -17,7 +17,7 @@
             <div class="element-table-list">{{i+1}}</div>
             <div class="element-table-title">{{item.titulo}}</div>
             <div class="element-table-opcions">
-                <button>Editar</button>
+                <button (click)="updatePublication(item.id_galeria)">Editar</button>
                 <button (click)="deleteGallerys(item.id_galeria)">Borrar</button>
             </div>
         </div>

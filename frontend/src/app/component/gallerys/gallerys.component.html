@@ -1,7 +1,7 @@
 <section class="size-viewport">
 
     <div class="gallery-container">
-        <div class="gallery-card" *ngFor="let item of gallerys;let i = index" >
+        <div class="gallery-card" *ngFor="let item of gallerys;let i = index" (click)="clicked(item)">
             <img class="gallery-ico" src="./../../../assets/gallery-ico.svg" alt="">
             <div class="gallery-card-title">{{item.titulo}}</div>
         </div>

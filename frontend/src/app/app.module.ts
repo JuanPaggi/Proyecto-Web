@@ -24,6 +24,8 @@ import { PanelPublicacionesEditarComponent } from './component/panel/panel-publi
 import { PanelEtiquetasEditComponent } from './component/panel/panel-etiquetas-edit/panel-etiquetas-edit.component';
 import { PanelEtiquetasCrearComponent } from './component/panel/panel-etiquetas-crear/panel-etiquetas-crear.component';
 import { PanelGaleriasCrearComponent } from './component/panel/panel-galerias-crear/panel-galerias-crear.component';
+import { GalleryImagesComponent } from './component/gallerys/gallery-images/gallery-images.component';
+import { PanelGaleriasEditComponent } from './component/panel/panel-galerias-edit/panel-galerias-edit.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { PanelGaleriasCrearComponent } from './component/panel/panel-galerias-cr
     PanelPublicacionesEditarComponent,
     PanelEtiquetasEditComponent,
     PanelEtiquetasCrearComponent,
-    PanelGaleriasCrearComponent
+    PanelGaleriasCrearComponent,
+    GalleryImagesComponent,
+    PanelGaleriasEditComponent
   ],
   imports: [
     AppRoutingModule,

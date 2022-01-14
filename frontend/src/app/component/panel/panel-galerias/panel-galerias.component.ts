@@ -13,6 +13,8 @@ export class PanelGaleriasComponent implements OnInit {
   htmlToAdd: String;
   option: String = "table";
 
+  idGalleryEdit: number 
+
   gallerys: GalleryResponseDto[];
 
   constructor(
@@ -66,6 +68,11 @@ export class PanelGaleriasComponent implements OnInit {
         }
       }
     )
+  }
+
+  public updatePublication(idGallery: number){
+    this.idGalleryEdit = idGallery
+    this.option = 'edit'
   }
 
 }

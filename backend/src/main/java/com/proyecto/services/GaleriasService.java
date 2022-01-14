@@ -1,7 +1,5 @@
 package com.proyecto.services;
 
-
-import com.proyecto.dtos.*;
 import com.proyecto.dtos.gallery.GalleryCreateDto;
 import com.proyecto.dtos.gallery.GalleryResponseDto;
 import com.proyecto.dtos.tag.TagResponseDto;
@@ -26,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 
 @Service
 public class GaleriasService {
@@ -41,6 +40,10 @@ public class GaleriasService {
 
     @Autowired
     UsuariosRepository usuariosRepository;
+
+    public String formatSeo(String text) {
+        return StringUtils.strip(text.replaceAll("([^a-zA-Z0-9]+)", "-"), "-");
+    }
 
     public GalleryResponseDto obtenerGaleria(int idGaleria) {
         Optional<GaleriaModels> galeriaDB = galeriasRepository.findById(idGaleria);
@@ -63,18 +66,10 @@ public class GaleriasService {
                 etiquetasSalida.add(tag);
             }
             salida.setEtiquetas(etiquetasSalida);
-            List<ImageResponseDto> imagenSalida = new ArrayList<>();
+            List<String> imagenSalida = new ArrayList<>();
             for (ImagenModels it : galeriaDB.get().getImagenes()) {
-                ImageResponseDto img = new ImageResponseDto();
-                img.setImagen(it.getImagen());
-                img.setFechaSubida(it.getFechaSubida());
-                UserNameResponseDto usuarioSalida = new UserNameResponseDto();
-                usuarioSalida.setIdUsuario(it.getUsuario().getIdUsuario());
-                usuarioSalida.setUser(it.getUsuario().getUser());
-                img.setUsuario(usuarioSalida);
-                imagenSalida.add(img);
+                imagenSalida.add("/image/" + it.getIdImagen() + "/" + formatSeo(salida.getTitulo()));
             }
-
             salida.setImagenes(imagenSalida);
             return salida;
         } else {
@@ -128,6 +123,40 @@ public class GaleriasService {
             galeria.setImagenes(imagenes);
         }
         galeriasRepository.save(galeria);
+    }
+
+    public void editGaleria(Integer idGaleria, GalleryCreateDto body, HttpServletRequest request) throws NoSuchAlgorithmException {
+        String userInput = Validaciones.obtenerUserLogin(request);
+        Optional<UsuarioModels> user = usuariosRepository.obtenerUsuario(userInput);
+        if (!user.isPresent()) {
+            throw new ApiException(404, Constantes.ERROR_NO_EXISTE);
+        }
+        if (!user.get().getAdmin()) {
+            throw new ApiException(401, Constantes.ERROR_NO_AUTORIZADO);
+        }
+        Optional<GaleriaModels> galeria = galeriasRepository.findById(idGaleria);
+        galeria.get().setTitulo(body.getTitulo());
+        galeria.get().setDescripcion(body.getDescripcion());
+        galeria.get().setFechaCreacion(new Date());
+        galeria.get().setUsuario(user.get());
+        if (body.getEtiquetas() != null) {
+            List<EtiquetaModels> etiquetas = etiquetasRepository.findAllById(body.getEtiquetas());
+            galeria.get().setEtiquetas(etiquetas);
+        }
+        if (body.getImagenes() != null) {
+            List<ImagenModels> imagenes = new ArrayList<>();
+            for (byte[] it : body.getImagenes()) {
+                byte[] hash = Sha1Hasher.hashBytes(it);
+                Optional<ImagenModels> imagen = imagenesService.obtenerImagenPorHash(hash);
+                if (imagen.isPresent()) {
+                    imagenes.add(imagen.get());
+                } else {
+                    imagenes.add(imagenesService.cargarImagen(it, user.get()));
+                }
+            }
+            galeria.get().setImagenes(imagenes);
+        }
+        galeriasRepository.save(galeria.get());
     }
 
     public void borrarGaleria(Integer idGaleria, HttpServletRequest request) {

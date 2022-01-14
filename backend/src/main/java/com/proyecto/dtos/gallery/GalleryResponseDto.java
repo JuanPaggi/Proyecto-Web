@@ -33,6 +33,6 @@ public class GalleryResponseDto {
     private UserNameResponseDto usuario;
 
     @JsonProperty("imagenes")
-    private List<ImageResponseDto> imagenes;
+    private List<String> imagenes;
 
 }

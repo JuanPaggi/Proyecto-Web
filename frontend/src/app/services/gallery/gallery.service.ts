@@ -37,6 +37,14 @@ export class GalleryService {
     );
   }
 
+  public edit(idGaleria: number, body: GalleryCreateDto): Observable<void> {
+    return this.http.put<void>(
+      environment.apiEndpoint + '/galerias/' + idGaleria,
+      body,
+      this.headers
+    );
+  }
+
   public delete(id_gallery: number): Observable<void> {
     return this.http.delete<void>(
       environment.apiEndpoint + '/galerias/' + id_gallery,
