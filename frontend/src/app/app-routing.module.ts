@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EventComponent } from './component/event/event.component';
+import { GalleryImagesComponent } from './component/gallerys/gallery-images/gallery-images.component';
 import { GallerysComponent } from './component/gallerys/gallerys.component';
 import { HomeComponent } from './component/home/home.component';
 import { LoginComponent } from './component/login/login.component';
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: 'gallerys',
     component: GallerysComponent,
+  },
+  {
+    path: 'gallerys/:id_galeria',
+    component: GalleryImagesComponent
   },
   {
     path: 'login',

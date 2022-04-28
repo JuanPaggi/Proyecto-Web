@@ -23,6 +23,6 @@
         </div>
         <div [innerHtml]="htmlToAdd"></div>
     </div>
-    <button *ngIf="opcion == 'table'" class="create-publication-button" (click)="opcion = 'create'">Crear Publicacion</button>
-    <button *ngIf="opcion == 'create' || opcion == 'edit'" class="create-publication-button" (click)="opcion = 'table'">Volver</button>
+    <button *ngIf="opcion == 'table'" class="create-button" (click)="opcion = 'create'">Crear Publicacion</button>
+    <button *ngIf="opcion == 'create' || opcion == 'edit'" class="create-button" (click)="opcion = 'table'">Volver</button>
 </section>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { GalleryResponseDto } from 'src/app/dtos/GalleryResponseDto';
 import { GalleryService } from 'src/app/services/gallery/gallery.service';
-import { UserService } from 'src/app/services/users/user.service';
 
 @Component({
   selector: 'app-gallerys',
@@ -15,7 +15,8 @@ export class GallerysComponent implements OnInit {
   gallerys: GalleryResponseDto[];
 
   constructor(
-    private gallerySrv: GalleryService
+    private gallerySrv: GalleryService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -38,4 +39,9 @@ export class GallerysComponent implements OnInit {
       }
     );
   }
+
+  public clicked(item: GalleryResponseDto){
+    this.router.navigateByUrl(`/gallerys/${item.id_galeria}`);
+  }
+
 }

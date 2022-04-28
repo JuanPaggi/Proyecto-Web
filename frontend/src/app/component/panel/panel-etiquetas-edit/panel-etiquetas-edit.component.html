@@ -1,0 +1,12 @@
+<h3>Editar Publicacion</h3>
+
+<div class="tags-container">
+
+    <span>Etiqueta</span>
+    <input class="tags-input-title" type="text" [(ngModel)]="etiqueta" maxlength="50">
+
+    <button class="tags-button" (click)="editEtiqueta()">Editar</button>
+    
+    <div [innerHtml]="htmlToAdd"></div>
+    
+</div>

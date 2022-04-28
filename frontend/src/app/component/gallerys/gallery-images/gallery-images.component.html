@@ -1,0 +1,7 @@
+<section class="size-viewport">
+    <div>{{gallery.titulo}}</div>
+    <div *ngFor="let item of gallery.imagenes">
+        <img [src]="apiURL + item" style="width: 80px; height: 80px;" />
+    </div>
+    <div [innerHtml]="htmlToAdd"></div>
+</section>

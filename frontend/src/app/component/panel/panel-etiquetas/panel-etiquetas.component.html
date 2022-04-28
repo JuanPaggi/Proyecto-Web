@@ -1,18 +1,28 @@
 <section class="contenedor-panel">
     <h3>Etiquetas</h3>
-    <div class="table">
-        <div class="table-row" >
+    <div *ngIf=" option == 'edit' ">
+        <app-panel-etiquetas-edit [etiqueta]="etiquetaEdit" [idEtiqueta]="idEtiquetaEdit"></app-panel-etiquetas-edit>
+    </div>
+    <div *ngIf="option == 'create'">
+        <app-panel-etiquetas-crear></app-panel-etiquetas-crear>
+    </div>
+    <div *ngIf=" option == 'table' " class="table">
+        <div class="table-row">
             <div class="element-table-list">Lista</div>
             <div class="element-table-title">Titulo</div>
             <div class="element-table-opcions">Opciones</div>
         </div>
-        <div class="table-row" *ngFor="let item of tags;let i = index" >
+        <div class="table-row" *ngFor="let item of tags;let i = index">
             <div class="element-table-list">{{i+1}}</div>
             <div class="element-table-title">{{item.etiqueta}}</div>
             <div class="element-table-opcions">
-                <button>Editar</button>
-                <button>Borrar</button>
+                <button (click)="updatePublication(item.id_etiqueta,item.etiqueta)">Editar</button>
+                <button (click)="deleteTag(item.id_etiqueta)">Borrar</button>
             </div>
         </div>
     </div>
+    <button *ngIf="option == 'table'" class="create-button" (click)="option = 'create'">Crear
+        Etiqueta</button>
+    <button *ngIf="option == 'create' || option == 'edit'" class="create-button"
+        (click)="option = 'table'">Volver</button>
 </section>
