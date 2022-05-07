@@ -15,8 +15,9 @@ export class PanelPublicacionesCrearComponent implements OnInit {
   titulo: String
   descripcion: String
 
+  
   tags: TagResponseDto[]
-
+  
   tagsResult: number[]
 
   tagsSelect: TagsValues[]
@@ -82,14 +83,6 @@ export class PanelPublicacionesCrearComponent implements OnInit {
         this.tags = response
       }
     )
-  }
-
-  public selectTag(id: number, e) {
-    this.tagsSelect.forEach(it => {
-      if (id == it.id) {
-        it.value = e.target.checked
-      }
-    })
   }
 
 }

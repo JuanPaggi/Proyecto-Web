@@ -27,6 +27,17 @@ import { PanelGaleriasCrearComponent } from './component/panel/panel-galerias-cr
 import { GalleryImagesComponent } from './component/gallerys/gallery-images/gallery-images.component';
 import { PanelGaleriasEditComponent } from './component/panel/panel-galerias-edit/panel-galerias-edit.component';
 
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {InputTextModule} from 'primeng/inputtext';
+import {ButtonModule} from 'primeng/button';
+import {CardModule} from 'primeng/card';
+import {TableModule} from 'primeng/table';
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import {CheckboxModule} from 'primeng/checkbox';
+import {ToggleButtonModule} from 'primeng/togglebutton';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,8 +65,17 @@ import { PanelGaleriasEditComponent } from './component/panel/panel-galerias-edi
   imports: [
     AppRoutingModule,
     BrowserModule,
+    BrowserAnimationsModule,
+    InputTextModule,
+    ButtonModule,
+    CardModule,
     FormsModule,
     HttpClientModule,
+    TableModule,
+    InputTextareaModule,
+    CheckboxModule,
+    ToggleButtonModule
+    
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
