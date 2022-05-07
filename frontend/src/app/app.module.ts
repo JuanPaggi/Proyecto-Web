@@ -35,6 +35,8 @@ import {TableModule} from 'primeng/table';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {CheckboxModule} from 'primeng/checkbox';
 import {ToggleButtonModule} from 'primeng/togglebutton';
+import {MenuModule} from 'primeng/menu';
+import {MenuItem} from 'primeng/api';
 
 
 
@@ -74,7 +76,9 @@ import {ToggleButtonModule} from 'primeng/togglebutton';
     TableModule,
     InputTextareaModule,
     CheckboxModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    MenuModule,
+    MenuItem
     
   ],
   providers: [DatePipe],
