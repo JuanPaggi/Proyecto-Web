@@ -9,9 +9,10 @@
     <textarea [rows]="10" [cols]="30" pInputTextarea class="publication-description" [(ngModel)]="descripcion"></textarea>
 
     <span class="publication-tags-title">Etiquetas</span>
-    <div *ngFor="let item of tags" >
-        <p-checkbox name="group2" value="item" [value]="item" (onChange)="selectTag(item.id_etiqueta,$event)" [(ngModel)]="tagsSelect" inputId="item.id_etiqueta" ></p-checkbox>
-        <label>{{item.etiqueta}}</label>
+    <div *ngFor="let item of tagsSelect" >
+        <p-toggleButton [(ngModel)]="item.value" onLabel="{{item.etiqueta}}" offLabel="{{item.etiqueta}}" onIcon="pi pi-check" offIcon="pi pi-times"  ></p-toggleButton>
+        <!-- <p-checkbox [binary]="true"  [(ngModel)]="item.value" ></p-checkbox>
+        <label>{{item.etiqueta}}</label> -->
         <!-- <input type="checkbox" (change)="selectTag(item.id_etiqueta,$event)">
         <span>{{item.etiqueta}}</span> -->
     </div>

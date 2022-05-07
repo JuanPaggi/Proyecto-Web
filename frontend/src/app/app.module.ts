@@ -34,6 +34,7 @@ import {CardModule} from 'primeng/card';
 import {TableModule} from 'primeng/table';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {CheckboxModule} from 'primeng/checkbox';
+import {ToggleButtonModule} from 'primeng/togglebutton';
 
 
 
@@ -72,7 +73,8 @@ import {CheckboxModule} from 'primeng/checkbox';
     HttpClientModule,
     TableModule,
     InputTextareaModule,
-    CheckboxModule
+    CheckboxModule,
+    ToggleButtonModule
     
   ],
   providers: [DatePipe],
