@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PublicationResponseDto } from 'src/app/dtos/PublicationResponseDto';
 import { PublicationService } from 'src/app/services/publications/publication.service';
 import { UserService } from 'src/app/services/users/user.service';
@@ -13,6 +13,7 @@ export class PanelPublicacionesComponent implements OnInit {
   htmlToAdd: String;
 
   opcion: String = "table"
+
   idPublicacionEdit:number
 
   publicaciones: PublicationResponseDto[];

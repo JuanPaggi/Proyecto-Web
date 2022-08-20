@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     height: 40%;
-    width: 30%;
+    width: 30rem;
     border-radius: 15px;
     background-color: white;
     filter: drop-shadow(0px 10px  10px #a7a7a7);     
@@ -18,7 +18,7 @@
 }
 
 .margen-separador{
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 .input{
     width: 30%;

@@ -1,21 +1,25 @@
-<h3>Crear Publicacion</h3>
 
 <div class="publication-container">
+    <h3 class="margen-separador">Crear Publicacion</h3>
 
     <span>Titulo</span>
-    <input class="publication-input-title" type="text" [(ngModel)]="titulo" maxlength="50">
+    <input pInputText  class="publication-input-title" type="text" [(ngModel)]="titulo" maxlength="50">
     
     <span>Descripcion</span>
-    <textarea class="publication-description" [(ngModel)]="descripcion" cols="30" rows="10"></textarea>
+    <textarea [rows]="10" [cols]="30" pInputTextarea class="publication-description" [(ngModel)]="descripcion"></textarea>
 
     <span class="publication-tags-title">Etiquetas</span>
-    <div *ngFor="let item of tags;let i = index">
-        <input type="checkbox" (change)="selectTag(item.id_etiqueta,$event)">
-        <span>{{i+1}} : {{item.etiqueta}}</span>
+    <div *ngFor="let item of tagsSelect" >
+        <p-toggleButton [(ngModel)]="item.value" onLabel="{{item.etiqueta}}" offLabel="{{item.etiqueta}}" onIcon="pi pi-check" offIcon="pi pi-times"  ></p-toggleButton>
+        <!-- <p-checkbox [binary]="true"  [(ngModel)]="item.value" ></p-checkbox>
+        <label>{{item.etiqueta}}</label> -->
+        <!-- <input type="checkbox" (change)="selectTag(item.id_etiqueta,$event)">
+        <span>{{item.etiqueta}}</span> -->
+    </div>
+    <div class="button-container">
+        <button pButton class="publication-create-button margen-separador" (click)="createPublication()">Crear</button>
     </div>
 
-    <button class="publication-create-button" (click)="createPublication()">Crear</button>
-    
     <div [innerHtml]="htmlToAdd"></div>
     
 </div>

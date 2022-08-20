@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { EventEmitter, Output } from '@angular/core';
 import { User } from 'src/app/dtos/User.model';
+import {MenuItem} from 'primeng/api';
 
 @Component({
   selector: 'app-root',

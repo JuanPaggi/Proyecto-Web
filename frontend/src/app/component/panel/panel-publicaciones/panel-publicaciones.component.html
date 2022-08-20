@@ -8,21 +8,28 @@
         <app-panel-publicaciones-editar [idPublication]="idPublicacionEdit"></app-panel-publicaciones-editar>
     </div>
     <div *ngIf="opcion == 'table'" class="table">
-        <div class="table-row" >
-            <div class="element-table-list">Lista</div>
-            <div class="element-table-title">Titulo</div>
-            <div class="element-table-opcions">Opciones</div>
-        </div>
-        <div class="table-row" *ngFor="let item of publicaciones;let i = index" >
-            <div class="element-table-list">{{i+1}}</div>
-            <div class="element-table-title">{{item.titulo}}</div>
-            <div class="element-table-opcions">
-                <button (click)="updatePublication(item.id_publicacion)">Editar</button>
-                <button (click)="deletePublication(item.id_publicacion)">Borrar</button>
-            </div>
-        </div>
+        <p-table [value]="publicaciones" [scrollable]="true"  [resizableColumns]="true" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pResizableColumn style="flex-basis:20%">Lista</th>
+                    <th pResizableColumn style="flex-basis:50%">Titulo</th>
+                    <th pResizableColumn style="flex-basis:30%">Opciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-publicacion let-i="rowIndex">
+                <tr>
+                    <td style="flex-basis:20%">{{i+1}}</td>
+                    <td style="flex-basis:50%">{{publicacion.titulo}}</td>
+                    
+                    <td style="flex-basis:30%">
+                        <button pButton  class="margen" (click)="updatePublication(publicacion.id_publicacion)">Editar</button>
+                        <button pButton class="p-button-danger" (click)="deletePublication(publicacion.id_publicacion)">Borrar</button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
         <div [innerHtml]="htmlToAdd"></div>
     </div>
-    <button *ngIf="opcion == 'table'" class="create-button" (click)="opcion = 'create'">Crear Publicacion</button>
-    <button *ngIf="opcion == 'create' || opcion == 'edit'" class="create-button" (click)="opcion = 'table'">Volver</button>
+    <button pButton *ngIf="opcion == 'table'" class="create-button" (click)="opcion = 'create'">Crear Publicacion</button>
+    <button pButton *ngIf="opcion == 'create' || opcion == 'edit'" class="create-button" (click)="opcion = 'table'">Volver</button>
 </section>

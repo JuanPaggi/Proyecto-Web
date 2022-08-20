@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.usuariosSrv.getUserLoggedIn();
+
   }
 
   clickedSalir() {
